@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Colecciones | ARTSPACE{% endblock %}
+
+{% block body_class %}collections-body{% endblock %}
+
+{% block content %}
+  <div style="padding: 100px 8% 40px; text-align: center;">
+      <h4 style="font-family: 'Patrick Hand', cursive; font-size: 3rem; color: #111; margin-bottom: 20px;">
+        Nuestras colecciones
+      </h4>
+      <p style="max-width: 800px; margin: auto; font-size: 1.3rem; color: #444; line-height: 1.7; font-family: 'Patrick Hand', cursive;">
+        En ARTSPACE, ofrecemos una amplia variedad de colecciones de arte que abarcan diferentes estilos, épocas y temáticas. Desde arte contemporáneo hasta obras clásicas, nuestras colecciones están cuidadosamente seleccionadas para satisfacer los gustos y preferencias de nuestros clientes. Explora nuestras colecciones y descubre piezas únicas que enriquecerán tu espacio y tu experiencia artística.
+      </p>
+  </div>
+
+  <!-- CARRUSEL -->
+  <div class="carrusel">
+    <div class="slides">
+      <img src="{% static 'img/imagen1.png' %}" alt="Imagen 1">
+      <img src="{% static 'img/imagen2.png' %}" alt="Imagen 2">
+      <img src="{% static 'img/imagen3.png' %}" alt="Imagen 3">
+      <img src="{% static 'img/imagen4.png' %}" alt="Imagen 4">
+      <img src="{% static 'img/imagen5.png' %}" alt="Imagen 5">
+    </div>
+  </div>
+{% endblock %}

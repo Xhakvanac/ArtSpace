@@ -1,0 +1,357 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ARTSPACE | Galería de Arte Contemporáneo & CRM{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <!-- Estilos Globales -->
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <style>
+    /* Notificaciones del Sistema Django Messages */
+    .messages-container {
+      max-width: 1200px;
+      margin: 95px auto 10px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 999;
+    }
+    .alert {
+      padding: 14px 20px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      animation: fadeIn 0.3s ease;
+    }
+    .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .alert-error, .alert-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+    .alert-warning { background: #fef9c3; color: #a16207; border: 1px solid #fef08a; }
+    .alert-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .alert-close { cursor: pointer; font-size: 1.2rem; line-height: 1; opacity: 0.7; }
+
+    /* Badge de Fidelización en Navbar */
+    .crm-badge-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      transition: 0.2s;
+    }
+    .crm-badge-nav:hover { background: #e2e8f0; }
+    .tier-patron { background: #fef08a; color: #854d0e; border-color: #fde047; }
+    .tier-collector { background: #e0e7ff; color: #4338ca; border-color: #c7d2fe; }
+
+    /* Widget Omnicanal Flotante (Chatbot FAQ + WhatsApp) */
+    .crm-floating-widget {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .crm-chat-btn {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #111827;
+      color: white;
+      border: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .crm-chat-btn:hover { transform: scale(1.08); background: #1f2937; }
+
+    .crm-chat-box {
+      width: 350px;
+      max-height: 480px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+      border: 1px solid rgba(0,0,0,0.08);
+      margin-bottom: 12px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: slideUp 0.25s ease;
+    }
+    .crm-chat-header {
+      background: #111827;
+      color: white;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .crm-chat-body {
+      padding: 15px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.88rem;
+      background: #f8fafc;
+    }
+    .chat-bubble-bot {
+      background: white;
+      color: #1e293b;
+      padding: 10px 14px;
+      border-radius: 14px 14px 14px 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      max-width: 85%;
+      line-height: 1.4;
+    }
+    .chat-bubble-user {
+      background: #111827;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 14px 14px 2px 14px;
+      align-self: flex-end;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+    .chat-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 5px;
+    }
+    .quick-chip {
+      background: #e2e8f0;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-family: inherit;
+      color: #334155;
+      font-weight: 500;
+      transition: 0.15s;
+    }
+    .quick-chip:hover { background: #cbd5e1; color: black; }
+    .crm-chat-footer {
+      padding: 10px;
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 8px;
+    }
+    .crm-chat-footer input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .crm-chat-footer button {
+      background: #111827;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="{% url 'index' %}">ARTSPACE</a>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a class="nav-btn {% if request.resolver_match.url_name == 'index' %}active-link{% endif %}" href="{% url 'index' %}">Inicio</a></li>
+        <li><a class="nav-btn {% if request.resolver_match.url_name == 'colecciones' %}active-link{% endif %}" href="{% url 'colecciones' %}">Colecciones</a></li>
+        <li><a class="nav-btn {% if request.resolver_match.url_name == 'artistas' %}active-link{% endif %}" href="{% url 'artistas' %}">Artistas</a></li>
+        <li><a class="nav-btn {% if request.resolver_match.url_name == 'galeria' %}active-link{% endif %}" href="{% url 'galeria' %}">Galería</a></li>
+        <li><a class="nav-btn {% if request.resolver_match.url_name == 'contacto' %}active-link{% endif %}" href="{% url 'contacto' %}">Soporte CRM</a></li>
+      </ul>
+
+      <div class="nav-icons" style="display: flex; align-items: center; gap: 15px;">
+        {% if user.is_authenticated %}
+          <!-- BADGE DE LEALTAD CRM -->
+          <span class="crm-badge-nav {% if user.perfil_crm.nivel_tier == 'PATRON' %}tier-patron{% elif user.perfil_crm.nivel_tier == 'COLLECTOR' %}tier-collector{% endif %}" title="Tu nivel en el programa Art Club">
+            🏆 {{ user.perfil_crm.get_nivel_tier_display }} · <strong>{{ user.perfil_crm.puntos_fidelidad }} pts</strong>
+          </span>
+          <a href="{% url 'simular_compra_demo' %}" style="font-size: 0.78rem; background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 12px; font-weight: 600; text-decoration: none;" title="Simula una compra de $1,500 MXN para acumular puntos en vivo">
+            + Simular Compra
+          </a>
+          <a href="/admin/" style="font-size: 0.8rem; font-weight: 600; color: #4b5563; text-decoration: underline;" title="Acceder a la consola de administración CRM">
+            Admin CRM
+          </a>
+        {% else %}
+          <a href="/admin/login/?next={{ request.path }}" style="font-size: 0.85rem; font-weight: 600; color: #111827;">
+            Iniciar Sesión
+          </a>
+        {% endif %}
+        <span>🛒</span>
+        <span>❤️</span>
+      </div>
+
+      <div class="menu-btn" id="menuBtn">☰</div>
+    </nav>
+  </header>
+
+  <!-- CONTENEDOR DE MENSAJES DJANGO -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          <span>{{ message }}</span>
+          <span class="alert-close" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main style="margin-top: {% if messages %}10px{% else %}80px{% endif %}; min-height: 70vh;">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- WIDGET OMNICANAL FLOTANTE (CHATBOT + WHATSAPP) -->
+  <div class="crm-floating-widget">
+    <!-- CAJA DE CHAT -->
+    <div class="crm-chat-box" id="crmChatBox">
+      <div class="crm-chat-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">🤖</span>
+          <div>
+            <div style="font-weight: 600; font-size: 0.95rem;">ArtBot · Concierge CRM</div>
+            <div style="font-size: 0.72rem; color: #94a3b8;">Atención Omnicanal en línea</div>
+          </div>
+        </div>
+        <span style="cursor: pointer; font-size: 1.3rem;" onclick="toggleChat()">&times;</span>
+      </div>
+      
+      <div class="crm-chat-body" id="chatBody">
+        <div class="chat-bubble-bot">
+          ¡Hola! Soy <strong>ArtBot</strong>. Te puedo orientar sobre compras de arte, certificados, envíos o nuestro programa de lealtad.
+        </div>
+        <div class="chat-quick-actions">
+          <button class="quick-chip" onclick="askBot('envios')">📦 Tiempos de envío</button>
+          <button class="quick-chip" onclick="askBot('autenticidad')">📜 Certificados</button>
+          <button class="quick-chip" onclick="askBot('puntos')">🎁 Puntos Art Club</button>
+          <button class="quick-chip" onclick="askBot('tiers')">🥇 Tiers de Lealtad</button>
+          <a href="https://wa.me/522460000000" target="_blank" class="quick-chip" style="background: #25d366; color: white; text-decoration: none;">💬 WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="crm-chat-footer">
+        <input type="text" id="chatInput" placeholder="Escribe tu consulta..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+        <button onclick="sendChatMessage()">Enviar</button>
+      </div>
+    </div>
+
+    <!-- BOTÓN DISPARADOR -->
+    <button class="crm-chat-btn" id="chatTriggerBtn" onclick="toggleChat()" title="Soporte en vivo y Chatbot FAQ">
+      💬
+    </button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; gap: 20px;">
+      <p style="margin: 0;">© 2026 ARTSPACE · Galería Digital & E-Commerce CRM</p>
+      <div style="font-size: 0.85rem; color: #888;">
+        <span>Mesa de Ayuda</span> · <span>WhatsApp Concierge</span> · <span>Programa Art Club</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS GLOBALES -->
+  <script>
+    // Menú móvil
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+    if (menuBtn && navLinks) {
+      menuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+    }
+
+    // Toggle Chatbot
+    function toggleChat() {
+      const chatBox = document.getElementById("crmChatBox");
+      if (chatBox.style.display === "flex") {
+        chatBox.style.display = "none";
+      } else {
+        chatBox.style.display = "flex";
+      }
+    }
+
+    // Chatbot query
+    function askBot(query) {
+      addUserBubble(query);
+      fetch(`/chatbot-api/?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => {
+          addBotBubble(data.respuesta);
+        })
+        .catch(err => {
+          addBotBubble("Hubo un detalle de conexión. Puedes radicar tu ticket en la sección Contacto.");
+        });
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      askBot(text);
+    }
+
+    function addUserBubble(text) {
+      const body = document.getElementById("chatBody");
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble-user";
+      bubble.textContent = text;
+      body.appendChild(bubble);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function addBotBubble(text) {
+      const body = document.getElementById("chatBody");
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble-bot";
+      bubble.textContent = text;
+      body.appendChild(bubble);
+      body.scrollTop = body.scrollHeight;
+    }
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

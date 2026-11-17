@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Crear Cuenta Segura | ARTSPACE{% endblock %}
+
+{% block content %}
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px;">
+  <div style="background: #1F2833; border: 1px solid rgba(102, 252, 241, 0.2); border-radius: 16px; padding: 40px; max-width: 480px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <span style="font-size: 2.2rem;">🔒</span>
+      <h2 style="color: #FFFFFF; font-family: 'Poppins', sans-serif; font-size: 1.8rem; margin: 10px 0 5px;">Únete a ARTSPACE</h2>
+      <p style="color: #C5C6C7; font-size: 0.9rem;">Crea tu cuenta de coleccionista con autenticación segura</p>
+    </div>
+
+    <form method="POST" action="{% url 'registro' %}" novalidate>
+      {% csrf_token %}
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; color: #66FCF1; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">NOMBRE DE USUARIO</label>
+        <input type="text" name="username" required autocomplete="username"
+               style="width: 100%; padding: 12px 16px; background: #0B0C10; border: 1px solid #45A29E; border-radius: 8px; color: #FFFFFF; font-size: 0.95rem; box-sizing: border-box;"
+               placeholder="ej. rodrigo_coleccionista" value="{{ form.username.value|default:'' }}">
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; color: #66FCF1; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">CORREO ELECTRÓNICO</label>
+        <input type="email" name="email" required autocomplete="email"
+               style="width: 100%; padding: 12px 16px; background: #0B0C10; border: 1px solid #45A29E; border-radius: 8px; color: #FFFFFF; font-size: 0.95rem; box-sizing: border-box;"
+               placeholder="correo@dominio.com" value="{{ form.email.value|default:'' }}">
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; color: #66FCF1; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">CONTRASEÑA SEGURA</label>
+        <input type="password" name="password" required autocomplete="new-password"
+               style="width: 100%; padding: 12px 16px; background: #0B0C10; border: 1px solid #45A29E; border-radius: 8px; color: #FFFFFF; font-size: 0.95rem; box-sizing: border-box;"
+               placeholder="Mín. 8 caracteres, números y símbolos">
+        <small style="color: #888; font-size: 0.78rem; display: block; margin-top: 4px;">Cifrada mediante PBKDF2-SHA256 (1,500,000 ciclos)</small>
+      </div>
+
+      <div style="margin-bottom: 25px;">
+        <label style="display: block; color: #66FCF1; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">CONFIRMAR CONTRASEÑA</label>
+        <input type="password" name="password_confirm" required autocomplete="new-password"
+               style="width: 100%; padding: 12px 16px; background: #0B0C10; border: 1px solid #45A29E; border-radius: 8px; color: #FFFFFF; font-size: 0.95rem; box-sizing: border-box;"
+               placeholder="Repite la contraseña exacta">
+      </div>
+
+      <button type="submit"
+              style="width: 100%; padding: 14px; background: #66FCF1; color: #0B0C10; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s ease;">
+        CREAR CUENTA PROTEGIDA
+      </button>
+    </form>
+
+    <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+      <p style="color: #C5C6C7; font-size: 0.88rem;">¿Ya tienes una cuenta de coleccionista?
+        <a href="{% url 'login' %}" style="color: #66FCF1; text-decoration: none; font-weight: 600;">Inicia Sesión</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

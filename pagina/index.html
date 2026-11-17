@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ARTSPACE | Galería de Arte</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <header>
+    <nav class="navbar">
+
+      <div class="logo">
+        ARTSPACE
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+
+  <li>
+    <a class="nav-btn" href="index.html">
+      Inicio
+    </a>
+  </li>
+
+  <li>
+    <a class="nav-btn" href="colecciones.html">
+      Colecciones
+    </a>
+  </li>
+
+  <li>
+    <a class="nav-btn" href="artistas.html">
+      Artistas
+    </a>
+  </li>
+
+  <li>
+    <a class="nav-btn" href="galeria.html">
+      Galería
+    </a>
+  </li>
+
+  <li>
+    <a class="nav-btn" href="contacto.html">
+      Contacto
+    </a>
+  </li>
+
+</ul>
+
+      <div class="nav-icons">
+        <span>🛒</span>
+        <span>❤️</span>
+      </div>
+
+      <div class="menu-btn" id="menuBtn">
+        ☰
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+      <h1>
+        Arte que respira en tus paredes
+      </h1>
+
+      <p>
+        Descubre ilustraciones, pinturas y piezas digitales
+        creadas por artistas independientes.
+      </p>
+
+      <a href="#productos" class="btn">
+        Explorar colección
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- PRODUCTOS -->
+
+  <section class="products-section" id="productos">
+
+    <div class="section-title">
+      <h2>Colección destacada</h2>
+      <p>Obras originales y prints exclusivos</p>
+    </div>
+
+    <div class="products-grid">
+
+      <!-- CARD 1 -->
+
+      <div class="card">
+
+        <img
+          src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200"
+          alt="Arte 1"
+        >
+
+        <div class="card-content">
+
+          <h3>Nebulosa Interior</h3>
+
+          <p class="artist">
+            por Ana Lucero
+          </p>
+
+          <div class="price">
+            $1,250 MXN
+          </div>
+
+          <div class="card-buttons">
+            <button class="buy-btn">
+              Comprar
+            </button>
+
+            <button class="fav-btn">
+              ♡
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CARD 2 -->
+
+      <div class="card">
+
+        <img
+          src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200"
+          alt="Arte 2"
+        >
+
+        <div class="card-content">
+
+          <h3>Ciudad de Vapor</h3>
+
+          <p class="artist">
+            por Diego Ferral
+          </p>
+
+          <div class="price">
+            $2,100 MXN
+          </div>
+
+          <div class="card-buttons">
+            <button class="buy-btn">
+              Comprar
+            </button>
+
+            <button class="fav-btn">
+              ♡
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CARD 3 -->
+
+      <div class="card">
+
+        <img
+          src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=1200"
+          alt="Arte 3"
+        >
+
+        <div class="card-content">
+
+          <h3>Fragmentos del Sol</h3>
+
+          <p class="artist">
+            por Elisa Moon
+          </p>
+
+          <div class="price">
+            $1,890 MXN
+          </div>
+
+          <div class="card-buttons">
+            <button class="buy-btn">
+              Comprar
+            </button>
+
+            <button class="fav-btn">
+              ♡
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- NEWSLETTER -->
+
+  <section class="newsletter-section">
+
+    <div class="newsletter-box">
+
+      <h2>Únete a la galería</h2>
+
+      <p>
+        Recibe nuevas colecciones y drops exclusivos.
+      </p>
+
+      <form class="newsletter-form">
+
+        <input
+          type="email"
+          placeholder="Tu correo electrónico"
+        >
+
+        <button type="submit">
+          Suscribirme
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <p>
+      © 2026 ARTÉRIA · Galería Digital
+    </p>
+
+  </footer>
+
+  <!-- SCRIPT -->
+
+  <script>
+
+    const menuBtn = document.getElementById("menuBtn");
+    const navLinks = document.getElementById("navLinks");
+
+    menuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+
+  </script>
+
+</body>
+</html>

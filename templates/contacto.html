@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contacto & Mesa de Ayuda CRM | ARTSPACE{% endblock %}
+
+{% block content %}
+  <div style="max-width: 800px; margin: 60px auto 100px; padding: 0 20px;">
+    
+    <!-- ENCABEZADO -->
+    <div style="text-align: center; margin-bottom: 40px;">
+      <span style="background: rgba(0,0,0,0.06); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+        Mesa de Ayuda & Atención al Coleccionista
+      </span>
+      <h1 style="font-size: 2.6rem; margin-top: 15px; margin-bottom: 10px; font-weight: 700;">Canal de Soporte CRM</h1>
+      <p style="color: #666; font-size: 1.05rem; max-width: 550px; margin: 0 auto;">
+        Radica tu solicitud formal para resolución de dudas sobre envíos físicos, certificados de autenticidad, obras por encargo o licencias digitales.
+      </p>
+    </div>
+
+    <!-- TARJETA CON CONFIRMACIÓN DE TICKET GENERADO -->
+    {% if ticket_generado %}
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 16px; padding: 24px; margin-bottom: 35px; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.08);">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+          <span style="font-size: 1.8rem;">✅</span>
+          <div>
+            <h3 style="color: #166534; font-size: 1.25rem; font-weight: 600;">Ticket #{{ ticket_generado.id }} Registrado en el CRM</h3>
+            <p style="color: #15803d; font-size: 0.95rem; margin: 0;">
+              Hemos recibido tu solicitud bajo el asunto: <strong>"{{ ticket_generado.asunto }}"</strong>
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #86efac; font-size: 0.9rem; color: #166534;">
+          <div><strong>Estado inicial:</strong> <span style="background: #dcfce7; padding: 3px 10px; border-radius: 12px; font-weight: 600;">{{ ticket_generado.get_estado_display }}</span></div>
+          <div><strong>Prioridad:</strong> <span style="background: #fef08a; color: #854d0e; padding: 3px 10px; border-radius: 12px; font-weight: 600;">{{ ticket_generado.get_prioridad_display }}</span></div>
+          <div><strong>Correo de seguimiento:</strong> {{ ticket_generado.email }}</div>
+          <div><strong>SLA de respuesta:</strong> &lt; 24 horas hábiles</div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start;">
+      <!-- FORMULARIO DE TICKETING -->
+      <div style="background: white; padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05);">
+        <h3 style="font-size: 1.3rem; margin-bottom: 20px; font-weight: 600;">Nuevo Ticket de Soporte</h3>
+        
+        <form method="POST" action="{% url 'contacto' %}" style="display: flex; flex-direction: column; gap: 18px;">
+          {% csrf_token %}
+          
+          <div>
+            <label for="nombre" style="font-weight: 500; font-size: 0.95rem; display: block; margin-bottom: 6px;">Nombre completo</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ej. Rodrigo Almendra" required
+                   value="{% if user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% endif %}"
+                   style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; font-size: 0.95rem; font-family: inherit; transition: 0.2s;">
+          </div>
+          
+          <div>
+            <label for="email" style="font-weight: 500; font-size: 0.95rem; display: block; margin-bottom: 6px;">Correo electrónico de contacto</label>
+            <input type="email" id="email" name="email" placeholder="coleccionista@correo.com" required
+                   value="{% if user.is_authenticated %}{{ user.email }}{% endif %}"
+                   style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; font-size: 0.95rem; font-family: inherit; transition: 0.2s;">
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px;">
+            <div>
+              <label for="asunto" style="font-weight: 500; font-size: 0.95rem; display: block; margin-bottom: 6px;">Asunto</label>
+              <input type="text" id="asunto" name="asunto" placeholder="Ej. Consulta de enmarcado y envío a Puebla" required
+                     style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; font-size: 0.95rem; font-family: inherit; transition: 0.2s;">
+            </div>
+            <div>
+              <label for="prioridad" style="font-weight: 500; font-size: 0.95rem; display: block; margin-bottom: 6px;">Prioridad</label>
+              <select id="prioridad" name="prioridad" style="width: 100%; padding: 12px 12px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; font-size: 0.95rem; font-family: inherit; background: white;">
+                <option value="BAJA">Baja</option>
+                <option value="MEDIA" selected>Media</option>
+                <option value="ALTA">Alta</option>
+              </select>
+            </div>
+          </div>
+          
+          <div>
+            <label for="mensaje" style="font-weight: 500; font-size: 0.95rem; display: block; margin-bottom: 6px;">Detalle de la consulta o solicitud</label>
+            <textarea id="mensaje" name="mensaje" rows="5" placeholder="Explica detalladamente la obra de tu interés, dudas sobre medidas, autenticidad o requerimiento técnico..." required
+                      style="width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; font-size: 0.95rem; font-family: inherit; resize: vertical; transition: 0.2s;"></textarea>
+          </div>
+          
+          <button type="submit" style="padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 600; border: none; background: #111827; color: white; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            Radicar Ticket en CRM
+          </button>
+        </form>
+      </div>
+
+      <!-- PANEL LATERAL OMNICANAL -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Canales Alternativos -->
+        <div style="background: white; padding: 25px; border-radius: 18px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 24px rgba(0,0,0,0.03);">
+          <h4 style="font-size: 1.1rem; margin-bottom: 12px; font-weight: 600;">Canales Omnicanal</h4>
+          <p style="color: #64748b; font-size: 0.88rem; line-height: 1.5; margin-bottom: 16px;">
+            Nuestro equipo de curaduría y atención técnica está disponible mediante múltiples vías de contacto:
+          </p>
+
+          <a href="https://wa.me/522460000000?text=Hola%20ARTSPACE,%20solicito%20información%20sobre%20una%20obra" target="_blank"
+             style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #25d366; color: white; border-radius: 10px; font-weight: 600; font-size: 0.9rem; margin-bottom: 12px; transition: 0.2s;">
+            <span>💬</span> WhatsApp Concierge VIP
+          </a>
+
+          <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #3b82f6; font-size: 0.85rem; color: #334155;">
+            <strong>Horario de Atención:</strong><br>
+            Lunes a Viernes: 9:00 - 18:00 hrs<br>
+            Sábados: 10:00 - 14:00 hrs
+          </div>
+        </div>
+
+        <!-- Programa Art Club Promoción -->
+        <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: white; padding: 25px; border-radius: 18px; box-shadow: 0 10px 25px rgba(49, 46, 129, 0.2);">
+          <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #a5b4fc; font-weight: 700;">Programa de Fidelización</span>
+          <h4 style="font-size: 1.2rem; margin: 8px 0 10px; font-weight: 700;">Art Club ARTSPACE</h4>
+          <p style="color: #c7d2fe; font-size: 0.85rem; line-height: 1.5; margin-bottom: 15px;">
+            Acumula 10 Puntos de Arte por cada $100 MXN en obras y accede a preventas de 48 horas en lanzamientos exclusivos.
+          </p>
+          {% if user.is_authenticated %}
+            <div style="background: rgba(255,255,255,0.1); padding: 10px 14px; border-radius: 8px; font-size: 0.85rem;">
+              Nivel: <strong>{{ user.perfil_crm.get_nivel_tier_display }}</strong><br>
+              Saldo: <strong>{{ user.perfil_crm.puntos_fidelidad }} Puntos</strong>
+            </div>
+          {% else %}
+            <a href="/admin/login/?next=/contacto/" style="display: inline-block; background: white; color: #1e1b4b; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;">
+              Iniciar sesión
+            </a>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

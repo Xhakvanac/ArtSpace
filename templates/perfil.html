@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Mi Cuenta y Colección | ARTSPACE{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+  <!-- Header de Perfil y Art Club -->
+  <div style="background: #1F2833; border: 1px solid rgba(102, 252, 241, 0.2); border-radius: 16px; padding: 30px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+    <div>
+      <span style="background: rgba(102, 252, 241, 0.15); color: #66FCF1; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">SESIÓN ACTIVA PROTEGIDA</span>
+      <h1 style="color: #FFFFFF; font-family: 'Poppins', sans-serif; font-size: 2rem; margin: 10px 0 5px;">Hola, {{ user.username }}</h1>
+      <p style="color: #C5C6C7; margin: 0; font-size: 0.95rem;">Correo registrado: <strong>{{ user.email }}</strong> | Miembro desde: {{ user.date_joined|date:"d M Y" }}</p>
+    </div>
+    <div style="text-align: right;">
+      <div style="background: #0B0C10; border: 1px solid #45A29E; border-radius: 12px; padding: 15px 25px; display: inline-block;">
+        <span style="color: #C5C6C7; font-size: 0.8rem; display: block; text-transform: uppercase;">Nivel de Coleccionista</span>
+        <strong style="color: #66FCF1; font-size: 1.4rem;">{{ perfil.get_nivel_tier_display }}</strong>
+        <span style="display: block; color: #FFF; font-size: 0.85rem; margin-top: 4px;">🪙 {{ perfil.puntos_fidelidad }} Puntos Art Club</span>
+      </div>
+      <div style="margin-top: 10px;">
+        <a href="{% url 'logout' %}" style="color: #FF6B6B; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión Segura</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido en Grid: Órdenes y Tickets -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
+    <!-- Mis Órdenes SCM -->
+    <div style="background: #1F2833; border-radius: 16px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
+      <h3 style="color: #FFFFFF; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">📦 Mis Obras Adquiridas (SCM)</h3>
+      {% if ordenes %}
+        {% for ord in ordenes %}
+          <div style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <strong style="color: #66FCF1;">{{ ord.codigo_pedido }}</strong> - {{ ord.get_estado_logistico_display }}<br>
+            <small style="color: #C5C6C7;">Transporte: {{ ord.get_transportista_display }} | Guía: {{ ord.numero_guia_awb|default:"Asignando en taller" }}</small>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color: #C5C6C7; font-size: 0.9rem;">Aún no tienes pedidos registrados. ¡Explora el catálogo!</p>
+        <a href="{% url 'galeria' %}" style="display: inline-block; padding: 8px 16px; background: #66FCF1; color: #0B0C10; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem;">Ver Catálogo de Arte</a>
+      {% endif %}
+    </div>
+
+    <!-- Tickets de Soporte CRM -->
+    <div style="background: #1F2833; border-radius: 16px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
+      <h3 style="color: #FFFFFF; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">🎫 Mis Consultas y Tickets CRM</h3>
+      {% if tickets %}
+        {% for t in tickets %}
+          <div style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <strong style="color: #FFFFFF;">Ticket #{{ t.id }}: {{ t.asunto }}</strong><br>
+            <span style="color: #66FCF1; font-size: 0.85rem;">Estado: {{ t.get_estado_display }}</span> |
+            <small style="color: #C5C6C7;">{{ t.fecha_creacion|date:"d/m/Y H:i" }}</small>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color: #C5C6C7; font-size: 0.9rem;">No tienes tickets de soporte activos.</p>
+        <a href="{% url 'contacto' %}" style="color: #66FCF1; font-size: 0.85rem; text-decoration: none;">¿Necesitas ayuda? Abre una consulta</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
