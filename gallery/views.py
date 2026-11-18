@@ -27,24 +27,197 @@ from .models import (
 )
 from .erp_services import ERPAccountingService
 
+# ==============================================================================
+# 🎨 CATÁLOGO MAESTRO DE OBRAS DE ARTE (ECOMMERCE & COMPONENTES UNIDAD 4)
+# ==============================================================================
+
+CATALOGO_OBRAS = [
+    {
+        'id': 'ECOS-VACIO-01',
+        'titulo': 'Ecos del Vacío',
+        'artista': 'Ana Lucero',
+        'categoria': 'Pintura al Óleo',
+        'precio_mxn': 34500.00,
+        'precio_usd': 1916.00,
+        'imagen': 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200',
+        'tecnica': 'Óleo y pigmentos naturales sobre lienzo de lino belga',
+        'dimensiones': '120 x 90 cm',
+        'anio': 2026,
+        'es_original_unica': True,
+        'certificado': 'Certificado Físico Holográfico + Registro Blockchain ERC-721',
+        'en_oferta': False,
+        'descuento_porcentaje': 0,
+        'enmarcado_disponible': True,
+        'precio_enmarcado': 3200.00,
+        'destacado': True,
+        'badge': 'Pieza Única 1/1',
+        'descripcion': 'Obra maestra que explora los contrastes cromáticos y la introspección del silencio en el arte abstracto contemporáneo.'
+    },
+    {
+        'id': 'CIUDAD-VAPOR-02',
+        'titulo': 'Ciudad de Vapor (Cyberpunk)',
+        'artista': 'Diego Ferral',
+        'categoria': 'Arte Digital / NFT',
+        'precio_mxn': 18900.00,
+        'precio_usd': 1050.00,
+        'imagen': 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200',
+        'tecnica': 'Pintura digital vectorial en Ultra-HD 8K con smart contract',
+        'dimensiones': '7680 x 4320 px (Master File)',
+        'anio': 2026,
+        'es_original_unica': True,
+        'certificado': 'Smart Contract Ethereum / IPFS Hash Verificado',
+        'en_oferta': True,
+        'descuento_porcentaje': 15,
+        'enmarcado_disponible': False,
+        'precio_enmarcado': 0.00,
+        'destacado': True,
+        'badge': 'Oferta -15% · NFT Exclusivo',
+        'descripcion': 'Visión retrofuturista de megalópolis nocturnas iluminadas por neón, transferible a wallet Ethereum o descarga directa.'
+    },
+    {
+        'id': 'FRAG-SOL-03',
+        'titulo': 'Fragmentos del Sol',
+        'artista': 'Elisa Moon',
+        'categoria': 'Pintura al Óleo',
+        'precio_mxn': 28400.00,
+        'precio_usd': 1577.00,
+        'imagen': 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=1200',
+        'tecnica': 'Acrílico texturizado y hoja de oro de 24k sobre madera estucada',
+        'dimensiones': '100 x 100 cm',
+        'anio': 2025,
+        'es_original_unica': True,
+        'certificado': 'Certificado de Galería ARTSPACE con firma autógrafa',
+        'en_oferta': False,
+        'descuento_porcentaje': 0,
+        'enmarcado_disponible': True,
+        'precio_enmarcado': 2800.00,
+        'destacado': True,
+        'badge': 'Hoja de Oro 24K',
+        'descripcion': 'Estudio de la refracción lumínica matutina aplicando láminas de oro puro que cambian de tonalidad según la luz ambiental.'
+    },
+    {
+        'id': 'MONOLITO-04',
+        'titulo': 'Monolito de Silencio',
+        'artista': 'Mateo Rivas',
+        'categoria': 'Escultura',
+        'precio_mxn': 42000.00,
+        'precio_usd': 2333.00,
+        'imagen': 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1200',
+        'tecnica': 'Mármol negro de Carrara y latón cepillado artesanal',
+        'dimensiones': '65 x 35 x 30 cm (24 kg)',
+        'anio': 2026,
+        'es_original_unica': True,
+        'certificado': 'Certificado Notarial de Escultura Original',
+        'en_oferta': True,
+        'descuento_porcentaje': 10,
+        'enmarcado_disponible': False,
+        'precio_enmarcado': 0.00,
+        'destacado': False,
+        'badge': 'Escultura Única 1/1',
+        'descripcion': 'Escultura tridimensional que equilibra el peso geológico del mármol con la ligereza reflectiva del latón pulido a mano.'
+    },
+    {
+        'id': 'HORIZONTE-05',
+        'titulo': 'Horizonte Etéreo',
+        'artista': 'Sofía Valenzuela',
+        'categoria': 'Fotografía',
+        'precio_mxn': 14500.00,
+        'precio_usd': 805.00,
+        'imagen': 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&w=1200',
+        'tecnica': 'Impresión Fine Art Giclée sobre papel Hahnemühle Photo Rag 308g',
+        'dimensiones': '90 x 60 cm (Edición 3/10)',
+        'anio': 2026,
+        'es_original_unica': False,
+        'certificado': 'Sello seco de autor con número de tiraje',
+        'en_oferta': False,
+        'descuento_porcentaje': 0,
+        'enmarcado_disponible': True,
+        'precio_enmarcado': 2500.00,
+        'destacado': False,
+        'badge': 'Edición Limitada 3/10',
+        'descripcion': 'Captura analógica de larga exposición en los salares de Atacama, revelando texturas atmosféricas en degradados pastel.'
+    },
+    {
+        'id': 'METAMORFOSIS-06',
+        'titulo': 'Metamorfosis Cuántica',
+        'artista': 'Kaelen Chen',
+        'categoria': 'Arte Digital / NFT',
+        'precio_mxn': 22500.00,
+        'precio_usd': 1250.00,
+        'imagen': 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200',
+        'tecnica': 'Generative AI curada y renderizada en 3D volumétrico cinético',
+        'dimensiones': 'Video Loop 4K 60fps + Token ERC-721',
+        'anio': 2026,
+        'es_original_unica': True,
+        'certificado': 'Contrato Inteligente descentralizado con royalties 70/30',
+        'en_oferta': True,
+        'descuento_porcentaje': 20,
+        'enmarcado_disponible': False,
+        'precio_enmarcado': 0.00,
+        'destacado': True,
+        'badge': 'Cyber Monday -20%',
+        'descripcion': 'Animación generativa hipercompleja basada en algoritmos cuánticos de fluctuación de fluidos en el espacio profundo.'
+    }
+]
+
 
 def index(request):
     perfil = None
     if request.user.is_authenticated:
         perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
-    return render(request, 'index.html', {'perfil': perfil})
+    
+    obras_destacadas = [o for o in CATALOGO_OBRAS if o.get('destacado')]
+    obras_ofertas = [o for o in CATALOGO_OBRAS if o.get('en_oferta')]
+
+    return render(request, 'index.html', {
+        'perfil': perfil,
+        'obras': CATALOGO_OBRAS,
+        'obras_destacadas': obras_destacadas,
+        'obras_ofertas': obras_ofertas,
+    })
 
 
 def colecciones(request):
-    return render(request, 'colecciones.html')
+    perfil = None
+    if request.user.is_authenticated:
+        perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
+    
+    return render(request, 'colecciones.html', {
+        'perfil': perfil,
+        'obras': CATALOGO_OBRAS
+    })
 
 
 def artistas(request):
-    return render(request, 'artistas.html')
+    artistas_data = [
+        {'nombre': 'Ana Lucero', 'pais': 'México', 'especialidad': 'Óleo Abstracto y Pigmentos', 'obras_count': 14, 'foto': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600', 'bio': 'Egresada de Bellas Artes con exposiciones en CDMX, Madrid y Nueva York.'},
+        {'nombre': 'Diego Ferral', 'pais': 'España', 'especialidad': 'Arte Digital y Crypto Art', 'obras_count': 22, 'foto': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600', 'bio': 'Pionero en modelado 3D ciberpunk y smart contracts de arte generativo.'},
+        {'nombre': 'Elisa Moon', 'pais': 'Argentina', 'especialidad': 'Técnicas Mixtas y Hoja de Oro', 'obras_count': 9, 'foto': 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600', 'bio': 'Investigadora de pigmentos renacentistas aplicados a composiciones modernas.'},
+        {'nombre': 'Mateo Rivas', 'pais': 'Chile', 'especialidad': 'Escultura en Piedra y Metales', 'obras_count': 7, 'foto': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600', 'bio': 'Escultor monumental reconocido con el Premio Iberoamericano de Escultura 2024.'}
+    ]
+    return render(request, 'artistas.html', {'artistas': artistas_data})
 
 
 def galeria(request):
-    return render(request, 'galeria.html')
+    categoria_filtro = request.GET.get('categoria', 'TODAS')
+    query = request.GET.get('q', '').strip().lower()
+
+    obras_filtradas = CATALOGO_OBRAS
+    if categoria_filtro != 'TODAS':
+        obras_filtradas = [o for o in obras_filtradas if o['categoria'].lower() == categoria_filtro.lower()]
+
+    if query:
+        obras_filtradas = [
+            o for o in obras_filtradas
+            if query in o['titulo'].lower() or query in o['artista'].lower() or query in o['tecnica'].lower()
+        ]
+
+    return render(request, 'galeria.html', {
+        'obras': obras_filtradas,
+        'categoria_activa': categoria_filtro,
+        'query': query,
+        'total_obras': len(obras_filtradas)
+    })
 
 
 def contacto(request):

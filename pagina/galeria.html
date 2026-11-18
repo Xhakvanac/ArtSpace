@@ -1,70 +1,1791 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galería</title>
+  <title>Catálogo de Obras & Galería Curada | ARTSPACE</title>
 
-  <link rel="stylesheet" href="styles.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Estilos Globales -->
+  <link rel="stylesheet" href="../static/styles.css">
+  
+  <style>
+    :root {
+      --bg-dark: #0B0C10;
+      --bg-surface: #1F2833;
+      --accent-cyan: #66FCF1;
+      --accent-teal: #45A29E;
+      --text-main: #FFFFFF;
+      --text-muted: #C5C6C7;
+      --gold-luxury: #D4AF37;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-heading: 'Playfair Display', serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: #0d0f12;
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR MODERNO DARK LUXURY */
+    .navbar {
+      background: rgba(11, 12, 16, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 5%;
+      z-index: 1000;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-text {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #ffffff;
+    }
+    .logo-badge {
+      font-size: 0.65rem;
+      background: linear-gradient(135deg, var(--gold-luxury), #b89324);
+      color: #000;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-item a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-item a:hover, .nav-item a.active {
+      color: var(--accent-cyan);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .btn-auth-outline {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-auth-outline:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(102, 252, 241, 0.05);
+    }
+
+    .btn-auth-solid {
+      background: var(--accent-cyan);
+      color: #0b0c10;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-auth-solid:hover {
+      background: #45a29e;
+      transform: translateY(-1px);
+    }
+
+    .cart-btn-trigger {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .cart-btn-trigger:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(102, 252, 241, 0.1);
+    }
+    .cart-badge-count {
+      background: var(--accent-cyan);
+      color: #0b0c10;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 12px;
+    }
+
+    /* SLIDE-OUT CART & CHECKOUT DRAWER */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .drawer-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -520px;
+      width: 100%;
+      max-width: 500px;
+      height: 100vh;
+      background: #11141a;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.6);
+      z-index: 2001;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .cart-drawer.active {
+      right: 0;
+    }
+
+    .drawer-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d0f12;
+    }
+    .drawer-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .drawer-close:hover { color: #fff; }
+
+    /* HOLD CART RESERVATION BANNER */
+    .hold-cart-banner {
+      background: linear-gradient(90deg, #1e1b4b 0%, #312e81 100%);
+      border-bottom: 1px solid #4338ca;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #e0e7ff;
+      font-size: 0.82rem;
+    }
+    .timer-badge {
+      font-weight: 800;
+      font-size: 0.95rem;
+      background: #4f46e5;
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    /* ITEMS LIST */
+    .cart-item-card {
+      display: flex;
+      gap: 15px;
+      background: #181c24;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 15px;
+    }
+    .cart-item-thumb {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .cart-item-info {
+      flex: 1;
+    }
+    .cart-item-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+    .cart-item-artist {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .cart-item-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(102, 252, 241, 0.12);
+      color: var(--accent-cyan);
+    }
+    .cart-item-price {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 6px;
+    }
+    .cart-item-remove {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 1.1rem;
+      align-self: flex-start;
+    }
+
+    /* TAX CALCULATOR SECTION */
+    .calc-box {
+      background: #151921;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .calc-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .calc-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .calc-input, .calc-select {
+      background: #0d0f12;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      width: 100%;
+    }
+    .calc-input:focus, .calc-select:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    /* RESUMEN DE COMPRA */
+    .summary-table {
+      width: 100%;
+      margin-top: 15px;
+      font-size: 0.85rem;
+      border-collapse: collapse;
+    }
+    .summary-table td {
+      padding: 6px 0;
+      color: #94a3b8;
+    }
+    .summary-table td.val {
+      text-align: right;
+      color: #fff;
+      font-weight: 600;
+    }
+    .summary-total {
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+    .summary-total td {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .summary-total td.val {
+      color: var(--accent-cyan);
+    }
+
+    /* PAYMENT METHOD TABS */
+    .payment-tabs {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0 15px;
+    }
+    .payment-tab-btn {
+      flex: 1;
+      padding: 10px 8px;
+      background: #181c24;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .payment-tab-btn.active {
+      border-color: var(--accent-cyan);
+      color: #fff;
+      background: rgba(102, 252, 241, 0.08);
+    }
+
+    .payment-panel {
+      display: none;
+      background: #151921;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .payment-panel.active {
+      display: block;
+    }
+
+    .form-group-custom {
+      margin-bottom: 12px;
+    }
+    .form-group-custom label {
+      display: block;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group-custom input {
+      width: 100%;
+      background: #0d0f12;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      box-sizing: border-box;
+    }
+
+    /* DRAWER FOOTER */
+    .drawer-footer {
+      padding: 18px 24px;
+      background: #0d0f12;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .btn-checkout-now {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, #45a29e 100%);
+      color: #0b0c10;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(102, 252, 241, 0.25);
+      transition: all 0.2s;
+    }
+    .btn-checkout-now:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(102, 252, 241, 0.35);
+    }
+
+    /* MODAL DE CONFIRMACIÓN DE ORDEN / CERTIFICADO */
+    .modal-backdrop-custom {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop-custom.active {
+      display: flex;
+    }
+    .modal-receipt-card {
+      background: #11141a;
+      border: 1px solid rgba(102, 252, 241, 0.3);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      border-radius: 20px;
+      max-width: 580px;
+      width: 100%;
+      padding: 32px;
+      color: #fff;
+      animation: modalSlide 0.3s ease;
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* QUICK VIEW MODAL */
+    .quickview-card {
+      background: #11141a;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      border-radius: 20px;
+      max-width: 850px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+    }
+
+    /* WIDGET OMNICANAL FLOTANTE */
+    .crm-floating-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), #45a29e);
+      color: #0b0c10;
+      border: none;
+      box-shadow: 0 8px 30px rgba(102, 252, 241, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      z-index: 1500;
+      transition: all 0.25s;
+    }
+    .crm-floating-btn:hover {
+      transform: scale(1.1);
+    }
+    .crm-widget-box {
+      position: fixed;
+      bottom: 95px;
+      right: 25px;
+      width: 360px;
+      max-height: 520px;
+      background: #151921;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1500;
+    }
+    .crm-widget-box.active {
+      display: flex;
+    }
+    .widget-tabs {
+      display: flex;
+      background: #0d0f12;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .widget-tab-btn {
+      flex: 1;
+      padding: 12px 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .widget-tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom: 2px solid var(--accent-cyan);
+    }
+  </style>
+  
 </head>
-
 <body>
-<header>
+
+  <!-- NAVBAR LUXURY -->
+  <header>
     <nav class="navbar">
+      <a href="index.html" class="logo-container">
+        <span class="logo-text">ARTSPACE</span>
+        <span class="logo-badge">CURATED</span>
+      </a>
 
-      <div class="logo">
-        ARTSPACE
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="">Inicio</a></li>
+        <li class="nav-item"><a href="galeria.html" class="active">Galería & Catálogo</a></li>
+        <li class="nav-item"><a href="colecciones.html" class="">Colecciones</a></li>
+        <li class="nav-item"><a href="artistas.html" class="">Artistas</a></li>
+        <li class="nav-item"><a href="contacto.html" class="">Soporte CRM</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        
+          <!-- INVITADO -->
+          <a href="/login/" class="btn-auth-outline">Iniciar Sesión</a>
+          <a href="/registro/" class="btn-auth-solid">Registro Seguro</a>
+        
+
+        <!-- BOTÓN DE CARRITO INTERACTIVO -->
+        <button class="cart-btn-trigger" onclick="toggleCartDrawer()">
+          <span>🛒</span>
+          <span>Bolsa</span>
+          <span class="cart-badge-count" id="cartCountBadge">1</span>
+        </button>
       </div>
-
-      <ul class="nav-links" id="navLinks">
-
-  <li>
-    <a class="nav-btn" href="index.html">
-      Inicio
-    </a>
-  </li>
-
-  <li>
-    <a class="nav-btn" href="colecciones.html">
-      Colecciones
-    </a>
-  </li>
-
-  <li>
-    <a class="nav-btn" href="artistas.html">
-      Artistas
-    </a>
-  </li>
-
-  <li>
-    <a class="nav-btn" href="galeria.html">
-      Galería
-    </a>
-  </li>
-
-  <li>
-    <a class="nav-btn" href="contacto.html">
-      Contacto
-    </a>
-  </li>
-
-</ul>
-
-      <div class="nav-icons">
-        <span>🛒</span>
-        <span>❤️</span>
-      </div>
-
-      <div class="menu-btn" id="menuBtn">
-        ☰
-      </div>
-
     </nav>
   </header>
-      <div>
-      <h4>
-        Sumérgete en piezas visuales seleccionadas.
-      </h4>
+
+  <!-- CONTENEDOR DE MENSAJES DJANGO -->
+  
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main style="margin-top: 75px; min-height: 80vh;">
+    
+<section style="padding: 40px 5% 80px; max-width: 1300px; margin: 0 auto;">
+  
+  <!-- CABECERA DEL CATÁLOGO -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <span style="color: var(--accent-cyan); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">
+      Componente A · Catálogo de Artículos
+    </span>
+    <h1 style="font-family: var(--font-heading); font-size: 2.8rem; color: #fff; margin: 8px 0 12px;">
+      Galería Curada de Obras Exclusivas
+    </h1>
+    <p style="color: #94a3b8; max-width: 650px; margin: 0 auto; font-size: 0.95rem; line-height: 1.6;">
+      Obras físicas únicas de autor (1/1) y piezas digitales autenticadas en blockchain. Cada adquisición incluye reserva temporal de 15 minutos (Hold Cart), seguro antirrobo DHL y factura fiscal CFDI 4.0.
+    </p>
+  </div>
+
+  <!-- BARRA DE BÚSQUEDA Y FILTRADO FACETADO -->
+  <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px 24px; margin-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+    
+    <!-- CATEGORÍAS -->
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <a href="galeria.html" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; background: var(--accent-cyan); color: #000;">
+        Todas (6)
+      </a>
+      <a href="/galeria/?categoria=Pintura al Óleo" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);">
+        🎨 Pintura al Óleo
+      </a>
+      <a href="/galeria/?categoria=Arte Digital / NFT" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);">
+        🌐 Arte Digital / NFT
+      </a>
+      <a href="/galeria/?categoria=Escultura" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);">
+        🗿 Escultura
+      </a>
+      <a href="/galeria/?categoria=Fotografía" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);">
+        📷 Fotografía
+      </a>
+    </div>
+
+    <!-- BUSCADOR -->
+    <form action="/galeria/" method="GET" style="display: flex; gap: 8px; flex: 1; max-width: 320px;">
+      <input type="text" name="q" value="" placeholder="Buscar por título o artista..." style="flex: 1; background: #0d0f12; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; outline: none;">
+      <button type="submit" style="background: var(--accent-cyan); color: #000; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.82rem;">
+        Buscar
+      </button>
+    </form>
+
+  </div>
+
+  <!-- GRID DE PRODUCTOS DEL CATÁLOGO -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 30px;">
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200" alt="Ecos del Vacío" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Pieza Única 1/1
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            120 x 90 cm
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Pintura al Óleo
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2026
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Ecos del Vacío
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Ana Lucero</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Óleo y pigmentos naturales sobre lienzo de lino belga</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado Físico Holográfico + Registro Blockchain ERC-721</span></div>
+              
+                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+$3200 MXN)</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $34500.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $1916 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
+                ✓ Stock: 1 Disponible (1/1)
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: 'ECOS-VACIO-01', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio: 34500.0, enmarcado: 3200.0, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200', es_original_unica: true, badge: 'Pieza Única 1/1'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                🛒 Apartar (Hold 15m)
+              </button>
+              
+              <button onclick="abrirQuickView({id: 'ECOS-VACIO-01', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio_mxn: 34500.0, descripcion: 'Obra maestra que explora los contrastes cromáticos y la introspección del silencio en el arte abstracto contemporáneo.', tecnica: 'Óleo y pigmentos naturales sobre lienzo de lino belga', dimensiones: '120 x 90 cm', anio: '2026', certificado: 'Certificado Físico Holográfico + Registro Blockchain ERC-721', imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200', badge: 'Pieza Única 1/1', precio_enmarcado: 3200.0, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
       </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200" alt="Ciudad de Vapor (Cyberpunk)" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: #f87171; border: 1px solid #f87171; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Oferta -15% · NFT Exclusivo
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            7680 x 4320 px (Master File)
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Arte Digital / NFT
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2026
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Ciudad de Vapor (Cyberpunk)
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Diego Ferral</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Pintura digital vectorial en Ultra-HD 8K con smart contract</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Smart Contract Ethereum / IPFS Hash Verificado</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $18900.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $1050 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
+                ✓ Stock: 1 Disponible (1/1)
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: 'CIUDAD-VAPOR-02', titulo: 'Ciudad de Vapor (Cyberpunk)', artista: 'Diego Ferral', precio: 18900.0, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200', es_original_unica: true, badge: 'Oferta -15% · NFT Exclusivo'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                🛒 Apartar (Hold 15m)
+              </button>
+              
+              <button onclick="abrirQuickView({id: 'CIUDAD-VAPOR-02', titulo: 'Ciudad de Vapor (Cyberpunk)', artista: 'Diego Ferral', precio_mxn: 18900.0, descripcion: 'Visión retrofuturista de megalópolis nocturnas iluminadas por neón, transferible a wallet Ethereum o descarga directa.', tecnica: 'Pintura digital vectorial en Ultra-HD 8K con smart contract', dimensiones: '7680 x 4320 px (Master File)', anio: '2026', certificado: 'Smart Contract Ethereum / IPFS Hash Verificado', imagen: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200', badge: 'Oferta -15% · NFT Exclusivo', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200" alt="Fragmentos del Sol" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Hoja de Oro 24K
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            100 x 100 cm
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Pintura al Óleo
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2025
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Fragmentos del Sol
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Elisa Moon</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Acrílico texturizado y hoja de oro de 24k sobre madera estucada</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado de Galería ARTSPACE con firma autógrafa</span></div>
+              
+                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+$2800 MXN)</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $28400.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $1577 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
+                ✓ Stock: 1 Disponible (1/1)
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: 'FRAG-SOL-03', titulo: 'Fragmentos del Sol', artista: 'Elisa Moon', precio: 28400.0, enmarcado: 2800.0, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200', es_original_unica: true, badge: 'Hoja de Oro 24K'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                🛒 Apartar (Hold 15m)
+              </button>
+              
+              <button onclick="abrirQuickView({id: 'FRAG-SOL-03', titulo: 'Fragmentos del Sol', artista: 'Elisa Moon', precio_mxn: 28400.0, descripcion: 'Estudio de la refracción lumínica matutina aplicando láminas de oro puro que cambian de tonalidad según la luz ambiental.', tecnica: 'Acrílico texturizado y hoja de oro de 24k sobre madera estucada', dimensiones: '100 x 100 cm', anio: '2025', certificado: 'Certificado de Galería ARTSPACE con firma autógrafa', imagen: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200', badge: 'Hoja de Oro 24K', precio_enmarcado: 2800.0, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200" alt="Monolito de Silencio" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: #f87171; border: 1px solid #f87171; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Escultura Única 1/1
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            65 x 35 x 30 cm (24 kg)
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Escultura
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2026
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Monolito de Silencio
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Mateo Rivas</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Mármol negro de Carrara y latón cepillado artesanal</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado Notarial de Escultura Original</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $42000.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $2333 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
+                ✓ Stock: 1 Disponible (1/1)
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: 'MONOLITO-04', titulo: 'Monolito de Silencio', artista: 'Mateo Rivas', precio: 42000.0, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200', es_original_unica: true, badge: 'Escultura Única 1/1'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                🛒 Apartar (Hold 15m)
+              </button>
+              
+              <button onclick="abrirQuickView({id: 'MONOLITO-04', titulo: 'Monolito de Silencio', artista: 'Mateo Rivas', precio_mxn: 42000.0, descripcion: 'Escultura tridimensional que equilibra el peso geológico del mármol con la ligereza reflectiva del latón pulido a mano.', tecnica: 'Mármol negro de Carrara y latón cepillado artesanal', dimensiones: '65 x 35 x 30 cm (24 kg)', anio: '2026', certificado: 'Certificado Notarial de Escultura Original', imagen: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200', badge: 'Escultura Única 1/1', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&amp;w=1200" alt="Horizonte Etéreo" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Edición Limitada 3/10
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            90 x 60 cm (Edición 3/10)
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Fotografía
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2026
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Horizonte Etéreo
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Sofía Valenzuela</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Impresión Fine Art Giclée sobre papel Hahnemühle Photo Rag 308g</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Sello seco de autor con número de tiraje</span></div>
+              
+                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+$2500 MXN)</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $14500.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $805 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
+                ✓ Stock: 1 Disponible (1/1)
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: 'HORIZONTE-05', titulo: 'Horizonte Etéreo', artista: 'Sofía Valenzuela', precio: 14500.0, enmarcado: 2500.0, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&amp;w=1200', es_original_unica: false, badge: 'Edición Limitada 3/10'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                🛒 Apartar (Hold 15m)
+              </button>
+              
+              <button onclick="abrirQuickView({id: 'HORIZONTE-05', titulo: 'Horizonte Etéreo', artista: 'Sofía Valenzuela', precio_mxn: 14500.0, descripcion: 'Captura analógica de larga exposición en los salares de Atacama, revelando texturas atmosféricas en degradados pastel.', tecnica: 'Impresión Fine Art Giclée sobre papel Hahnemühle Photo Rag 308g', dimensiones: '90 x 60 cm (Edición 3/10)', anio: '2026', certificado: 'Sello seco de autor con número de tiraje', imagen: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&amp;w=1200', badge: 'Edición Limitada 3/10', precio_enmarcado: 2500.0, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200" alt="Metamorfosis Cuántica" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: #f87171; border: 1px solid #f87171; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Cyber Monday -20%
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            Video Loop 4K 60fps + Token ERC-721
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Arte Digital / NFT
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2026
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Metamorfosis Cuántica
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Kaelen Chen</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Generative AI curada y renderizada en 3D volumétrico cinético</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Contrato Inteligente descentralizado con royalties 70/30</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $22500.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $1250 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
+                ✓ Stock: 1 Disponible (1/1)
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: 'METAMORFOSIS-06', titulo: 'Metamorfosis Cuántica', artista: 'Kaelen Chen', precio: 22500.0, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200', es_original_unica: true, badge: 'Cyber Monday -20%'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                🛒 Apartar (Hold 15m)
+              </button>
+              
+              <button onclick="abrirQuickView({id: 'METAMORFOSIS-06', titulo: 'Metamorfosis Cuántica', artista: 'Kaelen Chen', precio_mxn: 22500.0, descripcion: 'Animación generativa hipercompleja basada en algoritmos cuánticos de fluctuación de fluidos en el espacio profundo.', tecnica: 'Generative AI curada y renderizada en 3D volumétrico cinético', dimensiones: 'Video Loop 4K 60fps + Token ERC-721', anio: '2026', certificado: 'Contrato Inteligente descentralizado con royalties 70/30', imagen: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200', badge: 'Cyber Monday -20%', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+  </div>
+
+</section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 🛒 COMPONENTE B & C: SLIDE-OUT CART & CHECKOUT DRAWER (CON HOLD CART 15M) -->
+  <!-- ========================================================================= -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleCartDrawer()"></div>
+
+  <div class="cart-drawer" id="cartDrawer">
+    <!-- HEADER -->
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <span>🎨</span>
+        <span>Bolsa de Coleccionista</span>
+      </div>
+      <button class="drawer-close" onclick="toggleCartDrawer()">&times;</button>
+    </div>
+
+    <!-- HOLD-CART RESERVATION BANNER -->
+    <div class="hold-cart-banner">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span>⏳</span>
+        <span>Reserva Exclusiva (Hold Cart):</span>
+      </div>
+      <span class="timer-badge" id="holdTimer">14:59</span>
+    </div>
+
+    <!-- BODY -->
+    <div class="drawer-body">
+      <!-- LISTA DE OBRAS EN EL CARRITO -->
+      <div id="cartItemsContainer">
+        <!-- Renderizado dinámico vía JavaScript -->
+      </div>
+
+      <!-- CONFIGURADOR DE CÁLCULO DE IMPUESTOS Y FLETES (COMPONENTE E) -->
+      <div class="calc-box">
+        <div class="calc-title">
+          <span>📍</span>
+          <span>Configurador Fiscal & Flete Regional</span>
+        </div>
+        
+        <div class="calc-row">
+          <input type="text" id="inputCodigoPostal" class="calc-input" placeholder="Código Postal (ej. 90000 o 22000)" value="90000">
+          <button type="button" onclick="calcularImpuestosEnVivo()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 14px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; white-space: nowrap;">
+            Calcular
+          </button>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <select id="selectZonaFiscal" class="calc-select" onchange="calcularImpuestosEnVivo()">
+            <option value="GENERAL">México Central / Tasa General (16% IVA)</option>
+            <option value="FRONTERA">Franja Fronteriza Norte (8% IVA Decreto SAT)</option>
+            <option value="EXPORTACION">Exportación Digital Internacional (0% IVA)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 12px;">
+          <input type="checkbox" id="checkEnvioSeguro" checked onchange="calcularImpuestosEnVivo()" style="accent-color: var(--accent-cyan);">
+          <label for="checkEnvioSeguro">Embalaje de Museo y Flete Courier DHL Asegurado (+$1,450 MXN)</label>
+        </div>
+
+        <!-- DESGLOSE DETALLADO -->
+        <table class="summary-table">
+          <tr>
+            <td>Subtotal Obras:</td>
+            <td class="val" id="lblSubtotal">$34,500.00 MXN</td>
+          </tr>
+          <tr>
+            <td>Enmarcado Especial:</td>
+            <td class="val" id="lblEnmarcado">$3,200.00 MXN</td>
+          </tr>
+          <tr>
+            <td>Flete & Courier DHL Express:</td>
+            <td class="val" id="lblEnvio">$1,450.00 MXN</td>
+          </tr>
+          <tr>
+            <td>Seguro Antirrobo de Arte (1.5%):</td>
+            <td class="val" id="lblSeguro">$517.50 MXN</td>
+          </tr>
+          <tr>
+            <td>IVA (<span id="lblTasaIva">16%</span>):</td>
+            <td class="val" id="lblIva">$6,346.80 MXN</td>
+          </tr>
+          <tr class="summary-total">
+            <td>TOTAL A LIQUIDAR:</td>
+            <td class="val" id="lblTotal">$46,014.30 MXN</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- PASARELA DE PAGOS Y MÉTODOS (COMPONENTE C) -->
+      <div style="margin-top: 20px;">
+        <div style="font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 8px;">
+          💳 Selección de Método de Pago
+        </div>
+
+        <div class="payment-tabs">
+          <button class="payment-tab-btn active" onclick="setPaymentMethod('tarjeta')">💳 Tarjeta</button>
+          <button class="payment-tab-btn" onclick="setPaymentMethod('spei')">🏦 SPEI Banxico</button>
+          <button class="payment-tab-btn" onclick="setPaymentMethod('wallet')">📱 Billetera</button>
+        </div>
+
+        <!-- PANEL TARJETA -->
+        <div class="payment-panel active" id="panelTarjeta">
+          <div class="form-group-custom">
+            <label>Número de Tarjeta (Stripe Elements PCI-DSS)</label>
+            <input type="text" id="ccNumber" placeholder="4152 •••• •••• 9821" value="4152 7890 2341 9821">
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <div class="form-group-custom" style="flex: 2;">
+              <label>Expiración</label>
+              <input type="text" id="ccExp" placeholder="MM/AA" value="08/28">
+            </div>
+            <div class="form-group-custom" style="flex: 1;">
+              <label>CVC / CVV</label>
+              <input type="password" id="ccCvc" placeholder="•••" value="842" maxlength="4">
+            </div>
+          </div>
+          <div class="form-group-custom">
+            <label>Titular de la Tarjeta</label>
+            <input type="text" id="ccName" placeholder="Nombre completo" value="RODRIGO ALMENDRA VALENZUELA">
+          </div>
+        </div>
+
+        <!-- PANEL SPEI -->
+        <div class="payment-panel" id="panelSpei">
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 10px;">
+            Transfiere desde cualquier banca móvil vía Sistema de Pagos Electrónicos Interbancarios (Banxico STP):
+          </p>
+          <div style="background: #0d0f12; padding: 12px; border-radius: 8px; font-size: 0.8rem;">
+            <div><strong>Banco Receptor:</strong> STP / Banxico</div>
+            <div><strong>CLABE Interbancaria:</strong> 646180123456789012</div>
+            <div><strong>Beneficiario:</strong> ARTSPACE GALERIA DIGITAL S.A.S.</div>
+            <div><strong>Referencia Numérica:</strong> 20261103</div>
+          </div>
+        </div>
+
+        <!-- PANEL WALLET -->
+        <div class="payment-panel" id="panelWallet">
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 10px;">
+            Liquida con 1 clic mediante tu billetera digital autorizada:
+          </p>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" style="flex: 1; padding: 10px; background: #003087; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">PayPal</button>
+            <button type="button" style="flex: 1; padding: 10px; background: #009ee3; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Mercado Pago</button>
+          </div>
+        </div>
+
+        <!-- FACTURACIÓN FISCAL SAT CFDI 4.0 -->
+        <div style="background: #151921; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 12px; margin-top: 15px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #fff;">
+            <input type="checkbox" id="checkFacturaCfdi" checked style="accent-color: var(--accent-cyan);">
+            <label for="checkFacturaCfdi"><strong>¿Requieres Factura Fiscal CFDI 4.0?</strong></label>
+          </div>
+          <div id="cfdiInputs" style="margin-top: 10px;">
+            <div class="form-group-custom">
+              <label>RFC Receptor</label>
+              <input type="text" id="fiscalRfc" value="ALVR981024ABC" style="text-transform: uppercase;">
+            </div>
+            <div class="form-group-custom">
+              <label>Razón Social</label>
+              <input type="text" id="fiscalRazonSocial" value="RODRIGO ALMENDRA VALENZUELA">
+            </div>
+            <div class="form-group-custom">
+              <label>Uso de CFDI</label>
+              <select id="fiscalUsoCfdi" class="calc-select">
+                <option value="G03">G03 - Gastos en general</option>
+                <option value="CP01">CP01 - Pagos</option>
+                <option value="S01">S01 - Sin efectos fiscales</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER CON BOTÓN DE PAGO -->
+    <div class="drawer-footer">
+      <button class="btn-checkout-now" id="btnCheckout" onclick="ejecutarCompraFinal()">
+        <span>🔒 Confirmar y Pagar</span>
+        <span id="btnCheckoutAmount">$46,014.30 MXN</span>
+      </button>
+      <div style="text-align: center; font-size: 0.72rem; color: #94a3b8; margin-top: 8px;">
+        Cifrado SSL 256-bit · Garantía de Autenticidad Notariada · Entrega DHL Asegurada
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 📜 MODAL DE CONFIRMACIÓN DE PEDIDO Y TIMBRADO SAT CFDI 4.0 -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop-custom" id="modalOrderSuccess">
+    <div class="modal-receipt-card">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #fff;">¡Adquisición Exitosa!</h2>
+        <p style="color: var(--accent-cyan); font-size: 0.9rem; margin-top: 5px;">Tu obra de arte ha sido reservada y despachada.</p>
+      </div>
+
+      <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; font-size: 0.85rem; line-height: 1.8;">
+        <div><strong>Folio de Pedido:</strong> <span style="color: var(--accent-cyan); font-family: monospace;" id="resPedido">ART-202611-3F4C4F</span></div>
+        <div><strong>Obra Adquirida:</strong> <span id="resObra">Ecos del Vacío (Lienzo 120x90cm)</span></div>
+        <div><strong>Guía Courier DHL AWB:</strong> <span style="color: #fde047; font-family: monospace;" id="resAwb">DHL-AWB-D10D7F36E6</span></div>
+        <div><strong>Factura CFDI 4.0 UUID:</strong> <span style="font-size: 0.75rem; color: #94a3b8;" id="resUuid">224e4ef0-d81b-4ad1-9a6a-a9507474b5cf</span></div>
+        <div><strong>Liquidación Split Creador (70%):</strong> <span style="color: #86efac;">$31,807.38 MXN (SPEI Dispersado)</span></div>
+        <div><strong>Puntos Art Club Acreditados:</strong> <span style="color: var(--gold-luxury); font-weight: 700;">+4,601 Pts (Nivel VIP Patron)</span></div>
+        <div><strong>Monto Total Liquidado:</strong> <strong style="color: #fff;" id="resTotal">$46,014.30 MXN</strong></div>
+      </div>
+
+      <div style="margin-top: 24px; display: flex; gap: 12px;">
+        <a href="/perfil/" style="flex: 1; text-align: center; background: var(--accent-cyan); color: #000; padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 0.9rem;">
+          Ver en Mi Perfil
+        </a>
+        <button onclick="cerrarModalExito()" style="flex: 1; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+          Seguir Explorando
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 🔍 MODAL DE FICHA TÉCNICA Y QUICK VIEW DE OBRA -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop-custom" id="modalQuickView">
+    <div class="quickview-card">
+      <div style="flex: 1; min-width: 320px; max-height: 480px; position: relative;">
+        <img id="qvImg" src="" alt="Obra" style="width: 100%; height: 100%; object-fit: cover;">
+        <div id="qvBadge" style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+          Pieza Única 1/1
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 320px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="font-size: 0.82rem; color: var(--gold-luxury); text-transform: uppercase; letter-spacing: 1px;" id="qvArtist">Ana Lucero</div>
+            <button onclick="cerrarQuickView()" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+          </div>
+          <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff; margin: 6px 0 12px;" id="qvTitle">Ecos del Vacío</h2>
+          <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 15px;" id="qvPrice">$34,500 MXN</div>
+
+          <div style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 18px;" id="qvDesc">
+            Obra abstracta realizada con pigmentos minerales sobre lienzo de lino belga.
+          </div>
+
+          <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px; font-size: 0.8rem; line-height: 1.8;">
+            <div><strong>Técnica:</strong> <span id="qvTecnica">Óleo y pigmentos naturales</span></div>
+            <div><strong>Dimensiones:</strong> <span id="qvDim">120 x 90 cm</span></div>
+            <div><strong>Año:</strong> <span id="qvAnio">2026</span></div>
+            <div><strong>Certificado:</strong> <span id="qvCert">Holográfico + Blockchain ERC-721</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <button onclick="adquirirDesdeQuickView()" style="width: 100%; padding: 14px; background: var(--accent-cyan); color: #000; border: none; border-radius: 8px; font-weight: 800; font-size: 0.95rem; cursor: pointer;">
+            🛒 Apartar y Adquirir (Hold Cart 15 min)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 💬 COMPONENTE F: ATENCIÓN A CLIENTES OMNICANAL FLOTANTE -->
+  <!-- ========================================================================= -->
+  <button class="crm-floating-btn" onclick="toggleOmnicanalWidget()" title="Atención a Clientes & Chatbot">
+    💬
+  </button>
+
+  <div class="crm-widget-box" id="crmWidgetBox">
+    <div style="background: #0d0f12; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.2rem;">🤖</span>
+        <div>
+          <div style="font-weight: 700; font-size: 0.9rem; color: #fff;">Concierge ARTSPACE</div>
+          <div style="font-size: 0.7rem; color: #86efac;">En línea · Respuesta Inmediata</div>
+        </div>
+      </div>
+      <button onclick="toggleOmnicanalWidget()" style="background: none; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer;">&times;</button>
+    </div>
+
+    <div class="widget-tabs">
+      <button class="widget-tab-btn active" onclick="setWidgetTab('chat')">🤖 Chatbot FAQ</button>
+      <button class="widget-tab-btn" onclick="setWidgetTab('ticket')">📩 Ticket</button>
+      <button class="widget-tab-btn" onclick="setWidgetTab('wa')">💬 WhatsApp</button>
+    </div>
+
+    <!-- TAB 1: CHATBOT -->
+    <div id="tabChat" style="display: flex; flex-direction: column; flex: 1; height: 350px;">
+      <div style="flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px;" id="widgetChatHistory">
+        <div style="background: #1f2833; padding: 10px 14px; border-radius: 12px 12px 12px 2px; font-size: 0.82rem; color: #fff; max-width: 85%;">
+          ¡Hola! Soy <strong>ArtBot</strong>. ¿En qué puedo orientarte hoy sobre certificados, envíos DHL o facturación CFDI 4.0?
+        </div>
+      </div>
+
+      <div style="padding: 10px; background: #0d0f12; display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.05);">
+        <button onclick="askWidgetBot('¿Cómo funciona el envío asegurado DHL?')" style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; cursor: pointer;">📦 Envíos DHL</button>
+        <button onclick="askWidgetBot('¿Cómo se emite la factura CFDI 4.0?')" style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; cursor: pointer;">🧾 CFDI 4.0</button>
+        <button onclick="askWidgetBot('¿Qué incluye el certificado de autenticidad?')" style="background: rgba(255,255,255,0.08); color: #cbd5e1; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; cursor: pointer;">📜 Certificados</button>
+      </div>
+
+      <div style="padding: 10px; background: #0d0f12; display: flex; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
+        <input type="text" id="widgetChatInput" placeholder="Escribe tu duda..." style="flex: 1; background: #151921; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 0.82rem;" onkeypress="if(event.key==='Enter') sendWidgetMsg()">
+        <button onclick="sendWidgetMsg()" style="background: var(--accent-cyan); color: #000; border: none; padding: 0 14px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Enviar</button>
+      </div>
+    </div>
+
+    <!-- TAB 2: TICKET -->
+    <div id="tabTicket" style="display: none; padding: 16px; overflow-y: auto; height: 350px;">
+      <form action="/contacto/" method="POST">
+        <input type="hidden" name="csrfmiddlewaretoken" value="MCK8qXaOyw1Nzg29mXyOdkW8Orp2BheTAirhrdR6y3gThFCoTlwXXfC7BzcZOftU">
+        <div class="form-group-custom">
+          <label>Nombre Completo</label>
+          <input type="text" name="nombre" value="" required>
+        </div>
+        <div class="form-group-custom">
+          <label>Correo Electrónico</label>
+          <input type="email" name="email" value="" required>
+        </div>
+        <div class="form-group-custom">
+          <label>Asunto / Consulta</label>
+          <input type="text" name="asunto" placeholder="Cotización o duda" required>
+        </div>
+        <div class="form-group-custom">
+          <label>Mensaje Detallado</label>
+          <textarea name="mensaje" rows="3" style="width: 100%; background: #0d0f12; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 8px; border-radius: 8px; font-size: 0.82rem;" required></textarea>
+        </div>
+        <button type="submit" style="width: 100%; background: var(--accent-cyan); color: #000; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+          Radicar Ticket en CRM
+        </button>
+      </form>
+    </div>
+
+    <!-- TAB 3: WHATSAPP -->
+    <div id="tabWa" style="display: none; padding: 25px; text-align: center; height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <div style="font-size: 3rem; margin-bottom: 10px;">🟢</div>
+      <h3 style="margin: 0 0 10px; color: #fff;">WhatsApp Concierge</h3>
+      <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px;">
+        Chatea directamente con uno de nuestros curadores especializados para compras institucionales o piezas por encargo.
+      </p>
+      <a href="https://wa.me/522460000000?text=Hola,%20me%20interesa%20informaci%C3%B3n%20sobre%20una%20obra%20en%20ARTSPACE" target="_blank" style="display: inline-block; background: #25d366; color: #fff; font-weight: 700; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 0.9rem;">
+        Iniciar Conversación ➔
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="background: #07080a; border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 5%; margin-top: 60px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; font-size: 0.85rem; color: #94a3b8;">
+      <div>
+        <div style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; font-weight: 700; margin-bottom: 8px;">ARTSPACE</div>
+        <p style="margin: 0; max-width: 320px;">Galería de comercio electrónico para arte contemporáneo, piezas originales 1/1 y creaciones digitales curadas.</p>
+      </div>
+      <div>
+        <div style="font-weight: 700; color: #fff; margin-bottom: 10px;">Cumplimiento Fiscal & Operativo</div>
+        <div>✓ Timbrado Digital SAT CFDI 4.0</div>
+        <div>✓ Dispersión Split 70/30 a Creadores</div>
+        <div>✓ Envíos Asegurados DHL Express</div>
+      </div>
+      <div>
+        <div style="font-weight: 700; color: #fff; margin-bottom: 10px;">Seguridad & Ciberseguridad</div>
+        <div>✓ PBKDF2-SHA256 (1.5M Iteraciones)</div>
+        <div>✓ Sesiones HttpOnly & SameSite=Lax</div>
+        <div>✓ Tokenización Bancaria PCI-DSS</div>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 30px; font-size: 0.75rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+      © 2026 ARTSPACE · Universidad Autónoma de Tlaxcala · Negocios Electrónicos II · Equipo 3
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- ⚙️ MOTOR JAVASCRIPT GLOBAL (ECOMMERCE CART, TAX, HOLD & CHATBOT) -->
+  <!-- ========================================================================= -->
+  <script>
+    // Carrito de compras en memoria
+    let currentCart = [
+      {
+        id: 'ECOS-VACIO-01',
+        titulo: 'Ecos del Vacío',
+        artista: 'Ana Lucero',
+        precio: 34500.00,
+        enmarcado: 3200.00,
+        conEnmarcado: true,
+        imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200',
+        es_original_unica: true,
+        badge: 'Pieza Única 1/1'
+      }
+    ];
+
+    let currentQuickViewItem = null;
+
+    // Toggle Drawer
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      const overlay = document.getElementById('drawerOverlay');
+      const isActive = drawer.classList.contains('active');
+      if (isActive) {
+        drawer.classList.remove('active');
+        overlay.classList.remove('active');
+      } else {
+        renderCartUI();
+        calcularImpuestosEnVivo();
+        drawer.classList.add('active');
+        overlay.classList.add('active');
+      }
+    }
+
+    // Render Cart
+    function renderCartUI() {
+      const container = document.getElementById('cartItemsContainer');
+      const badge = document.getElementById('cartCountBadge');
+      badge.textContent = currentCart.length;
+
+      if (currentCart.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; color: #94a3b8;">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🛒</div>
+            <div style="font-size: 1rem; color: #fff; font-weight: 600;">Tu bolsa está vacía</div>
+            <p style="font-size: 0.85rem; margin-top: 5px;">Explora el catálogo para reservar una obra.</p>
+          </div>
+        `;
+        document.getElementById('lblSubtotal').textContent = '$0.00 MXN';
+        document.getElementById('lblEnmarcado').textContent = '$0.00 MXN';
+        document.getElementById('lblTotal').textContent = '$0.00 MXN';
+        document.getElementById('btnCheckoutAmount').textContent = '$0.00 MXN';
+        return;
+      }
+
+      container.innerHTML = currentCart.map((item, index) => `
+        <div class="cart-item-card">
+          <img src="${item.imagen}" class="cart-item-thumb" alt="${item.titulo}">
+          <div class="cart-item-info">
+            <div class="cart-item-title">${item.titulo}</div>
+            <div class="cart-item-artist">por ${item.artista}</div>
+            <span class="cart-item-badge">${item.badge}</span>
+            ${item.conEnmarcado ? '<div style="font-size: 0.75rem; color: #86efac; margin-top: 3px;">+ Con Enmarcado Nogal (+$3,200)</div>' : ''}
+            <div class="cart-item-price">$${item.precio.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</div>
+          </div>
+          <button class="cart-item-remove" onclick="removerItem(${index})" title="Remover de la bolsa">&times;</button>
+        </div>
+      `).join('');
+    }
+
+    function removerItem(index) {
+      currentCart.splice(index, 1);
+      renderCartUI();
+      calcularImpuestosEnVivo();
+    }
+
+    function agregarAlCarrito(obra) {
+      // Regla de Negocio RN-01: Hold Cart 15 min
+      currentCart = [obra]; // En piezas únicas se mantiene la seleccionada
+      renderCartUI();
+      toggleCartDrawer();
+      iniciarHoldTimer();
+    }
+
+    // Temporizador Hold Cart (15 minutos)
+    let holdSeconds = 900;
+    let holdInterval = null;
+
+    function iniciarHoldTimer() {
+      if (holdInterval) clearInterval(holdInterval);
+      holdSeconds = 900;
+      holdInterval = setInterval(() => {
+        holdSeconds--;
+        if (holdSeconds <= 0) {
+          clearInterval(holdInterval);
+          alert("El tiempo de reserva de la obra original ha expirado. La pieza vuelve a estar disponible.");
+          currentCart = [];
+          renderCartUI();
+          calcularImpuestosEnVivo();
+          return;
+        }
+        const m = Math.floor(holdSeconds / 60).toString().padStart(2, '0');
+        const s = (holdSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('holdTimer').textContent = `${m}:${s}`;
+      }, 1000);
+    }
+    iniciarHoldTimer();
+
+    // Cálculo dinámico de Impuestos y Fletes (Componente E)
+    function calcularImpuestosEnVivo() {
+      let subtotalBase = currentCart.reduce((sum, i) => sum + i.precio, 0);
+      let enmarcadoTotal = currentCart.reduce((sum, i) => sum + (i.conEnmarcado ? (i.enmarcado || 0) : 0), 0);
+      let subtotal = subtotalBase + enmarcadoTotal;
+
+      const zona = document.getElementById('selectZonaFiscal').value;
+      const cp = document.getElementById('inputCodigoPostal').value.trim();
+      const conEnvio = document.getElementById('checkEnvioSeguro').checked;
+
+      let envioDHL = (conEnvio && subtotal > 0) ? 1450.00 : 0.00;
+      let seguroArte = subtotal > 0 ? (subtotalBase * 0.015) : 0.00;
+
+      let tasaIva = 0.16;
+      let etiquetaTasa = '16%';
+
+      // Detección de Frontera Norte (C.P. 22xxx Tijuana, 32xxx Juárez, etc.)
+      if (zona === 'FRONTERA' || cp.startsWith('22') || cp.startsWith('32') || cp.startsWith('88')) {
+        tasaIva = 0.08;
+        etiquetaTasa = '8% (Frontera)';
+      } else if (zona === 'EXPORTACION') {
+        tasaIva = 0.00;
+        etiquetaTasa = '0% (Exportación)';
+        envioDHL = 0.00; // Activo digital o cotización exterior
+      }
+
+      let ivaMonto = (subtotal + envioDHL + seguroArte) * tasaIva;
+      let totalFinal = subtotal + envioDHL + seguroArte + ivaMonto;
+
+      // Actualizar UI
+      document.getElementById('lblSubtotal').textContent = `$${subtotalBase.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      document.getElementById('lblEnmarcado').textContent = `$${enmarcadoTotal.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      document.getElementById('lblEnvio').textContent = `$${envioDHL.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      document.getElementById('lblSeguro').textContent = `$${seguroArte.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      document.getElementById('lblTasaIva').textContent = etiquetaTasa;
+      document.getElementById('lblIva').textContent = `$${ivaMonto.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      document.getElementById('lblTotal').textContent = `$${totalFinal.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      document.getElementById('btnCheckoutAmount').textContent = `$${totalFinal.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+    }
+
+    // Selector de métodos de pago
+    function setPaymentMethod(method) {
+      document.querySelectorAll('.payment-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.payment-panel').forEach(p => p.classList.remove('active'));
+
+      if (method === 'tarjeta') {
+        document.querySelectorAll('.payment-tab-btn')[0].classList.add('active');
+        document.getElementById('panelTarjeta').classList.add('active');
+      } else if (method === 'spei') {
+        document.querySelectorAll('.payment-tab-btn')[1].classList.add('active');
+        document.getElementById('panelSpei').classList.add('active');
+      } else if (method === 'wallet') {
+        document.querySelectorAll('.payment-tab-btn')[2].classList.add('active');
+        document.getElementById('panelWallet').classList.add('active');
+      }
+    }
+
+    // Ejecutar Transacción Final
+    function ejecutarCompraFinal() {
+      if (currentCart.length === 0) {
+        alert("Tu bolsa está vacía.");
+        return;
+      }
+
+      const btn = document.getElementById('btnCheckout');
+      btn.innerHTML = `<span>⏳ Procesando Pago y CFDI...</span>`;
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.innerHTML = `<span>🔒 Confirmar y Pagar</span> <span id="btnCheckoutAmount">${document.getElementById('lblTotal').textContent}</span>`;
+        btn.disabled = false;
+
+        // Cierra el drawer
+        toggleCartDrawer();
+
+        // Rellena modal de éxito
+        const ordenFolio = 'ART-202611-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+        const awb = 'DHL-AWB-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+        const uuidSat = '224e4ef0-d81b-4ad1-9a6a-' + Math.random().toString(36).substring(2, 14);
+
+        document.getElementById('resPedido').textContent = ordenFolio;
+        document.getElementById('resAwb').textContent = awb;
+        document.getElementById('resUuid').textContent = uuidSat;
+        document.getElementById('resObra').textContent = currentCart[0].titulo;
+        document.getElementById('resTotal').textContent = document.getElementById('lblTotal').textContent;
+
+        document.getElementById('modalOrderSuccess').classList.add('active');
+      }, 1200);
+    }
+
+    function cerrarModalExito() {
+      document.getElementById('modalOrderSuccess').classList.remove('active');
+    }
+
+    // Modal Quick View
+    function abrirQuickView(obra) {
+      currentQuickViewItem = obra;
+      document.getElementById('qvImg').src = obra.imagen;
+      document.getElementById('qvTitle').textContent = obra.titulo;
+      document.getElementById('qvArtist').textContent = obra.artista;
+      document.getElementById('qvPrice').textContent = `$${obra.precio_mxn.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      document.getElementById('qvDesc').textContent = obra.descripcion;
+      document.getElementById('qvTecnica').textContent = obra.tecnica;
+      document.getElementById('qvDim').textContent = obra.dimensiones;
+      document.getElementById('qvAnio').textContent = obra.anio;
+      document.getElementById('qvCert').textContent = obra.certificado;
+      document.getElementById('qvBadge').textContent = obra.badge;
+
+      document.getElementById('modalQuickView').classList.add('active');
+    }
+
+    function cerrarQuickView() {
+      document.getElementById('modalQuickView').classList.remove('active');
+    }
+
+    function adquirirDesdeQuickView() {
+      if (currentQuickViewItem) {
+        cerrarQuickView();
+        agregarAlCarrito({
+          id: currentQuickViewItem.id,
+          titulo: currentQuickViewItem.titulo,
+          artista: currentQuickViewItem.artista,
+          precio: currentQuickViewItem.precio_mxn,
+          enmarcado: currentQuickViewItem.precio_enmarcado || 0,
+          conEnmarcado: currentQuickViewItem.enmarcado_disponible,
+          imagen: currentQuickViewItem.imagen,
+          es_original_unica: currentQuickViewItem.es_original_unica,
+          badge: currentQuickViewItem.badge
+        });
+      }
+    }
+
+    // Omnicanal Widget
+    function toggleOmnicanalWidget() {
+      const box = document.getElementById('crmWidgetBox');
+      box.classList.toggle('active');
+    }
+
+    function setWidgetTab(tab) {
+      document.querySelectorAll('.widget-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tabChat').style.display = 'none';
+      document.getElementById('tabTicket').style.display = 'none';
+      document.getElementById('tabWa').style.display = 'none';
+
+      if (tab === 'chat') {
+        document.querySelectorAll('.widget-tab-btn')[0].classList.add('active');
+        document.getElementById('tabChat').style.display = 'flex';
+      } else if (tab === 'ticket') {
+        document.querySelectorAll('.widget-tab-btn')[1].classList.add('active');
+        document.getElementById('tabTicket').style.display = 'block';
+      } else if (tab === 'wa') {
+        document.querySelectorAll('.widget-tab-btn')[2].classList.add('active');
+        document.getElementById('tabWa').style.display = 'flex';
+      }
+    }
+
+    function sendWidgetMsg() {
+      const input = document.getElementById('widgetChatInput');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      askWidgetBot(val);
+    }
+
+    function askWidgetBot(query) {
+      const hist = document.getElementById('widgetChatHistory');
+      
+      // Bubble user
+      const userDiv = document.createElement('div');
+      userDiv.style = "background: rgba(102, 252, 241, 0.15); border: 1px solid var(--accent-cyan); color: #fff; padding: 8px 12px; border-radius: 12px 12px 2px 12px; font-size: 0.8rem; align-self: flex-end; max-width: 80%;";
+      userDiv.textContent = query;
+      hist.appendChild(userDiv);
+      hist.scrollTop = hist.scrollHeight;
+
+      // Fetch
+      fetch(`/chatbot-api/?q=${encodeURIComponent(query)}`)
+        .then(r => r.json())
+        .then(d => {
+          const botDiv = document.createElement('div');
+          botDiv.style = "background: #1f2833; padding: 10px 14px; border-radius: 12px 12px 12px 2px; font-size: 0.82rem; color: #fff; max-width: 85%;";
+          botDiv.innerHTML = d.respuesta || "Gracias por contactarnos. Un curador te responderá en breve.";
+          hist.appendChild(botDiv);
+          hist.scrollTop = hist.scrollHeight;
+        })
+        .catch(e => {
+          const botDiv = document.createElement('div');
+          botDiv.style = "background: #1f2833; padding: 10px 14px; border-radius: 12px 12px 12px 2px; font-size: 0.82rem; color: #fff; max-width: 85%;";
+          botDiv.textContent = "Consulta registrada en bitácora CRM. Para atención directa puedes abrir un ticket o escribir a WhatsApp.";
+          hist.appendChild(botDiv);
+          hist.scrollTop = hist.scrollHeight;
+        });
+    }
+
+    // Inicializar al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCartUI();
+      calcularImpuestosEnVivo();
+    });
+  </script>
+
+  
 </body>
 </html>

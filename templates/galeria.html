@@ -1,14 +1,142 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Galería | ARTSPACE{% endblock %}
+{% block title %}Catálogo de Obras & Galería Curada | ARTSPACE{% endblock %}
 
 {% block content %}
-  <div style="padding: 100px 8%; text-align: center;">
-    <h2>Galería de Arte</h2>
-    <p style="color: #666; margin-top: 10px;">Sumérgete en piezas visuales seleccionadas.</p>
-    <div style="margin-top: 50px; min-height: 200px; display: flex; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 10px;">
-      <p style="color: #999;">La galería completa se cargará dinámicamente desde la base de datos.</p>
-    </div>
+<section style="padding: 40px 5% 80px; max-width: 1300px; margin: 0 auto;">
+  
+  <!-- CABECERA DEL CATÁLOGO -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <span style="color: var(--accent-cyan); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">
+      Componente A · Catálogo de Artículos
+    </span>
+    <h1 style="font-family: var(--font-heading); font-size: 2.8rem; color: #fff; margin: 8px 0 12px;">
+      Galería Curada de Obras Exclusivas
+    </h1>
+    <p style="color: #94a3b8; max-width: 650px; margin: 0 auto; font-size: 0.95rem; line-height: 1.6;">
+      Obras físicas únicas de autor (1/1) y piezas digitales autenticadas en blockchain. Cada adquisición incluye reserva temporal de 15 minutos (Hold Cart), seguro antirrobo DHL y factura fiscal CFDI 4.0.
+    </p>
   </div>
+
+  <!-- BARRA DE BÚSQUEDA Y FILTRADO FACETADO -->
+  <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px 24px; margin-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+    
+    <!-- CATEGORÍAS -->
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <a href="{% url 'galeria' %}" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; {% if categoria_activa == 'TODAS' %}background: var(--accent-cyan); color: #000;{% else %}background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);{% endif %}">
+        Todas ({{ total_obras }})
+      </a>
+      <a href="{% url 'galeria' %}?categoria=Pintura al Óleo" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; {% if categoria_activa == 'Pintura al Óleo' %}background: var(--accent-cyan); color: #000;{% else %}background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);{% endif %}">
+        🎨 Pintura al Óleo
+      </a>
+      <a href="{% url 'galeria' %}?categoria=Arte Digital / NFT" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; {% if categoria_activa == 'Arte Digital / NFT' %}background: var(--accent-cyan); color: #000;{% else %}background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);{% endif %}">
+        🌐 Arte Digital / NFT
+      </a>
+      <a href="{% url 'galeria' %}?categoria=Escultura" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; {% if categoria_activa == 'Escultura' %}background: var(--accent-cyan); color: #000;{% else %}background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);{% endif %}">
+        🗿 Escultura
+      </a>
+      <a href="{% url 'galeria' %}?categoria=Fotografía" style="padding: 8px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: 0.2s; {% if categoria_activa == 'Fotografía' %}background: var(--accent-cyan); color: #000;{% else %}background: #0d0f12; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);{% endif %}">
+        📷 Fotografía
+      </a>
+    </div>
+
+    <!-- BUSCADOR -->
+    <form action="{% url 'galeria' %}" method="GET" style="display: flex; gap: 8px; flex: 1; max-width: 320px;">
+      <input type="text" name="q" value="{{ query }}" placeholder="Buscar por título o artista..." style="flex: 1; background: #0d0f12; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; outline: none;">
+      <button type="submit" style="background: var(--accent-cyan); color: #000; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.82rem;">
+        Buscar
+      </button>
+    </form>
+
+  </div>
+
+  <!-- GRID DE PRODUCTOS DEL CATÁLOGO -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 30px;">
+    {% for obra in obras %}
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: {% if obra.en_oferta %}#f87171{% else %}var(--accent-cyan){% endif %}; border: 1px solid {% if obra.en_oferta %}#f87171{% else %}var(--accent-cyan){% endif %}; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            {{ obra.badge }}
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            {{ obra.dimensiones }}
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                {{ obra.categoria }}
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año {{ obra.anio }}
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              {{ obra.titulo }}
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">{{ obra.artista }}</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">{{ obra.tecnica }}</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">{{ obra.certificado }}</span></div>
+              {% if obra.enmarcado_disponible %}
+                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+${{ obra.precio_enmarcado|floatformat:0 }} MXN)</span></div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  ${{ obra.precio_mxn|floatformat:2 }} MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. ${{ obra.precio_usd|floatformat:0 }} USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
+                ✓ Stock: 1 Disponible (1/1)
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio: {{ obra.precio_mxn }}, enmarcado: {{ obra.precio_enmarcado|default:0 }}, conEnmarcado: {{ obra.enmarcado_disponible|yesno:'true,false' }}, imagen: '{{ obra.imagen }}', es_original_unica: {{ obra.es_original_unica|yesno:'true,false' }}, badge: '{{ obra.badge }}'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                🛒 Apartar (Hold 15m)
+              </button>
+              
+              <button onclick="abrirQuickView({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio_mxn: {{ obra.precio_mxn }}, descripcion: '{{ obra.descripcion }}', tecnica: '{{ obra.tecnica }}', dimensiones: '{{ obra.dimensiones }}', anio: '{{ obra.anio }}', certificado: '{{ obra.certificado }}', imagen: '{{ obra.imagen }}', badge: '{{ obra.badge }}', precio_enmarcado: {{ obra.precio_enmarcado|default:0 }}, enmarcado_disponible: {{ obra.enmarcado_disponible|yesno:'true,false' }}})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    {% empty %}
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #94a3b8;">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔍</div>
+        <h3>No se encontraron obras bajo los filtros seleccionados</h3>
+        <p>Prueba buscando con otros términos o seleccionando otra categoría.</p>
+        <a href="{% url 'galeria' %}" style="display: inline-block; margin-top: 15px; color: var(--accent-cyan); text-decoration: underline;">Restablecer filtros</a>
+      </div>
+    {% endfor %}
+  </div>
+
+</section>
 {% endblock %}

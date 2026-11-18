@@ -1,14 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Artistas | ARTSPACE{% endblock %}
+{% block title %}Creadores & Artistas Contemporáneos | ARTSPACE{% endblock %}
 
 {% block content %}
-  <div style="padding: 100px 8%; text-align: center;">
-    <h2>Nuestros Artistas</h2>
-    <p style="color: #666; margin-top: 10px;">Conoce a los creadores independientes detrás de cada obra.</p>
-    <div style="margin-top: 50px; min-height: 200px; display: flex; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 10px;">
-      <p style="color: #999;">El catálogo de artistas se cargará dinámicamente desde la base de datos.</p>
-    </div>
+<section style="padding: 40px 5% 80px; max-width: 1200px; margin: 0 auto;">
+  
+  <div style="text-align: center; margin-bottom: 50px;">
+    <span style="color: var(--gold-luxury); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">
+      Comunidad de Creadores
+    </span>
+    <h1 style="font-family: var(--font-heading); font-size: 2.8rem; color: #fff; margin: 8px 0 14px;">
+      Nuestros Artistas Independientes
+    </h1>
+    <p style="color: #94a3b8; max-width: 650px; margin: 0 auto; font-size: 0.95rem; line-height: 1.6;">
+      Respaldamos el talento mediante un esquema transparente de liquidación Split 70/30 vía SPEI y retención fiscal simplificada (RESICO), conectando coleccionistas con los creadores más visionarios.
+    </p>
   </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+    {% for artista in artistas %}
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; padding: 30px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div>
+          <div style="width: 110px; height: 110px; border-radius: 50%; overflow: hidden; margin: 0 auto 18px; border: 3px solid var(--accent-cyan); box-shadow: 0 0 20px rgba(102, 252, 241, 0.2);">
+            <img src="{{ artista.foto }}" alt="{{ artista.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <h2 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; margin: 0 0 4px;">{{ artista.nombre }}</h2>
+          <div style="font-size: 0.8rem; color: var(--gold-luxury); font-weight: 600; margin-bottom: 8px;">{{ artista.pais }}</div>
+          <div style="font-size: 0.82rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 12px;">{{ artista.especialidad }}</div>
+          <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6; margin-bottom: 20px;">{{ artista.bio }}</p>
+        </div>
+
+        <div>
+          <div style="font-size: 0.78rem; color: #cbd5e1; background: #0d0f12; padding: 8px; border-radius: 6px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05);">
+            <strong>{{ artista.obras_count }}</strong> obras catalogadas en ARTSPACE
+          </div>
+          <a href="{% url 'galeria' %}?q={{ artista.nombre }}" style="display: block; width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 700; transition: all 0.2s;" onmouseover="this.style.background='var(--accent-cyan)'; this.style.color='#000';" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.color='#fff';">
+            Ver Obras del Artista ➔
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</section>
 {% endblock %}

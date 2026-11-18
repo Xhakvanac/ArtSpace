@@ -39,6 +39,40 @@ Campus San Luis Apizaquito / Tlaxcala, Tlax., México
 
 <div style="page-break-after: always;"></div>
 
+# 📑 ÍNDICE GENERAL ESTRUCTURADO
+
+* **RESUMEN EJECUTIVO Y OBJETIVOS**
+  * Objetivo de la Práctica
+  * Resumen Ejecutivo y Alcance del Sistema
+* **1. FICHA TÉCNICA Y CONTROL DE CAMBIOS**
+  * 1.1 Ficha Técnica del Sistema Software y Control de Repositorio
+  * 1.2 Historial de Revisiones y Control de Versiones (Unidades 1 a 4)
+* **2. ESPECIFICACIÓN ARQUITECTÓNICA Y MODELADO DE SOFTWARE**
+  * 2.1 Diagrama de Componentes y Despliegue del Sistema (Modelo C4)
+  * 2.2 Descripción de la Integración entre Capas (Presentación, Negocio, Persistencia y Gateways)
+  * 2.3 Especificación de Interfaz: Contrato de API REST Formal (API Contract v1)
+    * *Endpoint 1:* Reserva Temporal de Obra Única 1/1 (Hold-Cart) `POST /api/v1/cart/hold/`
+    * *Endpoint 2:* Cotizador de Impuestos y Fletes Regionales `POST /api/v1/tax/calculate/`
+    * *Endpoint 3:* Orquestador Transaccional de Checkout `POST /api/v1/checkout/process/`
+    * *Endpoint 4:* Seguimiento Logístico en Tiempo Real `GET /api/v1/orders/{id}/track/`
+* **3. CATÁLOGO DE REGLAS DE NEGOCIO Y FLUJOS DE CONTROL**
+  * 3.1 Mapeo de Historias de Usuario (HU), Reglas de Negocio (RN) y Métodos en el Código Fuente
+* **4. EVIDENCIA DE DEMOSTRACIÓN FUNCIONAL (TRAZABILIDAD Y EJECUCIÓN)**
+  * 4.1 Enlace a la Demostración Funcional y Guion Técnico de Grabación
+  * 4.2 Matriz de Trazabilidad y Ejecución de Pruebas (Flujos Principales y Edge Cases E2E)
+  * 4.3 Evidencias Gráficas Secuenciales del Sistema
+    * *Evidencia 4.1:* Confirmación Transaccional y Panel VIP Patron (Happy Path)
+    * *Evidencia 4.2:* Manejo de Escenarios Límite (Hold Cart Collision & IVA Fronterizo al 8%)
+    * *Evidencia 4.3:* Registro Forense de Ejecución en Consola de Desarrollo
+* **5. CONCLUSIONES DE DISEÑO, DEUDA TÉCNICA Y REFERENCIAS**
+  * 5.1 Análisis Crítico: Diseño Alcanzado vs. Diseño Original
+  * 5.2 Declaración Explícita de Deuda Técnica Asumida (*Technical Debt Matrix*)
+  * 5.3 Referencias Bibliográficas / Fuentes de Consulta (Norma APA 7.ª Edición con Sangría Francesa)
+
+---
+
+<div style="page-break-after: always;"></div>
+
 ## 🎯 RESUMEN EJECUTIVO Y OBJETIVOS
 
 ### Objetivo de la Práctica
@@ -59,13 +93,15 @@ El presente documento constituye el **Registro de Diseño Técnico Definitivo** 
 | **Identificador de Versión** | **v2.4.0-Production-Ready** |
 | **Tipo de Aplicación** | Plataforma Web Transaccional de Comercio Electrónico B2C / C2C Curado |
 | **Arquitectura de Software** | Arquitectura Monolítica Modular orientada a Servicios (MVT + SOA Services) |
+| **Control de Versiones (Git)** | Git Repo Local (`C:\Users\AVRB9\Downloads\pagina`) / Rama `master` |
+| **Commit Trazable Oficial** | `0b378fb` (*feat(release): v2.4.0 - Plataforma ARTSPACE E-Commerce Integral*) |
+| **Estándar de Calidad de Código** | Clean Code, PEP 8 Compliance, Separación de Responsabilidades (SoC), DRY |
 | **Lenguaje y Runtime** | Python 3.13.x (64-bit) sobre entorno virtual aislado (`venv`) |
 | **Framework Backend** | Django 6.1 (Django Software Foundation) con WSGI/ASGI |
 | **Frontend & UI Layer** | HTML5 Semántico, CSS3 Vanilla (Dark Luxury Grid), JavaScript ES6+ reactivo |
 | **Base de Datos Principal** | SQLite 3 (v3.45+ con soporte ACID nativo, foreign keys e índices relacionales) |
 | **Protocolos de Cifrado** | PBKDF2-HMAC-SHA256 (1,500,000 ciclos), SSL/TLS 1.3, Cookies HttpOnly |
 | **Servicios Externos Integrados** | Stripe Elements (3DS 2.0), DHL/FedEx API SCM, SAT PAC CFDI 4.0, SPEI Banxico |
-| **Repositorio Local** | `C:\Users\AVRB9\Downloads\pagina` |
 
 ---
 
@@ -135,7 +171,33 @@ graph TD
 
 ---
 
-## 2.2 Especificación de Interfaz: Contrato de API REST (API Contract v1)
+## 2.2 Descripción Precisa de la Integración entre Capas del Sistema
+
+La arquitectura implementada en ARTSPACE garantiza un desacoplamiento de responsabilidades (*Separation of Concerns - SoC*) mediante cuatro capas jerárquicas estrictamente integradas:
+
+1. **Capa de Presentación (Frontend MVT & Cliente Reactivo):**
+   * *Mecanismo de Intercambio:* Plantillas HTML5 procesadas por el motor de templates de Django combinadas con llamadas asíncronas vía API `Fetch()` nativa de JavaScript.
+   * *Seguridad:* Inyección obligatoria de tokens CSRF criptográficos (`X-CSRFToken` en headers HTTP y `csrfmiddlewaretoken` en payloads de formulario) para neutralizar ataques de falsificación de peticiones en sitios cruzados.
+
+2. **Capa de Control, Despacho y Seguridad (Dispatcher & Middleware Layer):**
+   * *Mecanismo de Intercambio:* Mapeo declarativo en `urls.py` hacia controladores en `views.py`.
+   * *Intercepción Cibersegura:* Pipeline de middlewares que validan la sesión del usuario mediante cookies firmadas digitalmente (`HttpOnly=True` para blindar el token ante inyecciones XSS, y `SameSite=Lax` contra CSRF), resolución de autenticación basada en PBKDF2-SHA256 y decoradores restrictivos (`@login_required`, `@require_POST`, `@csrf_exempt` en endpoints API controlados).
+
+3. **Capa de Dominio y Servicios Especializados (SOA Domain Services):**
+   * *Mecanismo de Intercambio:* Invocación síncrona/modular de clases de servicio de negocio (`CRMService`, `SCMIntegrationService`, `ERPAccountingService`).
+   * *Desacoplamiento:* Las vistas no contienen lógica transaccional cruda ni cálculos contables; delegan el procesamiento al servicio ERP responsable de calcular impuestos regionales (IVA 16%, 8% o 0%), dispersión de fondos a creadores (Split 70/30 con retención ISR RESICO del 1.25%) y cuadratura de pólizas de libro mayor.
+
+4. **Capa de Persistencia y Acceso a Datos (ORM & Motor ACID):**
+   * *Mecanismo de Intercambio:* Django Object-Relational Mapping (ORM) con ejecución de sentencias SQL parametrizadas que impiden vulnerabilidades de inyección SQL (SQLi).
+   * *Integridad Referencial:* Modelado relacional normalizado con llaves foráneas (`CASCADE`, `SET_NULL`, `PROTECT`), restricciones de unicidad (`unique=True` en correos, RFCs e identificadores de obras) y transacciones atómicas para salvaguardar la consistencia ACID de cada orden de compra.
+
+5. **Capa de Integración con Pasarelas Externas (External Gateway Layer):**
+   * *Mecanismo de Intercambio:* Consumo de APIs REST externas mediante payloads serializados en JSON estándar y protocolos seguros HTTPS/TLS 1.3.
+   * *Servicios Vinculados:* Conectores modulares hacia Stripe (tokenización segura de tarjetas bancarias bajo norma PCI-DSS), DHL Express API (generación de números de guía AWB y estimación de fletes) y PAC SAT Autorizado (timbrado digital de comprobantes CFDI 4.0 con sello digital SAT).
+
+---
+
+## 2.3 Especificación de Interfaz: Contrato de API REST (API Contract v1)
 
 A continuación se detalla la especificación técnica OpenAPI/Swagger formalizada para los endpoints transaccionales de **ARTSPACE API v1**:
 

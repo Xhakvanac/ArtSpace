@@ -1,123 +1,267 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}ARTSPACE | Galería de Arte{% endblock %}
+{% block title %}ARTSPACE | Galería de Arte Contemporáneo, Piezas 1/1 & E-Commerce{% endblock %}
 
 {% block content %}
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1>Arte que respira en tus paredes</h1>
-      <p>Descubre ilustraciones, pinturas y piezas digitales creadas por artistas independientes.</p>
-      <a href="#productos" class="btn">Explorar colección</a>
-    </div>
-  </section>
-
-  <!-- PRODUCTOS -->
-  <section class="products-section" id="productos">
-    <div class="section-title">
-      <h2>Colección destacada</h2>
-      <p>Obras originales y prints exclusivos</p>
-    </div>
-
-    <div class="products-grid">
-      <!-- CARD 1 -->
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200" alt="Arte 1">
-        <div class="card-content">
-          <h3>Nebulosa Interior</h3>
-          <p class="artist">por Ana Lucero</p>
-          <div class="price">$1,250 MXN</div>
-          <div class="card-buttons">
-            <button class="buy-btn">Comprar</button>
-            <button class="fav-btn">♡</button>
-          </div>
+  <!-- ========================================================================= -->
+  <!-- 🌟 HERO PRINCIPAL LUXURY -->
+  <!-- ========================================================================= -->
+  <section style="position: relative; padding: 120px 6% 80px; background: radial-gradient(circle at 80% 20%, rgba(102, 252, 241, 0.08) 0%, rgba(11, 12, 16, 1) 70%); border-bottom: 1px solid rgba(255,255,255,0.08);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px;">
+      
+      <div style="flex: 1; min-width: 320px; max-width: 620px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(102, 252, 241, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;">
+          <span>✨</span> Curaduría Iberoamericana 2026
         </div>
-      </div>
-
-      <!-- CARD 2 -->
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200" alt="Arte 2">
-        <div class="card-content">
-          <h3>Ciudad de Vapor</h3>
-          <p class="artist">por Diego Ferral</p>
-          <div class="price">$2,100 MXN</div>
-          <div class="card-buttons">
-            <button class="buy-btn">Comprar</button>
-            <button class="fav-btn">♡</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 3 -->
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=1200" alt="Arte 3">
-        <div class="card-content">
-          <h3>Fragmentos del Sol</h3>
-          <p class="artist">por Elisa Moon</p>
-          <div class="price">$1,890 MXN</div>
-          <div class="card-buttons">
-            <button class="buy-btn">Comprar</button>
-            <button class="fav-btn">♡</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BANNER DE FIDELIZACIÓN ART CLUB -->
-  <section style="max-width: 1200px; margin: 60px auto 30px; padding: 0 20px;">
-    <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border-radius: 20px; padding: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.12);">
-      <div style="max-width: 600px;">
-        <span style="background: #3b82f6; color: white; padding: 5px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
-          Programa de Fidelización CRM
-        </span>
-        <h2 style="font-size: 2.2rem; margin: 15px 0 10px; font-weight: 700;">Club de Coleccionistas ARTSPACE</h2>
-        <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.6;">
-          Cada adquisición suma Puntos de Arte (10 pts por cada $100 MXN). Escala de <strong>Art Explorer</strong> a <strong>VIP Patron</strong> y obtén acceso prioritario de 48 horas a lanzamientos de obras únicas.
+        <h1 style="font-family: var(--font-heading); font-size: 3.2rem; line-height: 1.15; margin: 0 0 20px; color: #ffffff; font-weight: 700;">
+          El arte que trasciende en tus espacios privados.
+        </h1>
+        <p style="font-size: 1.05rem; line-height: 1.7; color: #94a3b8; margin-bottom: 30px;">
+          Descubre obras físicas originales de autor único (1/1) y creaciones digitales curadas. Embalaje de museo, flete Courier DHL Express asegurado y facturación fiscal electrónica CFDI 4.0.
         </p>
-      </div>
-      <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-        {% if user.is_authenticated %}
-          <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 20px 25px; text-align: center;">
-            <div style="font-size: 0.85rem; color: #94a3b8;">Tu Nivel Actual</div>
-            <div style="font-size: 1.3rem; font-weight: 700; color: #fde047; margin: 4px 0;">{{ user.perfil_crm.get_nivel_tier_display }}</div>
-            <div style="font-size: 0.95rem; color: white;">{{ user.perfil_crm.puntos_fidelidad }} Puntos</div>
-            <a href="{% url 'simular_compra_demo' %}" style="display: inline-block; margin-top: 10px; background: #3b82f6; color: white; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">
-              Simular Compra (+150 pts)
-            </a>
-          </div>
-        {% else %}
-          <a href="/admin/login/?next={{ request.path }}" style="background: white; color: #0f172a; padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 1rem; text-decoration: none; align-self: center;">
-            Iniciar Sesión / Registro
-          </a>
-        {% endif %}
-      </div>
-    </div>
-  </section>
 
-  <!-- NEWSLETTER / CAPTURA DE LEADS -->
-  <section class="newsletter-section">
-    <div class="newsletter-box">
-      <h2>Únete a la galería</h2>
-      <p>Recibe nuevas colecciones, drops exclusivos y 10% de descuento en tu primera compra.</p>
-      <form class="newsletter-form" method="POST" action="{% url 'newsletter_subscribe' %}">
-        {% csrf_token %}
-        <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 500px; margin: 0 auto;">
-          <input type="email" name="email" placeholder="Tu correo electrónico" required style="padding: 12px 18px; border-radius: 10px; border: 1px solid #ccc; font-size: 1rem; width: 100%;">
-          
-          <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.85rem; color: #555;">
-            <label style="cursor: pointer;"><input type="radio" name="interes" value="GENERAL" checked> Todo el Catálogo</label>
-            <label style="cursor: pointer;"><input type="radio" name="interes" value="DIGITAL"> Arte Digital / NFTs</label>
-            <label style="cursor: pointer;"><input type="radio" name="interes" value="FISICO"> Obra Física / Pintura</label>
-          </div>
-          
-          <button type="submit" style="padding: 12px 24px; border-radius: 10px; background: black; color: white; border: none; cursor: pointer; font-size: 1rem; font-weight: 600;">
-            Suscribirme al Club
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <a href="{% url 'galeria' %}" style="background: var(--accent-cyan); color: #0b0c10; font-weight: 800; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 0.95rem; box-shadow: 0 4px 20px rgba(102, 252, 241, 0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            Explorar Catálogo Completo ➔
+          </a>
+          <button onclick="toggleCartDrawer()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-weight: 600; padding: 14px 24px; border-radius: 8px; cursor: pointer; font-size: 0.95rem;">
+            🛒 Ver Bolsa de Compra
           </button>
         </div>
-      </form>
+
+        <!-- STATS -->
+        <div style="display: flex; gap: 30px; margin-top: 45px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;">
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #fff;">100%</div>
+            <div style="font-size: 0.78rem; color: #94a3b8;">Piezas Originales 1/1</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--gold-luxury);">15 Min</div>
+            <div style="font-size: 0.78rem; color: #94a3b8;">Hold Cart Exclusivo</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-cyan);">CFDI 4.0</div>
+            <div style="font-size: 0.78rem; color: #94a3b8;">Deducción SAT Inmediata</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO VISUAL CARD -->
+      <div style="flex: 1; min-width: 320px; max-width: 480px; position: relative;">
+        <div style="background: #151921; border: 1px solid rgba(102, 252, 241, 0.25); border-radius: 18px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.7);">
+          <div style="position: relative; height: 360px;">
+            <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200" alt="Obra de la semana" style="width: 100%; height: 100%; object-fit: cover;">
+            <span style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+              Obra de la Semana · 1/1
+            </span>
+          </div>
+          <div style="padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; margin: 0 0 4px;">Ecos del Vacío</h3>
+                <p style="color: var(--gold-luxury); font-size: 0.85rem; margin: 0;">por Ana Lucero (México)</p>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 1.25rem; font-weight: 800; color: #fff;">$34,500 MXN</div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">~ $1,916 USD</div>
+              </div>
+            </div>
+            <p style="font-size: 0.82rem; color: #cbd5e1; margin: 14px 0 18px; line-height: 1.5;">
+              Óleo y pigmentos sobre lino belga. Incluye certificado físico con sello holográfico y token de autenticidad.
+            </p>
+            <div style="display: flex; gap: 10px;">
+              <button onclick="agregarAlCarrito({id: 'ECOS-VACIO-01', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio: 34500, enmarcado: 3200, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200', es_original_unica: true, badge: 'Pieza Única 1/1'})" style="flex: 1; background: var(--accent-cyan); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem;">
+                🛒 Apartar (Hold Cart)
+              </button>
+              <button onclick="abrirQuickView({id: 'ECOS-VACIO-01', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio_mxn: 34500, descripcion: 'Obra maestra que explora los contrastes cromáticos y el silencio en el arte abstracto contemporáneo.', tecnica: 'Óleo y pigmentos sobre lino belga', dimensiones: '120 x 90 cm', anio: 2026, certificado: 'Certificado Físico Holográfico + Blockchain ERC-721', imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200', badge: 'Pieza Única 1/1', precio_enmarcado: 3200, enmarcado_disponible: true})" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 12px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 📢 COMPONENTE D: COMERCIALIZACIÓN Y PROMOCIÓN (BANNERS & DESCUENTOS) -->
+  <!-- ========================================================================= -->
+  <section style="max-width: 1200px; margin: 40px auto; padding: 0 5%;">
+    <div style="background: linear-gradient(135deg, #181c24 0%, #232936 100%); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 16px; padding: 30px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.5);">
+      <div style="max-width: 650px;">
+        <span style="background: var(--gold-luxury); color: #000; font-weight: 800; font-size: 0.72rem; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px;">
+          Promoción Especial de Temporada
+        </span>
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 10px 0; color: #fff;">
+          Semana del Coleccionista: Hasta 20% OFF en Obras Seleccionadas
+        </h2>
+        <p style="color: #cbd5e1; font-size: 0.9rem; margin: 0; line-height: 1.6;">
+          Aprovecha flete sin costo con DHL Express asegurado y póliza contable con timbrado SAT CFDI 4.0 incluido en todas las transacciones.
+        </p>
+      </div>
+      <div>
+        <a href="{% url 'galeria' %}?categoria=Arte Digital / NFT" style="background: #fff; color: #0b0c10; font-weight: 800; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; display: inline-block;">
+          Ver Obras en Promoción ➔
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 🎨 COMPONENTE A: CATÁLOGO DE ARTÍCULOS DESTACADOS -->
+  <!-- ========================================================================= -->
+  <section style="max-width: 1200px; margin: 60px auto; padding: 0 5%;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 35px; flex-wrap: wrap; gap: 15px;">
+      <div>
+        <div style="color: var(--accent-cyan); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px;">
+          Colección Curada
+        </div>
+        <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: #fff; margin: 6px 0 0;">
+          Obras Disponibles para Adquisición Inmediata
+        </h2>
+      </div>
+      <a href="{% url 'galeria' %}" style="color: var(--accent-cyan); text-decoration: none; font-weight: 700; font-size: 0.9rem;">
+        Ver Catálogo Completo (6 Obras) ➔
+      </a>
+    </div>
+
+    <!-- GRID DE PRODUCTOS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+      {% for obra in obras %}
+        <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+          
+          <!-- IMAGEN & BADGE -->
+          <div style="position: relative; height: 260px; overflow: hidden;">
+            <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" style="width: 100%; height: 100%; object-fit: cover;">
+            <span style="position: absolute; top: 12px; left: 12px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: {% if obra.en_oferta %}#f87171{% else %}var(--accent-cyan){% endif %}; border: 1px solid {% if obra.en_oferta %}#f87171{% else %}var(--accent-cyan){% endif %}; padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;">
+              {{ obra.badge }}
+            </span>
+          </div>
+
+          <!-- CONTENIDO CARD -->
+          <div style="padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase;">
+                {{ obra.categoria }}
+              </div>
+              <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: #fff; margin: 4px 0 2px;">
+                {{ obra.titulo }}
+              </h3>
+              <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 12px;">
+                por {{ obra.artista }} · {{ obra.anio }}
+              </div>
+              
+              <div style="font-size: 0.78rem; color: #cbd5e1; background: #0d0f12; padding: 8px 10px; border-radius: 6px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);">
+                <div><strong>Técnica:</strong> {{ obra.tecnica }}</div>
+                <div><strong>Medidas:</strong> {{ obra.dimensiones }}</div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px;">
+                <div style="font-size: 1.2rem; font-weight: 800; color: #fff;">
+                  ${{ obra.precio_mxn|floatformat:2 }} MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  ~ ${{ obra.precio_usd|floatformat:0 }} USD
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <button onclick="agregarAlCarrito({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio: {{ obra.precio_mxn }}, enmarcado: {{ obra.precio_enmarcado|default:0 }}, conEnmarcado: {{ obra.enmarcado_disponible|yesno:'true,false' }}, imagen: '{{ obra.imagen }}', es_original_unica: {{ obra.es_original_unica|yesno:'true,false' }}, badge: '{{ obra.badge }}'})" style="flex: 1; background: var(--accent-cyan); color: #000; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 0.82rem; cursor: pointer;">
+                  🛒 Apartar
+                </button>
+                <button onclick="abrirQuickView({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio_mxn: {{ obra.precio_mxn }}, descripcion: '{{ obra.descripcion }}', tecnica: '{{ obra.tecnica }}', dimensiones: '{{ obra.dimensiones }}', anio: '{{ obra.anio }}', certificado: '{{ obra.certificado }}', imagen: '{{ obra.imagen }}', badge: '{{ obra.badge }}', precio_enmarcado: {{ obra.precio_enmarcado|default:0 }}, enmarcado_disponible: {{ obra.enmarcado_disponible|yesno:'true,false' }}})" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 12px; border-radius: 6px; cursor: pointer; font-size: 0.82rem;">
+                  Ficha
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 🏆 ART CLUB FIDELIZACIÓN CRM Y TIERS -->
+  <!-- ========================================================================= -->
+  <section style="background: #0d0f12; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 70px 5%;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 40px;">
+      
+      <div style="max-width: 550px;">
+        <span style="color: var(--gold-luxury); font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1.5px;">
+          Programa de Lealtad Gamificado CRM
+        </span>
+        <h2 style="font-family: var(--font-heading); font-size: 2.3rem; color: #fff; margin: 10px 0 16px;">
+          Art Club: Beneficios Exclusivos para Coleccionistas Frecuentes
+        </h2>
+        <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 25px;">
+          Acumula 10 Puntos de Arte por cada $100 MXN invertidos en la plataforma. Accede a preventas privadas de 48 horas, visitas al taller de artistas y eventos de curaduría VIP.
+        </p>
+
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          {% if user.is_authenticated %}
+            <a href="{% url 'simular_compra_demo' %}" style="background: linear-gradient(135deg, var(--gold-luxury), #b89324); color: #000; font-weight: 800; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+              ⚡ Simular Compra (+150 Puntos Art Club)
+            </a>
+            <a href="{% url 'perfil' %}" style="background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); font-weight: 600; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+              Ver Mi Panel de Puntos
+            </a>
+          {% else %}
+            <a href="{% url 'registro' %}" style="background: var(--accent-cyan); color: #000; font-weight: 800; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+              Únete al Art Club con Registro Seguro ➔
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- TIERS PREVIEW CARDS -->
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
+        <div style="background: #151921; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 22px; width: 170px; text-align: center;">
+          <div style="font-size: 1.8rem; margin-bottom: 6px;">🥉</div>
+          <div style="font-weight: 700; color: #fff; font-size: 0.9rem;">Explorer</div>
+          <div style="font-size: 0.72rem; color: #94a3b8; margin: 4px 0 10px;">0 - 999 pts</div>
+          <div style="font-size: 0.72rem; color: #cbd5e1;">Catálogo mensual y boletín curatorial.</div>
+        </div>
+
+        <div style="background: #151921; border: 1px solid rgba(69, 162, 158, 0.5); border-radius: 12px; padding: 22px; width: 170px; text-align: center;">
+          <div style="font-size: 1.8rem; margin-bottom: 6px;">🥈</div>
+          <div style="font-weight: 700; color: var(--accent-cyan); font-size: 0.9rem;">Collector</div>
+          <div style="font-size: 0.72rem; color: #94a3b8; margin: 4px 0 10px;">1,000 - 4,999 pts</div>
+          <div style="font-size: 0.72rem; color: #cbd5e1;">5% descuento y preventa de 24 horas.</div>
+        </div>
+
+        <div style="background: #181c24; border: 1px solid var(--gold-luxury); border-radius: 12px; padding: 22px; width: 170px; text-align: center; box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);">
+          <div style="font-size: 1.8rem; margin-bottom: 6px;">🥇</div>
+          <div style="font-weight: 700; color: var(--gold-luxury); font-size: 0.9rem;">VIP Patron</div>
+          <div style="font-size: 0.72rem; color: #94a3b8; margin: 4px 0 10px;">5,000+ pts</div>
+          <div style="font-size: 0.72rem; color: #cbd5e1;">Concierge personal y enmarcado gratis.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 📩 NEWSLETTER CAPTURA DE LEADS CRM -->
+  <!-- ========================================================================= -->
+  <section style="max-width: 900px; margin: 70px auto; padding: 0 5%; text-align: center;">
+    <h2 style="font-family: var(--font-heading); font-size: 2rem; color: #fff; margin-bottom: 10px;">
+      Recibe la gaceta de lanzamientos de arte
+    </h2>
+    <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 25px;">
+      Notificaciones directas antes de que las piezas únicas salgan a subasta pública.
+    </p>
+
+    <form action="{% url 'newsletter_subscribe' %}" method="POST" style="display: flex; gap: 10px; max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
+      {% csrf_token %}
+      <input type="email" name="email" placeholder="tu.correo@ejemplo.com" required style="flex: 1; min-width: 240px; background: #151921; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; outline: none;">
+      <button type="submit" style="background: var(--accent-cyan); color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem;">
+        Suscribirme
+      </button>
+    </form>
   </section>
 {% endblock %}
