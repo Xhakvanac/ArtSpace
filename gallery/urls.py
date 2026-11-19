@@ -14,6 +14,7 @@ urlpatterns = [
     path('login/', views.login_usuario, name='login'),
     path('logout/', views.logout_usuario, name='logout'),
     path('perfil/', views.perfil_usuario, name='perfil'),
+    path('panel-artista/', views.panel_artista, name='panel_artista'),
     # API Contract REST Endpoints (v1)
     path('api/v1/cart/hold/', views.api_cart_hold, name='api_cart_hold'),
     path('api/v1/tax/calculate/', views.api_tax_calculate, name='api_tax_calculate'),

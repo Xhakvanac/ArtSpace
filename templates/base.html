@@ -582,16 +582,22 @@
         <li class="nav-item"><a href="{% url 'galeria' %}" class="{% if request.resolver_match.url_name == 'galeria' %}active{% endif %}">Galería & Catálogo</a></li>
         <li class="nav-item"><a href="{% url 'colecciones' %}" class="{% if request.resolver_match.url_name == 'colecciones' %}active{% endif %}">Colecciones</a></li>
         <li class="nav-item"><a href="{% url 'artistas' %}" class="{% if request.resolver_match.url_name == 'artistas' %}active{% endif %}">Artistas</a></li>
+        <li class="nav-item"><a href="{% url 'panel_artista' %}" class="{% if request.resolver_match.url_name == 'panel_artista' %}active{% endif %}" style="color: var(--gold-luxury);">Portal Artistas 🎨</a></li>
         <li class="nav-item"><a href="{% url 'contacto' %}" class="{% if request.resolver_match.url_name == 'contacto' %}active{% endif %}">Soporte CRM</a></li>
       </ul>
 
       <div class="nav-actions">
         {% if user.is_authenticated %}
           <!-- USUARIO CONECTADO -->
+          {% if user.perfil_crm.rol == 'ARTISTA' %}
+            <a href="{% url 'panel_artista' %}" class="btn-auth-outline" style="border-color: var(--gold-luxury); color: var(--gold-luxury); background: rgba(212,175,55,0.12); display: flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 0.8rem;">
+              <span>🎨</span> <strong>Mi Estudio / Subir Obras</strong>
+            </a>
+          {% endif %}
           <a href="{% url 'perfil' %}" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #fff; background: rgba(255,255,255,0.06); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); font-size: 0.85rem;">
-            <span>👑</span>
+            <span>{% if user.perfil_crm.rol == 'ARTISTA' %}🎨{% else %}👑{% endif %}</span>
             <span style="font-weight: 700; color: var(--gold-luxury);">{{ user.username }}</span>
-            <span style="color: #94a3b8; font-size: 0.75rem;">(Mi Perfil)</span>
+            <span style="color: #94a3b8; font-size: 0.75rem;">({% if user.perfil_crm.rol == 'ARTISTA' %}Artista{% else %}Coleccionista{% endif %})</span>
           </a>
           <a href="{% url 'logout' %}" class="btn-auth-outline" style="padding: 6px 12px; font-size: 0.78rem;">Salir</a>
         {% else %}

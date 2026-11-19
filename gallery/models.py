@@ -78,12 +78,18 @@ class OportunidadPipeline(models.Model):
 
 
 class PerfilCliente(models.Model):
+    ROL_CHOICES = [
+        ('COMPRADOR', 'Coleccionista / Comprador'),
+        ('ARTISTA', 'Artista Independiente / Creador')
+    ]
     TIER_CHOICES = [
         ('EXPLORER', 'Art Explorer (Bronce)'),
         ('COLLECTOR', 'Art Collector (Plata)'),
         ('PATRON', 'VIP Patron (Oro)')
     ]
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil_crm', verbose_name="Usuario")
+    rol = models.CharField(max_length=20, choices=ROL_CHOICES, default='COMPRADOR', verbose_name="Rol en la Plataforma")
+    biografia = models.TextField(blank=True, verbose_name="Semblanza / Declaración del Artista")
     puntos_fidelidad = models.PositiveIntegerField(default=0, verbose_name="Puntos de Arte Acumulados")
     nivel_tier = models.CharField(max_length=15, choices=TIER_CHOICES, default='EXPLORER', verbose_name="Nivel de Lealtad (Tier)")
     total_gastado = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, verbose_name="Gasto Acumulado (MXN)")
@@ -442,4 +448,46 @@ class PolizaAsientoContable(models.Model):
         verbose_name = "Póliza Contable ERP"
         verbose_name_plural = "ERP: Pólizas y Asientos de Libro Mayor"
         ordering = ['-fecha_asiento']
+
+
+# ==============================================================================
+# 🎨 4. MODELO DE PRODUCTO: OBRAS DE ARTE (MULTIUSUARIO: ARTISTAS & COMPRADORES)
+# ==============================================================================
+
+class ObraArte(models.Model):
+    CATEGORIA_CHOICES = [
+        ('Pintura al Óleo', 'Pintura al Óleo'),
+        ('Arte Digital / NFT', 'Arte Digital / NFT'),
+        ('Escultura', 'Escultura'),
+        ('Fotografía', 'Fotografía')
+    ]
+    titulo = models.CharField(max_length=150, verbose_name="Título de la Obra")
+    artista = models.CharField(max_length=100, verbose_name="Nombre del Artista")
+    artista_usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='obras_creadas', verbose_name="Cuenta de Usuario Creador")
+    categoria = models.CharField(max_length=30, choices=CATEGORIA_CHOICES, default='Pintura al Óleo', verbose_name="Categoría")
+    precio_mxn = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Precio de Venta (MXN)")
+    precio_usd = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, verbose_name="Precio Estimado (USD)")
+    imagen = models.URLField(max_length=500, verbose_name="URL de Imagen de Alta Resolución")
+    tecnica = models.CharField(max_length=200, verbose_name="Técnica Utilizada")
+    dimensiones = models.CharField(max_length=100, verbose_name="Dimensiones / Formato")
+    anio = models.PositiveIntegerField(default=2026, verbose_name="Año de Creación")
+    es_original_unica = models.BooleanField(default=True, verbose_name="Pieza Original Única 1/1")
+    en_oferta = models.BooleanField(default=False, verbose_name="En Promoción / Oferta")
+    descuento_porcentaje = models.PositiveIntegerField(default=0, verbose_name="Porcentaje de Descuento (%)")
+    enmarcado_disponible = models.BooleanField(default=True, verbose_name="Enmarcado Especial Disponible")
+    precio_enmarcado = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, verbose_name="Costo de Enmarcado (MXN)")
+    certificado = models.CharField(max_length=200, default="Certificado Físico Holográfico + Blockchain", verbose_name="Certificado")
+    badge = models.CharField(max_length=50, default="Pieza Única 1/1", verbose_name="Distintivo / Badge")
+    descripcion = models.TextField(verbose_name="Descripción Curatorial de la Obra")
+    vendida = models.BooleanField(default=False, verbose_name="Obra Vendida")
+    id_externo_zoho_item = models.CharField(max_length=60, blank=True, null=True, verbose_name="ID Ítem Zoho Inventory SCM")
+    fecha_subida = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Publicación")
+
+    class Meta:
+        verbose_name = "Obra de Arte"
+        verbose_name_plural = "Catálogo de Obras de Arte"
+        ordering = ['-fecha_subida']
+
+    def __str__(self):
+        return f"{self.titulo} - {self.artista} (${self.precio_mxn:,.2f} MXN)"
 

@@ -28,3 +28,4 @@ for dest, src in urls.items():
             print(f'Actualizado {dest} ({len(content_fixed)} bytes)')
     except Exception as e:
         print(f'Error en {dest}: {e}')
+

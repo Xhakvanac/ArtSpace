@@ -35,8 +35,7 @@ def sincronizar_lead_hubspot(email, nombre="Coleccionista Prospecto", interes="G
         "properties": {
             "email": email,
             "firstname": nombre,
-            "origen_prospecto": "Portal Web ARTSPACE",
-            "interes_arte": interes
+            "company": f"ARTSPACE - Interés: {interes}"
         }
     }
 

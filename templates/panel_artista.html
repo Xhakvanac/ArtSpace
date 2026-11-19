@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Panel del Artista · Creadores & Liquidaciones ERP | ARTSPACE{% endblock %}
+
+{% block content %}
+<style>
+  .form-group-custom {
+    margin-bottom: 18px;
+  }
+  .form-group-custom label {
+    display: block;
+    color: #66FCF1;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .form-group-custom input[type="text"],
+  .form-group-custom input[type="number"],
+  .form-group-custom input[type="url"],
+  .form-group-custom select,
+  .form-group-custom textarea {
+    width: 100%;
+    background: #0B0C10;
+    border: 1px solid rgba(102, 252, 241, 0.3);
+    border-radius: 8px;
+    color: #FFFFFF;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    box-sizing: border-box;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-group-custom input:focus,
+  .form-group-custom select:focus,
+  .form-group-custom textarea:focus {
+    border-color: #66FCF1;
+    box-shadow: 0 0 10px rgba(102, 252, 241, 0.25);
+  }
+  .form-group-custom input[type="checkbox"] {
+    accent-color: #66FCF1;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+</style>
+<section style="max-width: 1200px; margin: 40px auto 80px; padding: 0 5%;">
+  
+  <!-- CABECERA DEL PORTAL DE ARTISTA -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 25px;">
+    <div>
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--gold-luxury); color: var(--gold-luxury); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">
+        <span>🎨</span> Portal de Creador Independiente
+      </div>
+      <h1 style="font-family: var(--font-heading); font-size: 2.5rem; color: #fff; margin: 0 0 6px;">
+        Panel de Taller: {{ user.get_full_name|default:user.username }}
+      </h1>
+      <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">
+        Gestiona tu catálogo de obras, monitorea el inventario SCM y audita tus dividendos Split 70/30 liquidados por el ERP.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <a href="{% url 'galeria' %}" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+        Ver Catálogo Público ➔
+      </a>
+    </div>
+  </div>
+
+  <!-- TARJETAS DE MÉTRICAS FINANCIERAS Y ERP -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 40px;">
+    
+    <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 22px;">
+      <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Dividendo Neto del Artista (70%)</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #86efac; margin: 6px 0;">
+        ${{ total_neto|floatformat:2 }} MXN
+      </div>
+      <div style="font-size: 0.72rem; color: #94a3b8;">
+        Dispersado vía SPEI Banxico / STP
+      </div>
+    </div>
+
+    <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 22px;">
+      <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Retención Fiscal SAT (ISR RESICO)</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #fde047; margin: 6px 0;">
+        ${{ total_isr|floatformat:2 }} MXN
+      </div>
+      <div style="font-size: 0.72rem; color: #94a3b8;">
+        Tasa preferencial 1.25% (Art. 113-E LISR)
+      </div>
+    </div>
+
+    <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 22px;">
+      <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Obras Activas en Galería</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-cyan); margin: 6px 0;">
+        {{ obras_activas }} Piezas
+      </div>
+      <div style="font-size: 0.72rem; color: #94a3b8;">
+        Disponibles para compra con Hold Cart
+      </div>
+    </div>
+
+    <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 22px;">
+      <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Obras Vendidas</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #fff; margin: 6px 0;">
+        {{ obras_vendidas }} Obras
+      </div>
+      <div style="font-size: 0.72rem; color: #86efac;">
+        Despachadas con Courier DHL Express
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 35px; align-items: start;">
+    
+    <!-- FORMULARIO PARA SUBIR NUEVA OBRA -->
+    <div style="background: #151921; border: 1px solid rgba(102, 252, 241, 0.25); border-radius: 16px; padding: 32px; box-shadow: 0 15px 40px rgba(0,0,0,0.5);">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+        <span style="font-size: 1.5rem;">🖌️</span>
+        <div>
+          <h2 style="font-family: var(--font-heading); font-size: 1.4rem; color: #fff; margin: 0;">Publicar Nueva Obra de Arte</h2>
+          <p style="color: #94a3b8; font-size: 0.8rem; margin: 2px 0 0;">Se registrará automáticamente en el inventario SCM y en el catálogo para compradores.</p>
+        </div>
+      </div>
+
+      <form method="POST" action="{% url 'panel_artista' %}">
+        {% csrf_token %}
+
+        <div class="form-group-custom">
+          <label>Título de la Obra</label>
+          {{ form.titulo }}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group-custom">
+            <label>Categoría</label>
+            {{ form.categoria }}
+          </div>
+          <div class="form-group-custom">
+            <label>Precio de Venta al Público (MXN)</label>
+            {{ form.precio_mxn }}
+          </div>
+        </div>
+
+        <div class="form-group-custom">
+          <label>URL de Imagen en Alta Resolución</label>
+          {{ form.imagen }}
+          <div style="font-size: 0.7rem; color: #64748b; margin-top: 3px;">
+            Puedes usar imágenes de Unsplash, Imgur o cualquier servidor de imágenes web.
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px;">
+          <div class="form-group-custom">
+            <label>Técnica y Materiales</label>
+            {{ form.tecnica }}
+          </div>
+          <div class="form-group-custom">
+            <label>Dimensiones / Formato</label>
+            {{ form.dimensiones }}
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group-custom">
+            <label>Año de Creación</label>
+            {{ form.anio }}
+          </div>
+          <div class="form-group-custom">
+            <label>Costo de Enmarcado Especial (MXN)</label>
+            {{ form.precio_enmarcado }}
+          </div>
+        </div>
+
+        <div class="form-group-custom">
+          <label>Certificado de Autenticidad</label>
+          {{ form.certificado }}
+        </div>
+
+        <div style="display: flex; gap: 20px; margin: 12px 0;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #cbd5e1;">
+            {{ form.es_original_unica }}
+            <label>¿Es pieza original única 1/1? (Bloqueo Hold Cart 15m)</label>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #cbd5e1;">
+            {{ form.enmarcado_disponible }}
+            <label>Enmarcado disponible</label>
+          </div>
+        </div>
+
+        <div class="form-group-custom">
+          <label>Descripción Curatorial y Concepto</label>
+          {{ form.descripcion }}
+        </div>
+
+        <button type="submit" style="width: 100%; background: linear-gradient(135deg, var(--accent-cyan), #45a29e); color: #0b0c10; border: none; padding: 14px; border-radius: 8px; font-weight: 800; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 20px rgba(102, 252, 241, 0.3); margin-top: 10px;">
+          🚀 Publicar Obra en Catálogo & Registrar en SCM
+        </button>
+      </form>
+    </div>
+
+    <!-- RESUMEN DE INTEGRACIÓN SCM Y ERP -->
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+      
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;">
+        <h3 style="font-size: 1.15rem; color: #fff; margin: 0 0 12px; font-weight: 700;">
+          ⚖️ Esquema Financiero Split 70/30 (ERP)
+        </h3>
+        <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6; margin-bottom: 15px;">
+          Por cada obra que se adquiere a través del checkout de ARTSPACE, el motor contable ejecuta automáticamente:
+        </p>
+        
+        <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.8; background: #0d0f12; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+          <div>✓ <strong>70% Bruto:</strong> Asignado directamente al creador de la obra.</div>
+          <div>✓ <strong>-1.25% Retención:</strong> Retención fiscal de ISR bajo régimen RESICO (SAT).</div>
+          <div>✓ <strong>30% Comisión:</strong> Honorarios de curaduría, seguro y plataforma.</div>
+          <div>✓ <strong>Dispersión SPEI:</strong> Transferencia bancaria interbancaria automática.</div>
+          <div>✓ <strong>Póliza Cuadrada:</strong> Registro del pasivo en Odoo ERP / Libro Mayor.</div>
+        </div>
+      </div>
+
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;">
+        <h3 style="font-size: 1.15rem; color: #fff; margin: 0 0 12px; font-weight: 700;">
+          📦 Cadena de Suministro SCM (Zoho / DHL)
+        </h3>
+        <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6; margin-bottom: 15px;">
+          Cuando un comprador adquiere tu pieza:
+        </p>
+        
+        <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.8; background: #0d0f12; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+          <div>1. La obra se descuenta del stock en tiempo real (Stock = 0).</div>
+          <div>2. Se crea la orden de venta en Zoho Inventory SCM (<code>ZOHO-SO-XXXX</code>).</div>
+          <div>3. Se genera la guía aérea de DHL Express (<code>DHL-AWB-XXXXXXXXXX</code>).</div>
+          <div>4. El comprador recibe seguimiento en vivo con seguro de arte incluido.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- AUDITORÍA DE OBRAS PUBLICADAS POR EL ARTISTA -->
+  <div style="margin-top: 50px;">
+    <h2 style="font-family: var(--font-heading); font-size: 1.8rem; color: #fff; margin-bottom: 20px;">
+      Tus Obras en el Catálogo
+    </h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+      {% for obra in mis_obras %}
+        <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; display: flex; gap: 15px; padding: 14px;">
+          <img src="{{ obra.imagen }}" alt="{{ obra.titulo }}" style="width: 90px; height: 90px; object-fit: cover; border-radius: 8px;">
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <h4 style="font-size: 1.05rem; color: #fff; margin: 0;">{{ obra.titulo }}</h4>
+              {% if obra.vendida %}
+                <span style="background: #991b1b; color: #fecaca; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">VENDIDA (Stock 0)</span>
+              {% else %}
+                <span style="background: #065f46; color: #a7f3d0; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">DISPONIBLE (1/1)</span>
+              {% endif %}
+            </div>
+            <div style="font-size: 0.78rem; color: var(--gold-luxury); margin: 3px 0;">{{ obra.categoria }}</div>
+            <div style="font-size: 0.78rem; color: #94a3b8;">{{ obra.tecnica }}</div>
+            <div style="font-size: 1rem; font-weight: 800; color: #fff; margin-top: 6px;">
+              ${{ obra.precio_mxn|floatformat:2 }} MXN
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div style="grid-column: 1 / -1; background: #151921; padding: 40px; text-align: center; border-radius: 12px; color: #94a3b8;">
+          <div style="font-size: 2rem; margin-bottom: 8px;">🎨</div>
+          <div>Aún no has registrado obras bajo tu autoría. Utiliza el formulario superior para publicar tu primera pieza.</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- AUDITORÍA DE LIQUIDACIONES Y DIVIDENDOS ERP (SPLIT 70/30) -->
+  <div style="margin-top: 50px;">
+    <h2 style="font-family: var(--font-heading); font-size: 1.8rem; color: #fff; margin-bottom: 20px;">
+      Auditoría de Liquidaciones y Pagos ERP (Split 70/30)
+    </h2>
+
+    <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+        <thead>
+          <tr style="background: #0d0f12; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <th style="padding: 14px 18px;">Orden SCM</th>
+            <th style="padding: 14px 18px;">Bruto Obra (70%)</th>
+            <th style="padding: 14px 18px;">Retención ISR (1.25%)</th>
+            <th style="padding: 14px 18px;">Neto a Dispersar</th>
+            <th style="padding: 14px 18px;">Clave SPEI Banxico</th>
+            <th style="padding: 14px 18px;">Estado ERP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for liq in liquidaciones %}
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0;">
+              <td style="padding: 14px 18px; font-weight: 700; color: var(--accent-cyan);">{{ liq.orden.codigo_pedido }}</td>
+              <td style="padding: 14px 18px;">${{ liq.monto_bruto_dividendo|floatformat:2 }} MXN</td>
+              <td style="padding: 14px 18px; color: #fde047;">-${{ liq.retencion_isr|floatformat:2 }} MXN</td>
+              <td style="padding: 14px 18px; font-weight: 700; color: #86efac;">${{ liq.monto_neto_dispersar|floatformat:2 }} MXN</td>
+              <td style="padding: 14px 18px; font-family: monospace; font-size: 0.78rem;">{{ liq.clave_rastreo_spei|default:"SPEI-PROVISIONADO" }}</td>
+              <td style="padding: 14px 18px;">
+                <span style="background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid #86efac; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;">
+                  {{ liq.get_estado_pago_display }}
+                </span>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" style="padding: 30px; text-align: center; color: #94a3b8;">
+                No hay liquidaciones pendientes. Las transacciones se asientan automáticamente en cuanto un coleccionista adquiere una obra.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+{% endblock %}
+

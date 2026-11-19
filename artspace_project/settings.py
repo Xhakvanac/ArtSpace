@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,4 +133,35 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+# ==============================================================================
+# 🔌 CONFIGURACIÓN DE INTEGRACIÓN EXTERNA: CRM (HUBSPOT), SCM (ZOHO) Y ERP (ODOO)
+# ==============================================================================
+
+# 1. CRM - HubSpot API v3
+# Obtén tu Private App Token en: HubSpot -> Settings -> Integrations -> Private Apps
+# Scopes necesarios: crm.objects.contacts.read, crm.objects.contacts.write
+HUBSPOT_ACCESS_TOKEN = os.getenv('HUBSPOT_ACCESS_TOKEN', 'pat-na1-bcd74f74-28ac-4203-b248-2f7b3cc317b5')
+HUBSPOT_PORTAL_ID = os.getenv('HUBSPOT_PORTAL_ID', '51952679')
+
+# 2. SCM - Cadena de Suministro (Zoho Inventory API)
+# Obtén tu Org ID en: Zoho Inventory -> Configuración (⚙️) -> Perfil de Organización
+# Obtén tu Token en: api-console.zoho.com -> Self Client -> Scopes: ZohoInventory.fullaccess.all
+ZOHO_INVENTORY_ORG_ID = os.getenv('ZOHO_INVENTORY_ORG_ID', '940601046')  # Tu Organization ID numérico
+ZOHO_INVENTORY_API_KEY = os.getenv('ZOHO_INVENTORY_API_KEY', '1000.35bdf6c1c08a5bda7c04d35d6abb903e.7b49b683a75074bf66e93bc30635feaa')         # Tu Token OAuth / Bearer Token
+
+# 3. ERP - Enterprise Resource Planning (Odoo XML-RPC API)
+# Obtén tu API Key en: Odoo -> Mi Perfil / Preferencias -> Seguridad de la cuenta -> Claves de API
+# Requiere permisos de: Facturación / Contabilidad (Invoicing) y Ventas (Sales)
+ODOO_URL = os.getenv('ODOO_URL', 'https://mi-galeria.odoo.com')          # URL de tu instancia (ej. https://empresa.odoo.com)
+ODOO_DB = os.getenv('ODOO_DB', 'odoo_artspace_db')                      # Nombre exacto de la base de datos Odoo
+ODOO_USERNAME = os.getenv('ODOO_USERNAME', 'admin@artspace.mx')          # Correo del usuario administrador en Odoo
+ODOO_API_KEY = os.getenv('ODOO_API_KEY', '')                            # Clave de API alfanumérica generada en Odoo
+
+# 4. SAT CFDI 4.0 & Logística Courier DHL
+DHL_EXPRESS_API_KEY = os.getenv('DHL_EXPRESS_API_KEY', 'DHL_SANDBOX_KEY_2026')
+SAT_PAC_USER = os.getenv('SAT_PAC_USER', 'PAC_DEMO_UATX')
+SAT_PAC_PASSWORD = os.getenv('SAT_PAC_PASSWORD', 'PAC_PASS_2026')
+BANXICO_STP_CLABE = os.getenv('BANXICO_STP_CLABE', '646180123456789012')
+
 

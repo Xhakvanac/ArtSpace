@@ -109,15 +109,25 @@
                   Aprox. ${{ obra.precio_usd|floatformat:0 }} USD
                 </div>
               </div>
-              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
-                ✓ Stock: 1 Disponible (1/1)
+              <div style="text-align: right; font-size: 0.75rem;">
+                {% if obra.vendida %}
+                  <span style="color: #f87171; font-weight: 700; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(239,68,68,0.3);">● VENDIDA / COLECCIÓN PRIVADA</span>
+                {% else %}
+                  <span style="color: #86efac; font-weight: 600;">✓ Stock: 1 Disponible (1/1)</span>
+                {% endif %}
               </div>
             </div>
 
             <div style="display: flex; gap: 10px;">
-              <button onclick="agregarAlCarrito({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio: {{ obra.precio_mxn }}, enmarcado: {{ obra.precio_enmarcado|default:0 }}, conEnmarcado: {{ obra.enmarcado_disponible|yesno:'true,false' }}, imagen: '{{ obra.imagen }}', es_original_unica: {{ obra.es_original_unica|yesno:'true,false' }}, badge: '{{ obra.badge }}'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
-                🛒 Apartar (Hold 15m)
-              </button>
+              {% if obra.vendida %}
+                <button disabled style="flex: 2; background: #1e293b; color: #64748b; border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: not-allowed;">
+                  🔒 Obra Vendida
+                </button>
+              {% else %}
+                <button onclick="agregarAlCarrito({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio: {{ obra.precio_mxn }}, enmarcado: {{ obra.precio_enmarcado|default:0 }}, conEnmarcado: {{ obra.enmarcado_disponible|yesno:'true,false' }}, imagen: '{{ obra.imagen }}', es_original_unica: {{ obra.es_original_unica|yesno:'true,false' }}, badge: '{{ obra.badge }}'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                  🛒 Apartar (Hold 15m)
+                </button>
+              {% endif %}
               
               <button onclick="abrirQuickView({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio_mxn: {{ obra.precio_mxn }}, descripcion: '{{ obra.descripcion }}', tecnica: '{{ obra.tecnica }}', dimensiones: '{{ obra.dimensiones }}', anio: '{{ obra.anio }}', certificado: '{{ obra.certificado }}', imagen: '{{ obra.imagen }}', badge: '{{ obra.badge }}', precio_enmarcado: {{ obra.precio_enmarcado|default:0 }}, enmarcado_disponible: {{ obra.enmarcado_disponible|yesno:'true,false' }}})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
                 Ficha Técnica

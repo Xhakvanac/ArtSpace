@@ -123,7 +123,7 @@
         </h2>
       </div>
       <a href="{% url 'galeria' %}" style="color: var(--accent-cyan); text-decoration: none; font-weight: 700; font-size: 0.9rem;">
-        Ver Catálogo Completo (6 Obras) ➔
+        Ver Catálogo Completo ({{ obras|length }} Obras) ➔
       </a>
     </div>
 
@@ -170,9 +170,15 @@
               </div>
 
               <div style="display: flex; gap: 8px;">
-                <button onclick="agregarAlCarrito({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio: {{ obra.precio_mxn }}, enmarcado: {{ obra.precio_enmarcado|default:0 }}, conEnmarcado: {{ obra.enmarcado_disponible|yesno:'true,false' }}, imagen: '{{ obra.imagen }}', es_original_unica: {{ obra.es_original_unica|yesno:'true,false' }}, badge: '{{ obra.badge }}'})" style="flex: 1; background: var(--accent-cyan); color: #000; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 0.82rem; cursor: pointer;">
-                  🛒 Apartar
-                </button>
+                {% if obra.vendida %}
+                  <button disabled style="flex: 1; background: #1e293b; color: #64748b; border: 1px solid rgba(255,255,255,0.08); padding: 10px; border-radius: 6px; font-weight: 700; font-size: 0.82rem; cursor: not-allowed;">
+                    🔒 Vendida
+                  </button>
+                {% else %}
+                  <button onclick="agregarAlCarrito({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio: {{ obra.precio_mxn }}, enmarcado: {{ obra.precio_enmarcado|default:0 }}, conEnmarcado: {{ obra.enmarcado_disponible|yesno:'true,false' }}, imagen: '{{ obra.imagen }}', es_original_unica: {{ obra.es_original_unica|yesno:'true,false' }}, badge: '{{ obra.badge }}'})" style="flex: 1; background: var(--accent-cyan); color: #000; border: none; padding: 10px; border-radius: 6px; font-weight: 800; font-size: 0.82rem; cursor: pointer;">
+                    🛒 Apartar
+                  </button>
+                {% endif %}
                 <button onclick="abrirQuickView({id: '{{ obra.id }}', titulo: '{{ obra.titulo }}', artista: '{{ obra.artista }}', precio_mxn: {{ obra.precio_mxn }}, descripcion: '{{ obra.descripcion }}', tecnica: '{{ obra.tecnica }}', dimensiones: '{{ obra.dimensiones }}', anio: '{{ obra.anio }}', certificado: '{{ obra.certificado }}', imagen: '{{ obra.imagen }}', badge: '{{ obra.badge }}', precio_enmarcado: {{ obra.precio_enmarcado|default:0 }}, enmarcado_disponible: {{ obra.enmarcado_disponible|yesno:'true,false' }}})" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 12px; border-radius: 6px; cursor: pointer; font-size: 0.82rem;">
                   Ficha
                 </button>

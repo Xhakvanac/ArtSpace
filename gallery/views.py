@@ -10,7 +10,7 @@ from django.utils import timezone
 import json
 import uuid
 from decimal import Decimal
-from .forms import RegistroUsuarioForm, LoginUsuarioForm
+from .forms import RegistroUsuarioForm, LoginUsuarioForm, SubirObraArteForm
 from .models import (
     TicketSoporte,
     LeadProspecto,
@@ -23,9 +23,12 @@ from .models import (
     ProveedorArte,
     FacturaFiscalCFDI,
     LiquidacionArtistaERP,
-    PolizaAsientoContable
+    PolizaAsientoContable,
+    ObraArte
 )
 from .erp_services import ERPAccountingService
+from .crm_service import sincronizar_lead_hubspot
+from .scm_service import SCMIntegrationService
 
 # ==============================================================================
 # 🎨 CATÁLOGO MAESTRO DE OBRAS DE ARTE (ECOMMERCE & COMPONENTES UNIDAD 4)
@@ -165,13 +168,17 @@ def index(request):
     perfil = None
     if request.user.is_authenticated:
         perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
-    
-    obras_destacadas = [o for o in CATALOGO_OBRAS if o.get('destacado')]
-    obras_ofertas = [o for o in CATALOGO_OBRAS if o.get('en_oferta')]
+
+    # Cargar obras dinámicas desde la Base de Datos
+    obras_db = list(ObraArte.objects.filter(vendida=False))
+    obras = obras_db if obras_db else CATALOGO_OBRAS
+
+    obras_destacadas = [o for o in obras if getattr(o, 'destacado', True)]
+    obras_ofertas = [o for o in obras if getattr(o, 'en_oferta', False)]
 
     return render(request, 'index.html', {
         'perfil': perfil,
-        'obras': CATALOGO_OBRAS,
+        'obras': obras,
         'obras_destacadas': obras_destacadas,
         'obras_ofertas': obras_ofertas,
     })
@@ -182,9 +189,10 @@ def colecciones(request):
     if request.user.is_authenticated:
         perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
     
+    obras = ObraArte.objects.filter(vendida=False)
     return render(request, 'colecciones.html', {
         'perfil': perfil,
-        'obras': CATALOGO_OBRAS
+        'obras': obras
     })
 
 
@@ -202,21 +210,23 @@ def galeria(request):
     categoria_filtro = request.GET.get('categoria', 'TODAS')
     query = request.GET.get('q', '').strip().lower()
 
-    obras_filtradas = CATALOGO_OBRAS
+    obras_qs = ObraArte.objects.filter(vendida=False)
     if categoria_filtro != 'TODAS':
-        obras_filtradas = [o for o in obras_filtradas if o['categoria'].lower() == categoria_filtro.lower()]
+        obras_qs = obras_qs.filter(categoria__iexact=categoria_filtro)
 
     if query:
-        obras_filtradas = [
-            o for o in obras_filtradas
-            if query in o['titulo'].lower() or query in o['artista'].lower() or query in o['tecnica'].lower()
+        obras_qs = [
+            o for o in obras_qs
+            if query in o.titulo.lower() or query in o.artista.lower() or query in o.tecnica.lower()
         ]
+    else:
+        obras_qs = list(obras_qs)
 
     return render(request, 'galeria.html', {
-        'obras': obras_filtradas,
+        'obras': obras_qs,
         'categoria_activa': categoria_filtro,
         'query': query,
-        'total_obras': len(obras_filtradas)
+        'total_obras': len(obras_qs)
     })
 
 
@@ -272,9 +282,12 @@ def contacto(request):
                     etapa='CONTACTADO'
                 )
 
+            # 5. Sincronización automática con la API de HubSpot CRM
+            sincronizar_lead_hubspot(email=email, nombre=nombre, interes='GENERAL')
+
             messages.success(
                 request,
-                f"¡Gracias, {nombre}! Tu solicitud ha sido radicada con el Folio #{ticket.id}. "
+                f"¡Gracias, {nombre}! Tu solicitud ha sido radicada con el Folio #{ticket.id} y sincronizada con el CRM. "
                 f"Un asesor de ARTSPACE se pondrá en contacto al correo {email} en menos de 24 horas."
             )
 
@@ -310,6 +323,9 @@ def newsletter_subscribe(request):
         tipo_evento='Suscripción a Newsletter',
         resumen=f"El lead se suscribió con interés en {lead.get_interes_principal_display()}."
     )
+
+    # Sincronización en la nube con HubSpot CRM
+    sincronizar_lead_hubspot(email=email, nombre='Suscriptor Web', interes=interes)
 
     messages.success(
         request,
@@ -395,6 +411,7 @@ def registro_usuario(request):
             password = form.cleaned_data['password']
 
             # Creación segura: create_user aplica internamente make_password (PBKDF2-SHA256 + salt)
+            rol = form.cleaned_data.get('rol', 'COMPRADOR')
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -403,19 +420,41 @@ def registro_usuario(request):
 
             # Inicialización automática del perfil de cliente y lealtad Art Club
             perfil, _ = PerfilCliente.objects.get_or_create(usuario=user)
+            perfil.rol = rol
+            perfil.save()
+
+            if rol == 'ARTISTA':
+                ProveedorArte.objects.get_or_create(
+                    email=email,
+                    defaults={
+                        'nombre_empresa': f"Estudio de {username}",
+                        'tipo': 'ARTISTA_INDEPENDIENTE',
+                        'contacto_nombre': username,
+                        'email': email,
+                        'telefono': '+522461234567',
+                        'tiempo_entrega_dias': 3
+                    }
+                )
+
+            # Sincronización en la nube con HubSpot CRM
+            sincronizar_lead_hubspot(email=email, nombre=username, interes=f"Registro: {rol}")
 
             # Registro de auditoría en la bitácora CRM
             InteraccionCRM.objects.create(
                 usuario=user,
                 canal='CORREO',
-                tipo_evento='Registro Exitoso de Cuenta',
-                resumen=f"Usuario '{username}' registrado exitosamente con correo cifrado '{email}'."
+                tipo_evento=f'Registro Exitoso de Cuenta ({rol})',
+                resumen=f"Usuario '{username}' registrado exitosamente como {rol} con correo '{email}'."
             )
 
             # Iniciar sesión inmediatamente mediante cookie firmada con directiva HttpOnly
             login(request, user)
-            messages.success(request, f"¡Bienvenido a ARTSPACE, {username}! Tu cuenta ha sido creada con éxito.")
-            return redirect('perfil')
+            if rol == 'ARTISTA':
+                messages.success(request, f"¡Bienvenido a ARTSPACE Creadores, {username}! Tu portal de artista está activo.")
+                return redirect('panel_artista')
+            else:
+                messages.success(request, f"¡Bienvenido a ARTSPACE, {username}! Tu cuenta de coleccionista ha sido creada.")
+                return redirect('perfil')
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -494,6 +533,91 @@ def perfil_usuario(request):
         'ordenes': ordenes,
         'tickets': tickets,
         'historial_puntos': historial_puntos
+    })
+
+
+@login_required(login_url='login')
+def panel_artista(request):
+    """
+    Portal del Artista / Creador Independiente.
+    Permite publicar obras al catálogo, monitorear inventario SCM
+    y auditar liquidaciones Split 70/30 (con retención ISR 1.25% RESICO) y pagos SPEI / Odoo.
+    """
+    perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
+
+    if request.method == 'POST':
+        form = SubirObraArteForm(request.POST)
+        if form.is_valid():
+            nueva_obra = ObraArte.objects.create(
+                titulo=form.cleaned_data['titulo'],
+                artista=request.user.get_full_name() or request.user.username,
+                artista_usuario=request.user,
+                categoria=form.cleaned_data['categoria'],
+                precio_mxn=form.cleaned_data['precio_mxn'],
+                precio_usd=(form.cleaned_data['precio_mxn'] / Decimal('18.0')).quantize(Decimal('0.01')),
+                imagen=form.cleaned_data['imagen'],
+                tecnica=form.cleaned_data['tecnica'],
+                dimensiones=form.cleaned_data['dimensiones'],
+                anio=form.cleaned_data['anio'],
+                es_original_unica=form.cleaned_data['es_original_unica'],
+                enmarcado_disponible=form.cleaned_data['enmarcado_disponible'],
+                precio_enmarcado=form.cleaned_data['precio_enmarcado'],
+                certificado=form.cleaned_data['certificado'],
+                descripcion=form.cleaned_data['descripcion'],
+                badge="Obra Nueva 1/1" if form.cleaned_data['es_original_unica'] else "Edición de Autor"
+            )
+
+            # Notificar en HubSpot CRM la actividad del creador
+            sincronizar_lead_hubspot(
+                email=request.user.email,
+                nombre=request.user.username,
+                interes=f"Subió Obra: {nueva_obra.titulo} (${nueva_obra.precio_mxn})"
+            )
+
+            messages.success(
+                request,
+                f"🎨 ¡La obra '{nueva_obra.titulo}' ha sido publicada exitosamente en el catálogo! "
+                f"Ya está disponible en /galeria/ para que los compradores la aparten con Hold Cart."
+            )
+            return redirect('panel_artista')
+        else:
+            messages.error(request, "Por favor revisa los datos del formulario.")
+    else:
+        form = SubirObraArteForm()
+
+    if request.user.is_superuser:
+        mis_obras = ObraArte.objects.all()
+    else:
+        mis_obras = ObraArte.objects.filter(artista_usuario=request.user)
+
+    proveedor = ProveedorArte.objects.filter(email=request.user.email).first()
+    if proveedor:
+        liquidaciones = LiquidacionArtistaERP.objects.filter(artista_proveedor=proveedor)
+    else:
+        liquidaciones = LiquidacionArtistaERP.objects.none()
+
+    if not liquidaciones.exists():
+        liquidaciones = LiquidacionArtistaERP.objects.filter(
+            orden__detalles_envio__titulo_obra__in=[o.titulo for o in mis_obras]
+        ).distinct()
+
+    if not liquidaciones.exists() and request.user.is_superuser:
+        liquidaciones = LiquidacionArtistaERP.objects.all()[:6]
+
+    total_bruto = sum(l.monto_bruto_dividendo for l in liquidaciones)
+    total_isr = sum(l.retencion_isr for l in liquidaciones)
+    total_neto = sum(l.monto_neto_dispersar for l in liquidaciones)
+
+    return render(request, 'panel_artista.html', {
+        'perfil': perfil,
+        'form': form,
+        'mis_obras': mis_obras,
+        'liquidaciones': liquidaciones,
+        'total_bruto': total_bruto,
+        'total_isr': total_isr,
+        'total_neto': total_neto,
+        'obras_activas': mis_obras.filter(vendida=False).count(),
+        'obras_vendidas': mis_obras.filter(vendida=True).count(),
     })
 
 
@@ -664,15 +788,38 @@ def api_checkout_process(request):
             perfil_crm=perfil_crm
         )
 
+        # Identificar obra y artista en el catálogo
+        obra_match = ObraArte.objects.filter(titulo__iexact=obra_titulo).first()
+        if not obra_match:
+            obra_match = ObraArte.objects.filter(titulo__icontains=obra_titulo).first()
+
+        artista_nombre = obra_match.artista if obra_match else "Elena Rostova"
+        artista_proveedor = None
+        if obra_match and obra_match.artista_usuario:
+            artista_proveedor, _ = ProveedorArte.objects.get_or_create(
+                email=obra_match.artista_usuario.email,
+                defaults={
+                    'nombre_empresa': f"Estudio de {obra_match.artista}",
+                    'tipo': 'ARTISTA_INDEPENDIENTE',
+                    'contacto_nombre': obra_match.artista,
+                    'telefono': '+522461234567',
+                    'tiempo_entrega_dias': 3
+                }
+            )
+
         DetalleEnvioItem.objects.create(
             orden=orden,
             titulo_obra=obra_titulo,
-            artista_nombre="Elena Rostova",
+            artista_nombre=artista_nombre,
             tipo_pieza=obra_tipo,
             cantidad=1,
             precio_unitario=total_pago,
             folio_certificado=f"COA-ARTSPACE-{uuid.uuid4().hex[:8].upper()}"
         )
+
+        # 1.1 Sincronizar Orden con la Cadena de Suministro SCM (Zoho Inventory / Odoo)
+        scm_service = SCMIntegrationService(platform="ZOHO_INVENTORY")
+        scm_result = scm_service.sincronizar_orden_con_scm(orden)
 
         # 2. Orquestar Servicios ERP: CFDI 4.0, Split 70/30 y Póliza de Ingreso
         factura_cfdi = ERPAccountingService.generar_factura_cfdi(
@@ -682,8 +829,16 @@ def api_checkout_process(request):
             cp_fiscal=cp_fiscal
         )
 
-        liquidacion_artista = ERPAccountingService.procesar_split_artista(orden=orden)
+        liquidacion_artista = ERPAccountingService.procesar_split_artista(orden=orden, artista_proveedor=artista_proveedor)
+
+        # Descontar stock y marcar como vendida si es obra original única en el catálogo
+        if obra_match:
+            if obra_match.es_original_unica:
+                obra_match.vendida = True
+                obra_match.save()
+
         poliza = ERPAccountingService.generar_asiento_ingreso_venta(orden=orden)
+        odoo_result = ERPAccountingService.sincronizar_con_odoo(orden=orden, factura=factura_cfdi)
 
         # 3. Acreditar Puntos de Fidelización en CRM Art Club
         puntos_ganados = 0
@@ -699,6 +854,8 @@ def api_checkout_process(request):
             'status': 'TRANSACTION_CONFIRMED',
             'codigo_pedido': folio_pedido,
             'guia_awb': guia_awb,
+            'id_externo_scm': orden.id_externo_zoho,
+            'id_externo_odoo_erp': odoo_result.get('odoo_id'),
             'logistica_estado': orden.get_estado_logistico_display(),
             'factura_fiscal': {
                 'uuid_sat': str(factura_cfdi.uuid_fiscal),

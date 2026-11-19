@@ -582,6 +582,7 @@
         <li class="nav-item"><a href="galeria.html" class="active">Galería & Catálogo</a></li>
         <li class="nav-item"><a href="colecciones.html" class="">Colecciones</a></li>
         <li class="nav-item"><a href="artistas.html" class="">Artistas</a></li>
+        <li class="nav-item"><a href="/panel-artista/" class="" style="color: var(--gold-luxury);">Portal Artistas 🎨</a></li>
         <li class="nav-item"><a href="contacto.html" class="">Soporte CRM</a></li>
       </ul>
 
@@ -662,89 +663,14 @@
         
         <!-- IMAGEN CON ZOOM AL HOVER -->
         <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
-          <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200" alt="Ecos del Vacío" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-          
-          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
-            Pieza Única 1/1
-          </span>
-
-          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
-            120 x 90 cm
-          </span>
-        </div>
-
-        <!-- CONTENIDO Y FICHA TÉCNICA -->
-        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
-              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
-                Pintura al Óleo
-              </span>
-              <span style="font-size: 0.75rem; color: #94a3b8;">
-                Año 2026
-              </span>
-            </div>
-
-            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
-              Ecos del Vacío
-            </h2>
-            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
-              por <strong style="color: #fff;">Ana Lucero</strong>
-            </div>
-
-            <!-- FICHA TÉCNICA RESUMIDA -->
-            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
-              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Óleo y pigmentos naturales sobre lienzo de lino belga</span></div>
-              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado Físico Holográfico + Registro Blockchain ERC-721</span></div>
-              
-                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+$3200 MXN)</span></div>
-              
-            </div>
-          </div>
-
-          <!-- PRECIO Y ACCIONES -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
-              <div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
-                  $34500.00 MXN
-                </div>
-                <div style="font-size: 0.75rem; color: #94a3b8;">
-                  Aprox. $1916 USD
-                </div>
-              </div>
-              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
-                ✓ Stock: 1 Disponible (1/1)
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-              <button onclick="agregarAlCarrito({id: 'ECOS-VACIO-01', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio: 34500.0, enmarcado: 3200.0, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200', es_original_unica: true, badge: 'Pieza Única 1/1'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
-                🛒 Apartar (Hold 15m)
-              </button>
-              
-              <button onclick="abrirQuickView({id: 'ECOS-VACIO-01', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio_mxn: 34500.0, descripcion: 'Obra maestra que explora los contrastes cromáticos y la introspección del silencio en el arte abstracto contemporáneo.', tecnica: 'Óleo y pigmentos naturales sobre lienzo de lino belga', dimensiones: '120 x 90 cm', anio: '2026', certificado: 'Certificado Físico Holográfico + Registro Blockchain ERC-721', imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200', badge: 'Pieza Única 1/1', precio_enmarcado: 3200.0, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
-                Ficha Técnica
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    
-      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
-        
-        <!-- IMAGEN CON ZOOM AL HOVER -->
-        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
-          <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200" alt="Ciudad de Vapor (Cyberpunk)" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200" alt="Metamorfosis Cuántica" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
           
           <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: #f87171; border: 1px solid #f87171; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
-            Oferta -15% · NFT Exclusivo
+            Cyber Monday -20%
           </span>
 
           <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
-            7680 x 4320 px (Master File)
+            Video Loop 4K 60fps + Token ERC-721
           </span>
         </div>
 
@@ -761,16 +687,16 @@
             </div>
 
             <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
-              Ciudad de Vapor (Cyberpunk)
+              Metamorfosis Cuántica
             </h2>
             <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
-              por <strong style="color: #fff;">Diego Ferral</strong>
+              por <strong style="color: #fff;">Kaelen Chen</strong>
             </div>
 
             <!-- FICHA TÉCNICA RESUMIDA -->
             <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
-              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Pintura digital vectorial en Ultra-HD 8K con smart contract</span></div>
-              <div><strong>Certificado:</strong> <span style="color: #86efac;">Smart Contract Ethereum / IPFS Hash Verificado</span></div>
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Generative AI curada y renderizada en 3D volumétrico cinético</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Contrato Inteligente descentralizado con royalties 70/30</span></div>
               
             </div>
           </div>
@@ -780,171 +706,27 @@
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
               <div>
                 <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
-                  $18900.00 MXN
+                  $22500.00 MXN
                 </div>
                 <div style="font-size: 0.75rem; color: #94a3b8;">
-                  Aprox. $1050 USD
+                  Aprox. $1250 USD
                 </div>
               </div>
-              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
-                ✓ Stock: 1 Disponible (1/1)
+              <div style="text-align: right; font-size: 0.75rem;">
+                
+                  <span style="color: #86efac; font-weight: 600;">✓ Stock: 1 Disponible (1/1)</span>
+                
               </div>
             </div>
 
             <div style="display: flex; gap: 10px;">
-              <button onclick="agregarAlCarrito({id: 'CIUDAD-VAPOR-02', titulo: 'Ciudad de Vapor (Cyberpunk)', artista: 'Diego Ferral', precio: 18900.0, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200', es_original_unica: true, badge: 'Oferta -15% · NFT Exclusivo'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
-                🛒 Apartar (Hold 15m)
-              </button>
               
-              <button onclick="abrirQuickView({id: 'CIUDAD-VAPOR-02', titulo: 'Ciudad de Vapor (Cyberpunk)', artista: 'Diego Ferral', precio_mxn: 18900.0, descripcion: 'Visión retrofuturista de megalópolis nocturnas iluminadas por neón, transferible a wallet Ethereum o descarga directa.', tecnica: 'Pintura digital vectorial en Ultra-HD 8K con smart contract', dimensiones: '7680 x 4320 px (Master File)', anio: '2026', certificado: 'Smart Contract Ethereum / IPFS Hash Verificado', imagen: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200', badge: 'Oferta -15% · NFT Exclusivo', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
-                Ficha Técnica
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    
-      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
-        
-        <!-- IMAGEN CON ZOOM AL HOVER -->
-        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
-          <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200" alt="Fragmentos del Sol" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-          
-          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
-            Hoja de Oro 24K
-          </span>
-
-          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
-            100 x 100 cm
-          </span>
-        </div>
-
-        <!-- CONTENIDO Y FICHA TÉCNICA -->
-        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
-              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
-                Pintura al Óleo
-              </span>
-              <span style="font-size: 0.75rem; color: #94a3b8;">
-                Año 2025
-              </span>
-            </div>
-
-            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
-              Fragmentos del Sol
-            </h2>
-            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
-              por <strong style="color: #fff;">Elisa Moon</strong>
-            </div>
-
-            <!-- FICHA TÉCNICA RESUMIDA -->
-            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
-              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Acrílico texturizado y hoja de oro de 24k sobre madera estucada</span></div>
-              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado de Galería ARTSPACE con firma autógrafa</span></div>
+                <button onclick="agregarAlCarrito({id: '6', titulo: 'Metamorfosis Cuántica', artista: 'Kaelen Chen', precio: 22500.00, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200', es_original_unica: true, badge: 'Cyber Monday -20%'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                  🛒 Apartar (Hold 15m)
+                </button>
               
-                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+$2800 MXN)</span></div>
               
-            </div>
-          </div>
-
-          <!-- PRECIO Y ACCIONES -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
-              <div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
-                  $28400.00 MXN
-                </div>
-                <div style="font-size: 0.75rem; color: #94a3b8;">
-                  Aprox. $1577 USD
-                </div>
-              </div>
-              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
-                ✓ Stock: 1 Disponible (1/1)
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-              <button onclick="agregarAlCarrito({id: 'FRAG-SOL-03', titulo: 'Fragmentos del Sol', artista: 'Elisa Moon', precio: 28400.0, enmarcado: 2800.0, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200', es_original_unica: true, badge: 'Hoja de Oro 24K'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
-                🛒 Apartar (Hold 15m)
-              </button>
-              
-              <button onclick="abrirQuickView({id: 'FRAG-SOL-03', titulo: 'Fragmentos del Sol', artista: 'Elisa Moon', precio_mxn: 28400.0, descripcion: 'Estudio de la refracción lumínica matutina aplicando láminas de oro puro que cambian de tonalidad según la luz ambiental.', tecnica: 'Acrílico texturizado y hoja de oro de 24k sobre madera estucada', dimensiones: '100 x 100 cm', anio: '2025', certificado: 'Certificado de Galería ARTSPACE con firma autógrafa', imagen: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200', badge: 'Hoja de Oro 24K', precio_enmarcado: 2800.0, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
-                Ficha Técnica
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    
-      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
-        
-        <!-- IMAGEN CON ZOOM AL HOVER -->
-        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
-          <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200" alt="Monolito de Silencio" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-          
-          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: #f87171; border: 1px solid #f87171; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
-            Escultura Única 1/1
-          </span>
-
-          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
-            65 x 35 x 30 cm (24 kg)
-          </span>
-        </div>
-
-        <!-- CONTENIDO Y FICHA TÉCNICA -->
-        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
-              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
-                Escultura
-              </span>
-              <span style="font-size: 0.75rem; color: #94a3b8;">
-                Año 2026
-              </span>
-            </div>
-
-            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
-              Monolito de Silencio
-            </h2>
-            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
-              por <strong style="color: #fff;">Mateo Rivas</strong>
-            </div>
-
-            <!-- FICHA TÉCNICA RESUMIDA -->
-            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
-              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Mármol negro de Carrara y latón cepillado artesanal</span></div>
-              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado Notarial de Escultura Original</span></div>
-              
-            </div>
-          </div>
-
-          <!-- PRECIO Y ACCIONES -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
-              <div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
-                  $42000.00 MXN
-                </div>
-                <div style="font-size: 0.75rem; color: #94a3b8;">
-                  Aprox. $2333 USD
-                </div>
-              </div>
-              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
-                ✓ Stock: 1 Disponible (1/1)
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-              <button onclick="agregarAlCarrito({id: 'MONOLITO-04', titulo: 'Monolito de Silencio', artista: 'Mateo Rivas', precio: 42000.0, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200', es_original_unica: true, badge: 'Escultura Única 1/1'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
-                🛒 Apartar (Hold 15m)
-              </button>
-              
-              <button onclick="abrirQuickView({id: 'MONOLITO-04', titulo: 'Monolito de Silencio', artista: 'Mateo Rivas', precio_mxn: 42000.0, descripcion: 'Escultura tridimensional que equilibra el peso geológico del mármol con la ligereza reflectiva del latón pulido a mano.', tecnica: 'Mármol negro de Carrara y latón cepillado artesanal', dimensiones: '65 x 35 x 30 cm (24 kg)', anio: '2026', certificado: 'Certificado Notarial de Escultura Original', imagen: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200', badge: 'Escultura Única 1/1', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+              <button onclick="abrirQuickView({id: '6', titulo: 'Metamorfosis Cuántica', artista: 'Kaelen Chen', precio_mxn: 22500.00, descripcion: 'Animación generativa hipercompleja basada en algoritmos cuánticos de fluctuación de fluidos en el espacio profundo.', tecnica: 'Generative AI curada y renderizada en 3D volumétrico cinético', dimensiones: 'Video Loop 4K 60fps + Token ERC-721', anio: '2026', certificado: 'Contrato Inteligente descentralizado con royalties 70/30', imagen: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200', badge: 'Cyber Monday -20%', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
                 Ficha Técnica
               </button>
             </div>
@@ -1009,17 +791,21 @@
                   Aprox. $805 USD
                 </div>
               </div>
-              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
-                ✓ Stock: 1 Disponible (1/1)
+              <div style="text-align: right; font-size: 0.75rem;">
+                
+                  <span style="color: #86efac; font-weight: 600;">✓ Stock: 1 Disponible (1/1)</span>
+                
               </div>
             </div>
 
             <div style="display: flex; gap: 10px;">
-              <button onclick="agregarAlCarrito({id: 'HORIZONTE-05', titulo: 'Horizonte Etéreo', artista: 'Sofía Valenzuela', precio: 14500.0, enmarcado: 2500.0, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&amp;w=1200', es_original_unica: false, badge: 'Edición Limitada 3/10'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
-                🛒 Apartar (Hold 15m)
-              </button>
               
-              <button onclick="abrirQuickView({id: 'HORIZONTE-05', titulo: 'Horizonte Etéreo', artista: 'Sofía Valenzuela', precio_mxn: 14500.0, descripcion: 'Captura analógica de larga exposición en los salares de Atacama, revelando texturas atmosféricas en degradados pastel.', tecnica: 'Impresión Fine Art Giclée sobre papel Hahnemühle Photo Rag 308g', dimensiones: '90 x 60 cm (Edición 3/10)', anio: '2026', certificado: 'Sello seco de autor con número de tiraje', imagen: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&amp;w=1200', badge: 'Edición Limitada 3/10', precio_enmarcado: 2500.0, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                <button onclick="agregarAlCarrito({id: '5', titulo: 'Horizonte Etéreo', artista: 'Sofía Valenzuela', precio: 14500.00, enmarcado: 2500.00, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&amp;w=1200', es_original_unica: false, badge: 'Edición Limitada 3/10'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                  🛒 Apartar (Hold 15m)
+                </button>
+              
+              
+              <button onclick="abrirQuickView({id: '5', titulo: 'Horizonte Etéreo', artista: 'Sofía Valenzuela', precio_mxn: 14500.00, descripcion: 'Captura analógica de larga exposición en los salares de Atacama, revelando texturas atmosféricas en degradados pastel.', tecnica: 'Impresión Fine Art Giclée sobre papel Hahnemühle Photo Rag 308g', dimensiones: '90 x 60 cm (Edición 3/10)', anio: '2026', certificado: 'Sello seco de autor con número de tiraje', imagen: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?q=80&amp;w=1200', badge: 'Edición Limitada 3/10', precio_enmarcado: 2500.00, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
                 Ficha Técnica
               </button>
             </div>
@@ -1033,14 +819,170 @@
         
         <!-- IMAGEN CON ZOOM AL HOVER -->
         <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
-          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200" alt="Metamorfosis Cuántica" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200" alt="Monolito de Silencio" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
           
           <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: #f87171; border: 1px solid #f87171; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
-            Cyber Monday -20%
+            Escultura Única 1/1
           </span>
 
           <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
-            Video Loop 4K 60fps + Token ERC-721
+            65 x 35 x 30 cm (24 kg)
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Escultura
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2026
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Monolito de Silencio
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Mateo Rivas</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Mármol negro de Carrara y latón cepillado artesanal</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado Notarial de Escultura Original</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $42000.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $2333 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem;">
+                
+                  <span style="color: #86efac; font-weight: 600;">✓ Stock: 1 Disponible (1/1)</span>
+                
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              
+                <button onclick="agregarAlCarrito({id: '4', titulo: 'Monolito de Silencio', artista: 'Mateo Rivas', precio: 42000.00, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200', es_original_unica: true, badge: 'Escultura Única 1/1'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                  🛒 Apartar (Hold 15m)
+                </button>
+              
+              
+              <button onclick="abrirQuickView({id: '4', titulo: 'Monolito de Silencio', artista: 'Mateo Rivas', precio_mxn: 42000.00, descripcion: 'Escultura tridimensional que equilibra el peso geológico del mármol con la ligereza reflectiva del latón pulido a mano.', tecnica: 'Mármol negro de Carrara y latón cepillado artesanal', dimensiones: '65 x 35 x 30 cm (24 kg)', anio: '2026', certificado: 'Certificado Notarial de Escultura Original', imagen: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&amp;w=1200', badge: 'Escultura Única 1/1', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200" alt="Fragmentos del Sol" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Hoja de Oro 24K
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            100 x 100 cm
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Pintura al Óleo
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2025
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Fragmentos del Sol
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Elisa Moon</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Acrílico texturizado y hoja de oro de 24k sobre madera estucada</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado de Galería ARTSPACE con firma autógrafa</span></div>
+              
+                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+$2800 MXN)</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $28400.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $1577 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem;">
+                
+                  <span style="color: #86efac; font-weight: 600;">✓ Stock: 1 Disponible (1/1)</span>
+                
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              
+                <button onclick="agregarAlCarrito({id: '3', titulo: 'Fragmentos del Sol', artista: 'Elisa Moon', precio: 28400.00, enmarcado: 2800.00, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200', es_original_unica: true, badge: 'Hoja de Oro 24K'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                  🛒 Apartar (Hold 15m)
+                </button>
+              
+              
+              <button onclick="abrirQuickView({id: '3', titulo: 'Fragmentos del Sol', artista: 'Elisa Moon', precio_mxn: 28400.00, descripcion: 'Estudio de la refracción lumínica matutina aplicando láminas de oro puro que cambian de tonalidad según la luz ambiental.', tecnica: 'Acrílico texturizado y hoja de oro de 24k sobre madera estucada', dimensiones: '100 x 100 cm', anio: '2025', certificado: 'Certificado de Galería ARTSPACE con firma autógrafa', imagen: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&amp;w=1200', badge: 'Hoja de Oro 24K', precio_enmarcado: 2800.00, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200" alt="Ciudad de Vapor (Cyberpunk)" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: #f87171; border: 1px solid #f87171; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Oferta -15% · NFT Exclusivo
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            7680 x 4320 px (Master File)
           </span>
         </div>
 
@@ -1057,16 +999,16 @@
             </div>
 
             <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
-              Metamorfosis Cuántica
+              Ciudad de Vapor (Cyberpunk)
             </h2>
             <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
-              por <strong style="color: #fff;">Kaelen Chen</strong>
+              por <strong style="color: #fff;">Diego Ferral</strong>
             </div>
 
             <!-- FICHA TÉCNICA RESUMIDA -->
             <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
-              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Generative AI curada y renderizada en 3D volumétrico cinético</span></div>
-              <div><strong>Certificado:</strong> <span style="color: #86efac;">Contrato Inteligente descentralizado con royalties 70/30</span></div>
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Pintura digital vectorial en Ultra-HD 8K con smart contract</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Smart Contract Ethereum / IPFS Hash Verificado</span></div>
               
             </div>
           </div>
@@ -1076,23 +1018,106 @@
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
               <div>
                 <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
-                  $22500.00 MXN
+                  $18900.00 MXN
                 </div>
                 <div style="font-size: 0.75rem; color: #94a3b8;">
-                  Aprox. $1250 USD
+                  Aprox. $1050 USD
                 </div>
               </div>
-              <div style="text-align: right; font-size: 0.75rem; color: #86efac;">
-                ✓ Stock: 1 Disponible (1/1)
+              <div style="text-align: right; font-size: 0.75rem;">
+                
+                  <span style="color: #86efac; font-weight: 600;">✓ Stock: 1 Disponible (1/1)</span>
+                
               </div>
             </div>
 
             <div style="display: flex; gap: 10px;">
-              <button onclick="agregarAlCarrito({id: 'METAMORFOSIS-06', titulo: 'Metamorfosis Cuántica', artista: 'Kaelen Chen', precio: 22500.0, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200', es_original_unica: true, badge: 'Cyber Monday -20%'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
-                🛒 Apartar (Hold 15m)
-              </button>
               
-              <button onclick="abrirQuickView({id: 'METAMORFOSIS-06', titulo: 'Metamorfosis Cuántica', artista: 'Kaelen Chen', precio_mxn: 22500.0, descripcion: 'Animación generativa hipercompleja basada en algoritmos cuánticos de fluctuación de fluidos en el espacio profundo.', tecnica: 'Generative AI curada y renderizada en 3D volumétrico cinético', dimensiones: 'Video Loop 4K 60fps + Token ERC-721', anio: '2026', certificado: 'Contrato Inteligente descentralizado con royalties 70/30', imagen: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&amp;w=1200', badge: 'Cyber Monday -20%', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                <button onclick="agregarAlCarrito({id: '2', titulo: 'Ciudad de Vapor (Cyberpunk)', artista: 'Diego Ferral', precio: 18900.00, enmarcado: 0, conEnmarcado: false, imagen: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200', es_original_unica: true, badge: 'Oferta -15% · NFT Exclusivo'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                  🛒 Apartar (Hold 15m)
+                </button>
+              
+              
+              <button onclick="abrirQuickView({id: '2', titulo: 'Ciudad de Vapor (Cyberpunk)', artista: 'Diego Ferral', precio_mxn: 18900.00, descripcion: 'Visión retrofuturista de megalópolis nocturnas iluminadas por neón, transferible a wallet Ethereum o descarga directa.', tecnica: 'Pintura digital vectorial en Ultra-HD 8K con smart contract', dimensiones: '7680 x 4320 px (Master File)', anio: '2026', certificado: 'Smart Contract Ethereum / IPFS Hash Verificado', imagen: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&amp;w=1200', badge: 'Oferta -15% · NFT Exclusivo', precio_enmarcado: 0, enmarcado_disponible: false})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                Ficha Técnica
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    
+      <div style="background: #151921; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: transform 0.25s, border-color 0.25s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='rgba(102, 252, 241, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.08)'">
+        
+        <!-- IMAGEN CON ZOOM AL HOVER -->
+        <div style="position: relative; height: 300px; overflow: hidden; background: #0d0f12;">
+          <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200" alt="Ecos del Vacío" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          
+          <span style="position: absolute; top: 15px; left: 15px; background: rgba(11, 12, 16, 0.85); backdrop-filter: blur(4px); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+            Pieza Única 1/1
+          </span>
+
+          <span style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: #e2e8f0; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px;">
+            120 x 90 cm
+          </span>
+        </div>
+
+        <!-- CONTENIDO Y FICHA TÉCNICA -->
+        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span style="font-size: 0.75rem; color: var(--gold-luxury); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                Pintura al Óleo
+              </span>
+              <span style="font-size: 0.75rem; color: #94a3b8;">
+                Año 2026
+              </span>
+            </div>
+
+            <h2 style="font-family: var(--font-heading); font-size: 1.45rem; color: #fff; margin: 4px 0 2px;">
+              Ecos del Vacío
+            </h2>
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+              por <strong style="color: #fff;">Ana Lucero</strong>
+            </div>
+
+            <!-- FICHA TÉCNICA RESUMIDA -->
+            <div style="background: #0d0f12; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; font-size: 0.8rem; line-height: 1.6; margin-bottom: 18px; color: #94a3b8;">
+              <div><strong>Técnica:</strong> <span style="color: #e2e8f0;">Óleo y pigmentos naturales sobre lienzo de lino belga</span></div>
+              <div><strong>Certificado:</strong> <span style="color: #86efac;">Certificado Físico Holográfico + Registro Blockchain ERC-721</span></div>
+              
+                <div><strong>Enmarcado:</strong> <span style="color: var(--accent-cyan);">Madera de Nogal disponible (+$3200 MXN)</span></div>
+              
+            </div>
+          </div>
+
+          <!-- PRECIO Y ACCIONES -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+              <div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #fff;">
+                  $34500.00 MXN
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8;">
+                  Aprox. $1916 USD
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 0.75rem;">
+                
+                  <span style="color: #86efac; font-weight: 600;">✓ Stock: 1 Disponible (1/1)</span>
+                
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              
+                <button onclick="agregarAlCarrito({id: '1', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio: 34500.00, enmarcado: 3200.00, conEnmarcado: true, imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200', es_original_unica: true, badge: 'Pieza Única 1/1'})" style="flex: 2; background: var(--accent-cyan); color: #0b0c10; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);">
+                  🛒 Apartar (Hold 15m)
+                </button>
+              
+              
+              <button onclick="abrirQuickView({id: '1', titulo: 'Ecos del Vacío', artista: 'Ana Lucero', precio_mxn: 34500.00, descripcion: 'Obra maestra que explora los contrastes cromáticos y la introspección del silencio en el arte abstracto contemporáneo.', tecnica: 'Óleo y pigmentos naturales sobre lienzo de lino belga', dimensiones: '120 x 90 cm', anio: '2026', certificado: 'Certificado Físico Holográfico + Registro Blockchain ERC-721', imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&amp;w=1200', badge: 'Pieza Única 1/1', precio_enmarcado: 3200.00, enmarcado_disponible: true})" style="flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
                 Ficha Técnica
               </button>
             </div>
@@ -1414,7 +1439,7 @@
     <!-- TAB 2: TICKET -->
     <div id="tabTicket" style="display: none; padding: 16px; overflow-y: auto; height: 350px;">
       <form action="/contacto/" method="POST">
-        <input type="hidden" name="csrfmiddlewaretoken" value="MCK8qXaOyw1Nzg29mXyOdkW8Orp2BheTAirhrdR6y3gThFCoTlwXXfC7BzcZOftU">
+        <input type="hidden" name="csrfmiddlewaretoken" value="ZrZ6shXMvRY2XqPahpl9XtwWfhH18ojWqG6bbDqo9FnNv4VzuFMUwrV7Bccp3lVT">
         <div class="form-group-custom">
           <label>Nombre Completo</label>
           <input type="text" name="nombre" value="" required>
