@@ -30,7 +30,7 @@ def run_security_test_suite():
     rf = RequestFactory()
     data_registro = {
         'username': 'rodrigo_coleccionista',
-        'email': 'r.almendra@alumnos.uatx.mx',
+        'email': 'r.almendra@apizaco.tecnm.mx',
         'password': 'ArtSecure#2026!X',
         'password_confirm': 'ArtSecure#2026!X'
     }
@@ -59,7 +59,7 @@ def run_security_test_suite():
     # 2.A Correo/Username duplicado
     data_duplicado = {
         'username': 'rodrigo_coleccionista',
-        'email': 'r.almendra@alumnos.uatx.mx',
+        'email': 'r.almendra@apizaco.tecnm.mx',
         'password': 'OtraPassword#99!',
         'password_confirm': 'OtraPassword#99!'
     }

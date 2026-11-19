@@ -1,14 +1,14 @@
 # 🛡️ REPORTE TÉCNICO: IMPLEMENTACIÓN DE MECANISMOS DE REGISTRO Y AUTENTICACIÓN SEGURA DE USUARIOS
 ## UNIDAD 4: ELEMENTOS DE E-BUSINESS, BASE DE DATOS Y TRANSACCIÓN DIGITAL
 ### PROYECTO INTEGRADOR: ARTSPACE (GALERÍA E-COMMERCE DE ARTE CONTEMPORÁNEO Y DIGITAL)
-#### ASIGNATURA: NEGOCIOS ELECTRÓNICOS II — UNIVERSIDAD AUTÓNOMA DE TLAXCALA
+#### ASIGNATURA: NEGOCIOS ELECTRÓNICOS II — TECNOLÓGICO NACIONAL DE MÉXICO — INSTITUTO TECNOLÓGICO DE APIZACO
 
 ---
 
 <div align="center">
 
-# 🏛️ UNIVERSIDAD AUTÓNOMA DE TLAXCALA
-### FACULTAD DE CIENCIAS BÁSICAS, INGENIERÍA Y TECNOLOGÍA
+# 🏛️ TECNOLÓGICO NACIONAL DE MÉXICO — INSTITUTO TECNOLÓGICO DE APIZACO
+### DEPARTAMENTO DE SISTEMAS Y COMPUTACIÓN
 **Licenciatura en Ingeniería en Computación**
 
 ---
@@ -23,14 +23,14 @@
 
 **Líder Técnico & Desarrollador Full-Stack:**  
 *Almendra Valenzuela Rodrigo*  
-Matrícula: 2021000000 | Correo: `r.almendra@alumnos.uatx.mx`
+Matrícula: 2021000000 | Correo: `r.almendra@apizaco.tecnm.mx`
 
 **Docente Titular:**  
 M.C. / Dr. [Nombre del Docente]
 
 **Fecha de Entrega:**  
 Noviembre de 2026 — Periodo Académico Otoño 2026  
-Campus San Luis Apizaquito / Tlaxcala, Tlax., México
+Apizaco, Tlaxcala, México
 
 ---
 
@@ -40,8 +40,8 @@ Campus San Luis Apizaquito / Tlaxcala, Tlax., México
 
 ## 🎯 DATOS DE IDENTIFICACIÓN Y OBJETIVOS
 
-* **Institución Educativa:** Universidad Autónoma de Tlaxcala (UATx)
-* **Facultad:** Facultad de Ciencias Básicas, Ingeniería y Tecnología
+* **Institución Educativa:** Instituto Tecnológico de Apizaco (TecNM Campus Apizaco)
+* **Facultad:** Departamento de Sistemas y Computación
 * **Licenciatura:** Ingeniería en Computación
 * **Asignatura:** Negocios Electrónicos II (9no Semestre)
 * **Nombre de la Práctica:** Reporte Técnico sobre Implementación de Mecanismos de Registro y Usuarios
@@ -492,8 +492,8 @@ A continuación se resume la batería de pruebas automatizadas y funcionales eje
 
 | ID Caso | Módulo Evaluado | Precondición | Datos de Entrada (Payload) | Resultado Esperado | Resultado Obtenido | Estatus |
 | :---: | :--- | :--- | :--- | :--- | :--- | :---: |
-| **CP-01** | Registro de Usuario | Base de datos limpia sin usuario duplicado | `User: rodrigo_coleccionista`<br>`Email: r.almendra@alumnos.uatx.mx`<br>`Pass: ArtSecure#2026!X` | Usuario creado en BD, perfil CRM inicializado en Tier Bronce, redirección a `/perfil/`. | Formulario validado con éxito, registro insertado en `auth_user` con ID=2. | **APROBADO** |
-| **CP-02A** | Control de Duplicados | Usuario de CP-01 ya existente en la BD | `User: rodrigo_coleccionista`<br>`Email: r.almendra@alumnos.uatx.mx`<br>`Pass: OtraClave#2026!` | Rechazo por validación en servidor, mensajes de duplicidad en `username` y `email`. | Petición abortada con `ValidationError` en campos duplicados. Transacción segura. | **APROBADO** |
+| **CP-01** | Registro de Usuario | Base de datos limpia sin usuario duplicado | `User: rodrigo_coleccionista`<br>`Email: r.almendra@apizaco.tecnm.mx`<br>`Pass: ArtSecure#2026!X` | Usuario creado en BD, perfil CRM inicializado en Tier Bronce, redirección a `/perfil/`. | Formulario validado con éxito, registro insertado en `auth_user` con ID=2. | **APROBADO** |
+| **CP-02A** | Control de Duplicados | Usuario de CP-01 ya existente en la BD | `User: rodrigo_coleccionista`<br>`Email: r.almendra@apizaco.tecnm.mx`<br>`Pass: OtraClave#2026!` | Rechazo por validación en servidor, mensajes de duplicidad en `username` y `email`. | Petición abortada con `ValidationError` en campos duplicados. Transacción segura. | **APROBADO** |
 | **CP-02B** | Complejidad de Contraseña | Usuario no registrado previamente | `User: nuevo_usuario_xyz`<br>`Email: nuevo@artspace.mx`<br>`Pass: 123` | Rechazo por no cumplir longitud mínima, ser contraseña común y ser totalmente numérica. | Formulario inválido. Disparó los 3 mensajes de error de `AUTH_PASSWORD_VALIDATORS`. | **APROBADO** |
 | **CP-03** | Autenticación y Sesión | Usuario registrado previamente en CP-01 | `User: rodrigo_coleccionista`<br>`Pass: ArtSecure#2026!X` | Hash verificado, usuario autenticado, cookie `sessionid` emitida con `HttpOnly=True`. | `authenticate()` retornó instancia de usuario activo; sesión iniciada exitosamente. | **APROBADO** |
 | **CP-04** | Resiliencia ante Fuerza Bruta | Intentos con credenciales no válidas | `User: rodrigo_coleccionista` (Pass incorrecta) / `User: usuario_fantasma_404` | Acceso denegado, mensaje de error neutral genérico, ninguna pista sobre existencia de usuario. | `authenticate()` retornó `None`. Mensaje neutral mostrado: *"Credenciales inválidas"*. | **APROBADO** |
@@ -538,7 +538,7 @@ A continuación se transcribe la salida real emitida por la suite de pruebas aut
 [CP-05] AUDITORÍA CRIPTOGRÁFICA DIRECTA EN BASE DE DATOS SQLITE
   • ID: 2
   • Username: rodrigo_coleccionista
-  • Email: r.almendra@alumnos.uatx.mx
+  • Email: r.almendra@apizaco.tecnm.mx
   • Estado Activo: True
   • Hash Almacenado en Columna 'password':
     >>> pbkdf2_sha256$1500000$Zz4fqh7d5OAmuQcEs15XYL$ZF5jDcfQMPUYrztdH45Bqmq8E5BO7rkbrWDBAfPFvOQ=
@@ -570,7 +570,7 @@ A continuación se presentan las capturas de pantalla de alta fidelidad que comp
 
 </div>
 
-* **Validación Demostrada:** Tras ingresar datos válidos en el formulario de registro (`rodrigo_coleccionista` y `r.almendra@alumnos.uatx.mx`), el sistema crea el registro en `auth_user`, inicializa su perfil CRM en Tier Bronce y emite la cookie de sesión protegida `sessionid` con flags `HttpOnly=True` y `SameSite=Lax`.
+* **Validación Demostrada:** Tras ingresar datos válidos en el formulario de registro (`rodrigo_coleccionista` y `r.almendra@apizaco.tecnm.mx`), el sistema crea el registro en `auth_user`, inicializa su perfil CRM en Tier Bronce y emite la cookie de sesión protegida `sessionid` con flags `HttpOnly=True` y `SameSite=Lax`.
 
 ---
 
@@ -585,7 +585,7 @@ A continuación se presentan las capturas de pantalla de alta fidelidad que comp
 </div>
 
 * **Validación Demostrada:**
-  1. **CP-02A:** Al intentar registrar nuevamente el correo `r.almendra@alumnos.uatx.mx`, el validador en servidor aborta la inserción y despliega la advertencia en rojo *"Este correo electrónico ya está asociado a una cuenta registrada"*.
+  1. **CP-02A:** Al intentar registrar nuevamente el correo `r.almendra@apizaco.tecnm.mx`, el validador en servidor aborta la inserción y despliega la advertencia en rojo *"Este correo electrónico ya está asociado a una cuenta registrada"*.
   2. **CP-02B:** Al introducir la contraseña `123`, los 3 validadores de Django (`MinimumLengthValidator`, `CommonPasswordValidator`, `NumericPasswordValidator`) bloquean el envío.
   3. **CP-04:** Al ingresar credenciales inexistentes o erróneas, el controlador emite el mensaje neutral *"Credenciales inválidas. Verifica tu usuario y contraseña"*, cumpliendo con el estándar OWASP de prevención de enumeración de cuentas.
 

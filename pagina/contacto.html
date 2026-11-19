@@ -582,23 +582,19 @@
         <li class="nav-item"><a href="galeria.html" class="">Galería & Catálogo</a></li>
         <li class="nav-item"><a href="colecciones.html" class="">Colecciones</a></li>
         <li class="nav-item"><a href="artistas.html" class="">Artistas</a></li>
-        <li class="nav-item"><a href="/panel-artista/" class="" style="color: var(--gold-luxury);">Portal Artistas 🎨</a></li>
-        <li class="nav-item"><a href="contacto.html" class="active">Soporte CRM</a></li>
       </ul>
 
       <div class="nav-actions">
         
-          <!-- INVITADO -->
+          <!-- INVITADO (SIN SESIÓN INICIADA - CARRITO EN CERO) -->
           <a href="/login/" class="btn-auth-outline">Iniciar Sesión</a>
           <a href="/registro/" class="btn-auth-solid">Registro Seguro</a>
+          <button class="cart-btn-trigger" onclick="toggleCartDrawer()">
+            <span>🛒</span>
+            <span>Bolsa</span>
+            <span class="cart-badge-count" id="cartCountBadge">0</span>
+          </button>
         
-
-        <!-- BOTÓN DE CARRITO INTERACTIVO -->
-        <button class="cart-btn-trigger" onclick="toggleCartDrawer()">
-          <span>🛒</span>
-          <span>Bolsa</span>
-          <span class="cart-badge-count" id="cartCountBadge">1</span>
-        </button>
       </div>
     </nav>
   </header>
@@ -634,7 +630,7 @@
       </h3>
 
       <form method="POST" action="/contacto/" style="display: flex; flex-direction: column; gap: 16px;">
-        <input type="hidden" name="csrfmiddlewaretoken" value="DWeET9FGS6fm1so2MXx30spq2MdDezaIHjkZ5tVkNvNgOaGyVqIvp2RwtEXyNM1Z">
+        <input type="hidden" name="csrfmiddlewaretoken" value="UkYW2KS3UWvgh2FuzC97NMBCXJ0IP0OGvyD866A2fufUxVdPBZsbW6fVfAxzS4Fz">
 
         <div class="form-group-custom">
           <label>Nombre del Solicitante</label>
@@ -1020,7 +1016,7 @@
     <!-- TAB 2: TICKET -->
     <div id="tabTicket" style="display: none; padding: 16px; overflow-y: auto; height: 350px;">
       <form action="/contacto/" method="POST">
-        <input type="hidden" name="csrfmiddlewaretoken" value="DWeET9FGS6fm1so2MXx30spq2MdDezaIHjkZ5tVkNvNgOaGyVqIvp2RwtEXyNM1Z">
+        <input type="hidden" name="csrfmiddlewaretoken" value="UkYW2KS3UWvgh2FuzC97NMBCXJ0IP0OGvyD866A2fufUxVdPBZsbW6fVfAxzS4Fz">
         <div class="form-group-custom">
           <label>Nombre Completo</label>
           <input type="text" name="nombre" value="" required>
@@ -1077,33 +1073,83 @@
       </div>
     </div>
     <div style="text-align: center; margin-top: 30px; font-size: 0.75rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-      © 2026 ARTSPACE · Universidad Autónoma de Tlaxcala · Negocios Electrónicos II · Equipo 3
+      © 2026 ARTSPACE · Instituto Tecnológico de Apizaco (TecNM) · Negocios Electrónicos II · Equipo 3
     </div>
   </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 🔒 MODAL DE INICIO DE SESIÓN REQUERIDO PARA APARTAR O COMPRAR -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop-custom" id="modalAuthRequired">
+    <div class="modal-receipt-card" style="max-width: 440px; text-align: center;">
+      <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.6rem; margin: 0 0 8px; color: #fff;">Inicia Sesión para Adquirir</h2>
+      <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin-bottom: 22px;" id="authModalMessage">
+        Para apartar una obra con reserva exclusiva (Hold Cart 15 min) o realizar una compra certificada, necesitas iniciar sesión con una cuenta de <strong>Coleccionista / Comprador</strong>.
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="/login/" style="background: var(--accent-cyan); color: #0b0c10; padding: 13px; border-radius: 8px; font-weight: 800; text-decoration: none; font-size: 0.95rem;">
+          🔑 Iniciar Sesión Ahora
+        </a>
+        <a href="/registro/" style="background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 12px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 0.9rem;">
+          📝 Crear Cuenta de Coleccionista
+        </a>
+        <button onclick="cerrarModalAuth()" style="background: none; border: none; color: #94a3b8; padding: 8px; cursor: pointer; font-size: 0.85rem; margin-top: 4px;">
+          Cancelar y seguir explorando
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- ⚙️ MOTOR JAVASCRIPT GLOBAL (ECOMMERCE CART, TAX, HOLD & CHATBOT) -->
   <!-- ========================================================================= -->
   <script>
-    // Carrito de compras en memoria
-    let currentCart = [
-      {
-        id: 'ECOS-VACIO-01',
-        titulo: 'Ecos del Vacío',
-        artista: 'Ana Lucero',
-        precio: 34500.00,
-        enmarcado: 3200.00,
-        conEnmarcado: true,
-        imagen: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200',
-        es_original_unica: true,
-        badge: 'Pieza Única 1/1'
+    // Estado de sesión e identidad del usuario
+    const IS_USER_AUTHENTICATED = false;
+    const CURRENT_USERNAME = "";
+    const CURRENT_USER_EMAIL = "";
+    const CURRENT_USER_ROLE = "GUEST";
+    const CART_STORAGE_KEY = IS_USER_AUTHENTICATED ? `artspace_cart_${CURRENT_USERNAME}` : null;
+
+    // Carrito de compras: inicia SIEMPRE vacío para visitantes no autenticados
+    let currentCart = [];
+    if (IS_USER_AUTHENTICATED && CURRENT_USER_ROLE === 'COMPRADOR' && CART_STORAGE_KEY) {
+      try {
+        const saved = sessionStorage.getItem(CART_STORAGE_KEY);
+        if (saved) currentCart = JSON.parse(saved);
+      } catch (e) {
+        currentCart = [];
       }
-    ];
+    } else {
+      sessionStorage.clear();
+    }
+
+    function syncCartStorage() {
+      if (IS_USER_AUTHENTICATED && CURRENT_USER_ROLE === 'COMPRADOR' && CART_STORAGE_KEY) {
+        sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(currentCart));
+      }
+    }
+
+    function mostrarModalAuth(mensajeOpcional) {
+      if (mensajeOpcional) {
+        document.getElementById('authModalMessage').innerHTML = mensajeOpcional;
+      }
+      document.getElementById('modalAuthRequired').classList.add('active');
+    }
+
+    function cerrarModalAuth() {
+      document.getElementById('modalAuthRequired').classList.remove('active');
+    }
 
     let currentQuickViewItem = null;
 
     // Toggle Drawer
     function toggleCartDrawer() {
+      if (!IS_USER_AUTHENTICATED) {
+        mostrarModalAuth("Debes <strong>iniciar sesión</strong> para acceder a tu bolsa de coleccionista y apartar obras de arte.");
+        return;
+      }
       const drawer = document.getElementById('cartDrawer');
       const overlay = document.getElementById('drawerOverlay');
       const isActive = drawer.classList.contains('active');
@@ -1122,7 +1168,7 @@
     function renderCartUI() {
       const container = document.getElementById('cartItemsContainer');
       const badge = document.getElementById('cartCountBadge');
-      badge.textContent = currentCart.length;
+      if (badge) badge.textContent = currentCart.length;
 
       if (currentCart.length === 0) {
         container.innerHTML = `
@@ -1156,13 +1202,24 @@
 
     function removerItem(index) {
       currentCart.splice(index, 1);
+      syncCartStorage();
       renderCartUI();
       calcularImpuestosEnVivo();
     }
 
     function agregarAlCarrito(obra) {
+      // Validación estricta: si no ha iniciado sesión, mostrar mensaje de iniciar sesión
+      if (!IS_USER_AUTHENTICATED) {
+        mostrarModalAuth("Para apartar la obra <strong>\"" + obra.titulo + "\"</strong> en el carrito o adquirirla, por favor inicia sesión primero.");
+        return;
+      }
+      if (CURRENT_USER_ROLE === 'ARTISTA') {
+        alert("Estás conectado con una cuenta de Artista. Para comprar obras utiliza una cuenta de Coleccionista / Comprador.");
+        return;
+      }
       // Regla de Negocio RN-01: Hold Cart 15 min
-      currentCart = [obra]; // En piezas únicas se mantiene la seleccionada
+      currentCart = [obra];
+      syncCartStorage();
       renderCartUI();
       toggleCartDrawer();
       iniciarHoldTimer();
@@ -1179,18 +1236,21 @@
         holdSeconds--;
         if (holdSeconds <= 0) {
           clearInterval(holdInterval);
-          alert("El tiempo de reserva de la obra original ha expirado. La pieza vuelve a estar disponible.");
-          currentCart = [];
-          renderCartUI();
-          calcularImpuestosEnVivo();
+          if (currentCart.length > 0) {
+            alert("El tiempo de reserva de la obra original ha expirado. La pieza vuelve a estar disponible.");
+            currentCart = [];
+            syncCartStorage();
+            renderCartUI();
+            calcularImpuestosEnVivo();
+          }
           return;
         }
         const m = Math.floor(holdSeconds / 60).toString().padStart(2, '0');
         const s = (holdSeconds % 60).toString().padStart(2, '0');
-        document.getElementById('holdTimer').textContent = `${m}:${s}`;
+        const timerEl = document.getElementById('holdTimer');
+        if (timerEl) timerEl.textContent = `${m}:${s}`;
       }, 1000);
     }
-    iniciarHoldTimer();
 
     // Cálculo dinámico de Impuestos y Fletes (Componente E)
     function calcularImpuestosEnVivo() {
@@ -1230,6 +1290,7 @@
       document.getElementById('lblIva').textContent = `$${ivaMonto.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
       document.getElementById('lblTotal').textContent = `$${totalFinal.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
       document.getElementById('btnCheckoutAmount').textContent = `$${totalFinal.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+      window.currentCalculatedTotal = totalFinal;
     }
 
     // Selector de métodos de pago
@@ -1249,41 +1310,71 @@
       }
     }
 
-    // Ejecutar Transacción Final
+    // Ejecutar Transacción Final conectada al Orquestador Backend (CRM, SCM Zoho, ERP Odoo)
     function ejecutarCompraFinal() {
+      if (!IS_USER_AUTHENTICATED) {
+        mostrarModalAuth("Debes iniciar sesión con tu cuenta de Coleccionista para procesar una compra.");
+        return;
+      }
       if (currentCart.length === 0) {
-        alert("Tu bolsa está vacía.");
+        alert("Tu bolsa está vacía. Selecciona una obra del catálogo primero.");
         return;
       }
 
       const btn = document.getElementById('btnCheckout');
-      btn.innerHTML = `<span>⏳ Procesando Pago y CFDI...</span>`;
+      btn.innerHTML = `<span>⏳ Sincronizando Pago, Zoho SCM y Odoo ERP...</span>`;
       btn.disabled = true;
 
-      setTimeout(() => {
-        btn.innerHTML = `<span>🔒 Confirmar y Pagar</span> <span id="btnCheckoutAmount">${document.getElementById('lblTotal').textContent}</span>`;
+      const item = currentCart[0];
+      const rfcInput = document.getElementById('fiscalRfc').value || 'XAXX010101000';
+      const razonInput = document.getElementById('fiscalRazonSocial').value || CURRENT_USERNAME || 'COLECCIONISTA ARTSPACE';
+      const cpInput = document.getElementById('inputCodigoPostal').value || '90000';
+      const totalAmount = window.currentCalculatedTotal || item.precio;
+
+      fetch('/api/v1/checkout/process/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cliente_nombre: razonInput,
+          cliente_email: CURRENT_USER_EMAIL || 'cliente@artspace.mx',
+          direccion: `C.P. ${cpInput} - Envío DHL Express Asegurado`,
+          total_pago: totalAmount.toFixed(2),
+          obra_titulo: item.titulo,
+          obra_tipo: item.es_original_unica ? 'ORIGINAL_UNICA' : 'EDICION_LIMITADA',
+          rfc: rfcInput,
+          razon_social: razonInput,
+          codigo_postal_fiscal: cpInput
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        btn.innerHTML = `<span>🔒 Confirmar y Pagar</span> <span id="btnCheckoutAmount">$0.00 MXN</span>`;
         btn.disabled = false;
 
-        // Cierra el drawer
         toggleCartDrawer();
 
-        // Rellena modal de éxito
-        const ordenFolio = 'ART-202611-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-        const awb = 'DHL-AWB-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-        const uuidSat = '224e4ef0-d81b-4ad1-9a6a-' + Math.random().toString(36).substring(2, 14);
+        document.getElementById('resPedido').textContent = data.codigo_pedido || 'ART-202611-OK';
+        document.getElementById('resAwb').textContent = data.guia_awb || 'DHL-AWB-OK';
+        document.getElementById('resUuid').textContent = (data.factura_fiscal && data.factura_fiscal.uuid_sat) ? data.factura_fiscal.uuid_sat : 'TIMBRADO-SAT-OK';
+        document.getElementById('resObra').textContent = item.titulo;
+        document.getElementById('resTotal').textContent = `$${totalAmount.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
 
-        document.getElementById('resPedido').textContent = ordenFolio;
-        document.getElementById('resAwb').textContent = awb;
-        document.getElementById('resUuid').textContent = uuidSat;
-        document.getElementById('resObra').textContent = currentCart[0].titulo;
-        document.getElementById('resTotal').textContent = document.getElementById('lblTotal').textContent;
+        currentCart = [];
+        syncCartStorage();
+        renderCartUI();
 
         document.getElementById('modalOrderSuccess').classList.add('active');
-      }, 1200);
+      })
+      .catch(err => {
+        btn.innerHTML = `<span>🔒 Confirmar y Pagar</span>`;
+        btn.disabled = false;
+        alert("Ocurrió un error al procesar la orden: " + err);
+      });
     }
 
     function cerrarModalExito() {
       document.getElementById('modalOrderSuccess').classList.remove('active');
+      window.location.reload();
     }
 
     // Modal Quick View

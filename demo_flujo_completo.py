@@ -27,7 +27,7 @@ from gallery.models import (
 def run_full_system_demo():
     print("=" * 85)
     print("🚀 DEMOSTRACIÓN FUNCIONAL DEL ECOSISTEMA TRANSACCIONAL ARTSPACE v2.4")
-    print("   Universidad Autónoma de Tlaxcala - Negocios Electrónicos II")
+    print("   Instituto Tecnológico de Apizaco (TecNM) - Negocios Electrónicos II")
     print("=" * 85)
 
     client = Client()
@@ -42,7 +42,7 @@ def run_full_system_demo():
     # 1. Autenticación / Registro de usuario
     user, _ = User.objects.get_or_create(
         username='rodrigo_coleccionista',
-        defaults={'email': 'r.almendra@alumnos.uatx.mx'}
+        defaults={'email': 'r.almendra@apizaco.tecnm.mx'}
     )
     user.set_password('ArtSecure#2026!X')
     user.save()

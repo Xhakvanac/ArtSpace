@@ -1,62 +1,211 @@
 {% extends 'base.html' %}
-{% block title %}Mi Cuenta y Colección | ARTSPACE{% endblock %}
+{% block title %}Mi Cuenta, Colección y Preferencias | ARTSPACE{% endblock %}
 
 {% block content %}
-<div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+<style>
+  .pref-input, .pref-select, .pref-textarea {
+    width: 100%;
+    background: #0B0C10;
+    border: 1px solid rgba(102, 252, 241, 0.28);
+    border-radius: 8px;
+    color: #FFFFFF;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    box-sizing: border-box;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .pref-input:focus, .pref-select:focus, .pref-textarea:focus {
+    border-color: #66FCF1;
+    box-shadow: 0 0 8px rgba(102, 252, 241, 0.2);
+  }
+  .pref-label {
+    display: block;
+    color: #66FCF1;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+</style>
+
+<div style="max-width: 1200px; margin: 40px auto 80px; padding: 0 20px;">
   <!-- Header de Perfil y Art Club -->
   <div style="background: #1F2833; border: 1px solid rgba(102, 252, 241, 0.2); border-radius: 16px; padding: 30px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
     <div>
-      <span style="background: rgba(102, 252, 241, 0.15); color: #66FCF1; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">SESIÓN ACTIVA PROTEGIDA</span>
-      <h1 style="color: #FFFFFF; font-family: 'Poppins', sans-serif; font-size: 2rem; margin: 10px 0 5px;">Hola, {{ user.username }}</h1>
-      <p style="color: #C5C6C7; margin: 0; font-size: 0.95rem;">Correo registrado: <strong>{{ user.email }}</strong> | Miembro desde: {{ user.date_joined|date:"d M Y" }}</p>
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(102, 252, 241, 0.15); color: #66FCF1; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;">
+        <span>👑</span> CUENTA DE COLECCIONISTA / COMPRADOR
+      </div>
+      <h1 style="color: #FFFFFF; font-family: var(--font-heading); font-size: 2.2rem; margin: 10px 0 5px;">
+        Hola, {{ user.get_full_name|default:user.username }}
+      </h1>
+      <p style="color: #C5C6C7; margin: 0; font-size: 0.92rem;">
+        Usuario: <strong>@{{ user.username }}</strong> | Correo: <strong>{{ user.email }}</strong> | Moneda activa: <strong>{{ perfil.moneda_preferida }}</strong>
+      </p>
     </div>
     <div style="text-align: right;">
       <div style="background: #0B0C10; border: 1px solid #45A29E; border-radius: 12px; padding: 15px 25px; display: inline-block;">
-        <span style="color: #C5C6C7; font-size: 0.8rem; display: block; text-transform: uppercase;">Nivel de Coleccionista</span>
+        <span style="color: #C5C6C7; font-size: 0.78rem; display: block; text-transform: uppercase;">Nivel de Lealtad Art Club</span>
         <strong style="color: #66FCF1; font-size: 1.4rem;">{{ perfil.get_nivel_tier_display }}</strong>
-        <span style="display: block; color: #FFF; font-size: 0.85rem; margin-top: 4px;">🪙 {{ perfil.puntos_fidelidad }} Puntos Art Club</span>
-      </div>
-      <div style="margin-top: 10px;">
-        <a href="{% url 'logout' %}" style="color: #FF6B6B; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión Segura</a>
+        <span style="display: block; color: #FFF; font-size: 0.85rem; margin-top: 4px;">🪙 {{ perfil.puntos_fidelidad }} Puntos Acumulados</span>
       </div>
     </div>
   </div>
 
-  <!-- Contenido en Grid: Órdenes y Tickets -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
-    <!-- Mis Órdenes SCM -->
-    <div style="background: #1F2833; border-radius: 16px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
-      <h3 style="color: #FFFFFF; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">📦 Mis Obras Adquiridas (SCM)</h3>
+  <!-- Apartados 1 y 2: Mis Obras Adquiridas y Mis Consultas -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 30px; margin-bottom: 35px;">
+    <!-- Mis Obras Adquiridas (SCM) -->
+    <div style="background: #1F2833; border-radius: 16px; padding: 26px; border: 1px solid rgba(255,255,255,0.08);">
+      <h3 style="color: #FFFFFF; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <span>📦 Mis Obras Adquiridas</span>
+        <span style="font-size: 0.75rem; color: #66FCF1; font-weight: 600;">{{ ordenes|length }} Pedidos</span>
+      </h3>
       {% if ordenes %}
-        {% for ord in ordenes %}
-          <div style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <strong style="color: #66FCF1;">{{ ord.codigo_pedido }}</strong> - {{ ord.get_estado_logistico_display }}<br>
-            <small style="color: #C5C6C7;">Transporte: {{ ord.get_transportista_display }} | Guía: {{ ord.numero_guia_awb|default:"Asignando en taller" }}</small>
-          </div>
-        {% endfor %}
+        <div style="max-height: 320px; overflow-y: auto; padding-right: 4px;">
+          {% for ord in ordenes %}
+            <div style="padding: 14px; background: #0B0C10; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <strong style="color: #66FCF1; font-family: monospace; font-size: 0.92rem;">{{ ord.codigo_pedido }}</strong>
+                <span style="background: rgba(134, 239, 172, 0.15); color: #86efac; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;">
+                  {{ ord.get_estado_logistico_display }}
+                </span>
+              </div>
+              <div style="font-size: 0.85rem; color: #fff; font-weight: 600; margin-bottom: 4px;">
+                Monto Total: ${{ ord.monto_total_venta|floatformat:2 }} MXN
+              </div>
+              <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.5;">
+                <div>🚚 <strong>Courier:</strong> {{ ord.get_transportista_display }} | <strong>Guía AWB:</strong> <span style="color: #fde047; font-family: monospace;">{{ ord.numero_guia_awb|default:"En preparación" }}</span></div>
+                {% if ord.id_externo_zoho %}
+                  <div>📦 <strong>Zoho SCM ID:</strong> <span style="font-family: monospace;">{{ ord.id_externo_zoho }}</span></div>
+                {% endif %}
+                {% if ord.factura_cfdi %}
+                  <div>🧾 <strong>CFDI 4.0 UUID:</strong> <span style="font-family: monospace; font-size: 0.72rem; color: #cbd5e1;">{{ ord.factura_cfdi.uuid_fiscal }}</span></div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       {% else %}
-        <p style="color: #C5C6C7; font-size: 0.9rem;">Aún no tienes pedidos registrados. ¡Explora el catálogo!</p>
-        <a href="{% url 'galeria' %}" style="display: inline-block; padding: 8px 16px; background: #66FCF1; color: #0B0C10; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem;">Ver Catálogo de Arte</a>
+        <p style="color: #C5C6C7; font-size: 0.9rem;">Aún no tienes obras adquiridas en tu colección. ¡Explora el catálogo curado!</p>
+        <a href="{% url 'galeria' %}" style="display: inline-block; padding: 10px 18px; background: #66FCF1; color: #0B0C10; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">Explorar Galería de Arte ➔</a>
       {% endif %}
     </div>
 
-    <!-- Tickets de Soporte CRM -->
-    <div style="background: #1F2833; border-radius: 16px; padding: 25px; border: 1px solid rgba(255,255,255,0.05);">
-      <h3 style="color: #FFFFFF; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">🎫 Mis Consultas y Tickets CRM</h3>
+    <!-- Mis Consultas -->
+    <div style="background: #1F2833; border-radius: 16px; padding: 26px; border: 1px solid rgba(255,255,255,0.08);">
+      <h3 style="color: #FFFFFF; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <span>🎫 Mis Consultas</span>
+        <span style="font-size: 0.75rem; color: #94a3b8;">Historial de Atención</span>
+      </h3>
       {% if tickets %}
-        {% for t in tickets %}
-          <div style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <strong style="color: #FFFFFF;">Ticket #{{ t.id }}: {{ t.asunto }}</strong><br>
-            <span style="color: #66FCF1; font-size: 0.85rem;">Estado: {{ t.get_estado_display }}</span> |
-            <small style="color: #C5C6C7;">{{ t.fecha_creacion|date:"d/m/Y H:i" }}</small>
-          </div>
-        {% endfor %}
+        <div style="max-height: 320px; overflow-y: auto;">
+          {% for t in tickets %}
+            <div style="padding: 12px 14px; background: #0B0C10; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 10px;">
+              <strong style="color: #FFFFFF; font-size: 0.9rem;">Consulta #{{ t.id }}: {{ t.asunto }}</strong><br>
+              <p style="color: #94a3b8; font-size: 0.8rem; margin: 6px 0;">{{ t.mensaje|truncatechars:100 }}</p>
+              <span style="color: #66FCF1; font-size: 0.78rem; font-weight: 600;">Estado: {{ t.get_estado_display }}</span> |
+              <small style="color: #C5C6C7; font-size: 0.75rem;">{{ t.fecha_creacion|date:"d/m/Y H:i" }}</small>
+            </div>
+          {% endfor %}
+        </div>
       {% else %}
-        <p style="color: #C5C6C7; font-size: 0.9rem;">No tienes tickets de soporte activos.</p>
-        <a href="{% url 'contacto' %}" style="color: #66FCF1; font-size: 0.85rem; text-decoration: none;">¿Necesitas ayuda? Abre una consulta</a>
+        <p style="color: #C5C6C7; font-size: 0.9rem; line-height: 1.6;">No tienes consultas pendientes. Puedes utilizar el asistente flotante de abajo a la derecha si tienes dudas sobre envíos o certificados.</p>
       {% endif %}
     </div>
+  </div>
+
+  <!-- Apartado 3: Configuración de Perfil y Preferencias Básicas -->
+  <div style="background: #1F2833; border-radius: 16px; padding: 32px; border: 1px solid rgba(102, 252, 241, 0.22); box-shadow: 0 12px 35px rgba(0,0,0,0.4);">
+    <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h2 style="color: #FFFFFF; font-family: var(--font-heading); font-size: 1.6rem; margin: 0;">⚙️ Configuración de Perfil y Preferencias Básicas</h2>
+        <p style="color: #94a3b8; font-size: 0.88rem; margin: 4px 0 0;">Personaliza tu información de cuenta, preferencias de galería, datos fiscales CFDI 4.0 y alertas de envío.</p>
+      </div>
+      <span style="background: rgba(102, 252, 241, 0.1); color: #66FCF1; border: 1px solid rgba(102, 252, 241, 0.3); padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">
+        Sincronizado con Base de Datos
+      </span>
+    </div>
+
+    <form method="POST" action="{% url 'perfil' %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="guardar_configuracion">
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 22px;">
+        <div>
+          <label class="pref-label">Nombre(s)</label>
+          <input type="text" name="first_name" class="pref-input" value="{{ user.first_name }}" placeholder="Ej. Rodrigo">
+        </div>
+        <div>
+          <label class="pref-label">Apellidos</label>
+          <input type="text" name="last_name" class="pref-input" value="{{ user.last_name }}" placeholder="Ej. Almendra">
+        </div>
+        <div>
+          <label class="pref-label">Correo Electrónico</label>
+          <input type="email" name="email" class="pref-input" value="{{ user.email }}" required>
+        </div>
+        <div>
+          <label class="pref-label">Teléfono / WhatsApp de Contacto</label>
+          <input type="text" name="telefono" class="pref-input" value="{{ perfil.telefono }}" placeholder="Ej. +52 241 123 4567">
+        </div>
+      </div>
+
+      <!-- Datos Fiscales y Logísticos -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 22px;">
+        <div>
+          <label class="pref-label">RFC Fiscal Predeterminado (CFDI 4.0)</label>
+          <input type="text" name="rfc_fiscal" class="pref-input" value="{{ perfil.rfc_fiscal }}" maxlength="13" style="text-transform: uppercase;" placeholder="XAXX010101000">
+        </div>
+        <div>
+          <label class="pref-label">Dirección de Entrega DHL Express</label>
+          <input type="text" name="direccion_envio" class="pref-input" value="{{ perfil.direccion_envio }}" placeholder="Calle, Número, Colonia, C.P. y Ciudad">
+        </div>
+        <div>
+          <label class="pref-label">Moneda Preferida de Visualización</label>
+          <select name="moneda_preferida" class="pref-select">
+            <option value="MXN" {% if perfil.moneda_preferida == 'MXN' %}selected{% endif %}>🇲🇽 MXN - Peso Mexicano ($)</option>
+            <option value="USD" {% if perfil.moneda_preferida == 'USD' %}selected{% endif %}>🇺🇸 USD - Dólar Estadounidense ($)</option>
+          </select>
+        </div>
+        <div>
+          <label class="pref-label">Categoría de Arte Favorita</label>
+          <select name="categoria_favorita" class="pref-select">
+            <option value="Pintura al Óleo" {% if perfil.categoria_favorita == 'Pintura al Óleo' %}selected{% endif %}>🎨 Pintura al Óleo</option>
+            <option value="Escultura" {% if perfil.categoria_favorita == 'Escultura' %}selected{% endif %}>🗿 Escultura Contemporánea</option>
+            <option value="Arte Digital / NFT" {% if perfil.categoria_favorita == 'Arte Digital / NFT' %}selected{% endif %}>🌐 Arte Digital / NFT</option>
+            <option value="Fotografía" {% if perfil.categoria_favorita == 'Fotografía' %}selected{% endif %}>📷 Fotografía de Autor</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 22px;">
+        <div>
+          <label class="pref-label">Biografía / Notas de Colección</label>
+          <textarea name="biografia" rows="3" class="pref-textarea" placeholder="Escribe tus intereses artísticos o notas de coleccionista...">{{ perfil.biografia }}</textarea>
+        </div>
+        <div>
+          <label class="pref-label">Actualizar Contraseña (Opcional)</label>
+          <input type="password" name="nueva_password" class="pref-input" placeholder="Dejar en blanco para mantener la actual (mín. 8 caracteres)">
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem; color: #cbd5e1;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" name="notificaciones_activas" {% if perfil.notificaciones_activas %}checked{% endif %} style="accent-color: #66FCF1; width: 17px; height: 17px;">
+              <span>Recibir notificaciones de guía DHL Express y facturas CFDI 4.0</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" name="coleccion_privada" {% if perfil.coleccion_privada %}checked{% endif %} style="accent-color: #66FCF1; width: 17px; height: 17px;">
+              <span>Mantener mi perfil y colección de obras en Modo Privado</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">
+        <button type="submit" style="background: #66FCF1; color: #0B0C10; border: none; padding: 12px 28px; border-radius: 8px; font-weight: 800; font-size: 0.92rem; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.25);">
+          💾 Guardar Configuración y Preferencias
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}
-

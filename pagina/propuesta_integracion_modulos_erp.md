@@ -1,14 +1,14 @@
 # 📑 PROPUESTA FORMAL DE INTEGRACIÓN DE MÓDULOS ERP Y DOCUMENTACIÓN DE ACTUALIZACIÓN DEL PROYECTO ELECTRÓNICO
 ## EJE 3: ARQUITECTURA INTEGRADA (DJANGO 5.X — ODOO ERP), FLUJOS DE PROCESO END-TO-END E IMPACTO OPERATIVO
 ### PROYECTO INTEGRADOR: ARTSPACE (E-COMMERCE DE ARTE CONTEMPORÁNEO Y DIGITAL)
-#### Asignatura: Negocios Electrónicos II — Universidad Autónoma de Tlaxcala
+#### Asignatura: Negocios Electrónicos II — Instituto Tecnológico de Apizaco (TecNM)
 
 ---
 
 ## 🏛️ DATOS DE IDENTIFICACIÓN INSTITUCIONAL
 
-* **Institución:** Universidad Autónoma de Tlaxcala (UATx)
-* **Facultad:** Facultad de Ciencias Básicas, Ingeniería y Tecnología
+* **Institución:** Instituto Tecnológico de Apizaco (TecNM Campus Apizaco)
+* **Facultad:** Departamento de Sistemas y Computación
 * **Licenciatura / Ingeniería:** Ingeniería en Computación
 * **Asignatura:** Negocios Electrónicos II
 * **Eje de Entrega:** Eje 3 — Propuesta de Integración de Módulos ERP y Documentación de la Actualización del Proyecto

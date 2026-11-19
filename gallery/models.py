@@ -94,6 +94,13 @@ class PerfilCliente(models.Model):
     nivel_tier = models.CharField(max_length=15, choices=TIER_CHOICES, default='EXPLORER', verbose_name="Nivel de Lealtad (Tier)")
     total_gastado = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, verbose_name="Gasto Acumulado (MXN)")
     telefono = models.CharField(max_length=20, blank=True, verbose_name="Teléfono / WhatsApp")
+    moneda_preferida = models.CharField(max_length=10, default='MXN', verbose_name="Moneda de Visualización")
+    categoria_favorita = models.CharField(max_length=50, default='Pintura al Óleo', verbose_name="Categoría de Arte Preferida")
+    direccion_envio = models.CharField(max_length=255, blank=True, default='', verbose_name="Dirección de Entrega Predeterminada")
+    rfc_fiscal = models.CharField(max_length=13, blank=True, default='XAXX010101000', verbose_name="RFC Receptor CFDI 4.0")
+    clabe_spei = models.CharField(max_length=18, blank=True, default='646180123456789012', verbose_name="CLABE Interbancaria SPEI (Artistas)")
+    notificaciones_activas = models.BooleanField(default=True, verbose_name="Alertas de Envíos DHL y Facturación")
+    coleccion_privada = models.BooleanField(default=True, verbose_name="Perfil / Colección en Modo Privado")
     fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Última Actualización")
 
     class Meta:

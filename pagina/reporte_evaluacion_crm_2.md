@@ -5,8 +5,8 @@
 
 ## 🏛️ PORTADA
 
-*   **Institución:** Universidad Autónoma de Tlaxcala  
-*   **Facultad / Carrera:** Facultad de Ciencias Básicas, Ingeniería y Tecnología / Ingeniería en Computación  
+*   **Institución:** Instituto Tecnológico de Apizaco (TecNM)  
+*   **Facultad / Carrera:** Departamento de Sistemas y Computación / Ingeniería en Computación  
 *   **Asignatura:** Negocios Electrónicos II  
 *   **Número de Práctica:** Práctica 2: Selección y Evaluación de Herramientas CRM en la Nube  
 *   **Nombre del Proyecto:** ARTSPACE (Artéria)  

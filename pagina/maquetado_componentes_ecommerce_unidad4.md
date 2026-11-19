@@ -7,8 +7,8 @@
 
 <div align="center">
 
-# 🏛️ UNIVERSIDAD AUTÓNOMA DE TLAXCALA
-### FACULTAD DE CIENCIAS BÁSICAS, INGENIERÍA Y TECNOLOGÍA
+# 🏛️ TECNOLÓGICO NACIONAL DE MÉXICO — INSTITUTO TECNOLÓGICO DE APIZACO
+### DEPARTAMENTO DE SISTEMAS Y COMPUTACIÓN
 **Licenciatura en Ingeniería en Computación**
 
 ---
@@ -22,7 +22,7 @@
 
 **Líder Técnico & Desarrollador Full-Stack:**  
 *Almendra Valenzuela Rodrigo*  
-Matrícula: 2021000000 | Correo: `r.almendra@alumnos.uatx.mx`
+Matrícula: 2021000000 | Correo: `r.almendra@apizaco.tecnm.mx`
 
 **Docente Titular:**  
 M.C. / Dr. [Nombre del Docente]

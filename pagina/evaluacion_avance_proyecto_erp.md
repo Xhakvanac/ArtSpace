@@ -1,14 +1,14 @@
 # 📊 REPORTE DE EVALUACIÓN DEL AVANCE DEL PROYECTO ELECTRÓNICO Y DIAGNÓSTICO DE CUELLOS DE BOTELLA OPERATIVOS
 ## EJE 2: EVALUACIÓN DE MADUREZ OPERATIVA Y REQUERIMIENTOS PARA LA INTEGRACIÓN ERP
 ### PROYECTO INTEGRADOR: ARTSPACE (E-COMMERCE DE ARTE CONTEMPORÁNEO Y DIGITAL)
-#### Asignatura: Negocios Electrónicos II — Universidad Autónoma de Tlaxcala
+#### Asignatura: Negocios Electrónicos II — Instituto Tecnológico de Apizaco (TecNM)
 
 ---
 
 ## 🏛️ DATOS DE IDENTIFICACIÓN INSTITUCIONAL
 
-* **Institución:** Universidad Autónoma de Tlaxcala (UATx)
-* **Facultad:** Facultad de Ciencias Básicas, Ingeniería y Tecnología
+* **Institución:** Instituto Tecnológico de Apizaco (TecNM Campus Apizaco)
+* **Facultad:** Departamento de Sistemas y Computación
 * **Licenciatura / Ingeniería:** Ingeniería en Computación
 * **Asignatura:** Negocios Electrónicos II
 * **Eje de Entrega:** Eje 2 — Evaluación del Avance del Proyecto Electrónico (Unidades 1 y 2) y Diagnóstico de Cuellos de Botella

@@ -467,11 +467,17 @@ def registro_usuario(request):
 
 def login_usuario(request):
     """
-    Controlador de Inicio de Sesión Seguro.
-    Verifica hash criptográfico, mitiga ataques de fuerza bruta
-    y previene enumeración de usuarios con mensajes neutrales.
+    Controlador de Inicio de Sesión Seguro con Enrutamiento por Rol (RBAC).
+    - Administrador (superuser/staff) -> Gestor Administrativo de Django (/admin/)
+    - Artista Creador -> Portal del Artista (/panel-artista/)
+    - Comprador / Coleccionista -> Panel de Coleccionista (/perfil/)
     """
     if request.user.is_authenticated:
+        if request.user.is_superuser or request.user.is_staff:
+            return redirect('/admin/')
+        perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
+        if perfil.rol == 'ARTISTA':
+            return redirect('panel_artista')
         return redirect('perfil')
 
     if request.method == 'POST':
@@ -492,6 +498,12 @@ def login_usuario(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)  # Asigna token de sesión y cookie de sesión HttpOnly
+                    if user.is_superuser or user.is_staff:
+                        return redirect('/admin/')
+                    perfil, _ = PerfilCliente.objects.get_or_create(usuario=user)
+                    if perfil.rol == 'ARTISTA':
+                        messages.success(request, f"🎨 Sesión iniciada en Portal de Artista. ¡Bienvenido, {user.username}!")
+                        return redirect('panel_artista')
                     messages.success(request, f"Sesión iniciada correctamente. ¡Hola de nuevo, {user.username}!")
                     next_url = request.GET.get('next', 'perfil')
                     return redirect(next_url)
@@ -520,11 +532,49 @@ def logout_usuario(request):
 @login_required(login_url='login')
 def perfil_usuario(request):
     """
-    Panel Privado Protegido del Coleccionista (Art Club).
-    Requiere una sesión autenticada válida con cookie de sesión activa.
+    Panel Privado Protegido del Coleccionista / Comprador (Art Club).
+    Separa roles: Admin va a /admin/, Artista va a /panel-artista/.
     """
+    if request.user.is_superuser or request.user.is_staff:
+        return redirect('/admin/')
+
     perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
-    ordenes = request.user.perfil_crm.ordenes_scm.all() if hasattr(request.user, 'perfil_crm') else []
+    if perfil.rol == 'ARTISTA':
+        return redirect('panel_artista')
+
+    if request.method == 'POST':
+        action = request.POST.get('action', 'guardar_configuracion')
+        if action == 'guardar_configuracion':
+            request.user.first_name = request.POST.get('first_name', '').strip()
+            request.user.last_name = request.POST.get('last_name', '').strip()
+            nuevo_email = request.POST.get('email', '').strip()
+            if nuevo_email:
+                request.user.email = nuevo_email
+            nueva_pass = request.POST.get('nueva_password', '').strip()
+            if nueva_pass and len(nueva_pass) >= 8:
+                request.user.set_password(nueva_pass)
+                from django.contrib.auth import update_session_auth_hash
+                request.user.save()
+                update_session_auth_hash(request, request.user)
+            else:
+                request.user.save()
+
+            perfil.telefono = request.POST.get('telefono', '').strip()
+            perfil.biografia = request.POST.get('biografia', '').strip()
+            perfil.moneda_preferida = request.POST.get('moneda_preferida', 'MXN')
+            perfil.categoria_favorita = request.POST.get('categoria_favorita', 'Pintura al Óleo')
+            perfil.direccion_envio = request.POST.get('direccion_envio', '').strip()
+            perfil.rfc_fiscal = request.POST.get('rfc_fiscal', 'XAXX010101000').strip().upper()
+            perfil.notificaciones_activas = request.POST.get('notificaciones_activas') == 'on'
+            perfil.coleccion_privada = request.POST.get('coleccion_privada') == 'on'
+            perfil.save()
+
+            messages.success(request, "✅ Configuración de perfil y preferencias básicas actualizadas exitosamente.")
+            return redirect('perfil')
+
+    ordenes = perfil.ordenes_scm.all()
+    if not ordenes.exists():
+        ordenes = OrdenEnvioSCM.objects.filter(cliente_email__iexact=request.user.email)
     tickets = request.user.tickets.all()
     historial_puntos = perfil.historial_puntos.all()[:10]
 
@@ -539,13 +589,41 @@ def perfil_usuario(request):
 @login_required(login_url='login')
 def panel_artista(request):
     """
-    Portal del Artista / Creador Independiente.
-    Permite publicar obras al catálogo, monitorear inventario SCM
-    y auditar liquidaciones Split 70/30 (con retención ISR 1.25% RESICO) y pagos SPEI / Odoo.
+    Portal Exclusivo del Artista / Creador Independiente.
+    Integra publicación de obras, inventario SCM, liquidaciones Split 70/30
+    y configuración de perfil/preferencias del creador.
     """
+    if request.user.is_superuser or request.user.is_staff:
+        return redirect('/admin/')
+
     perfil, _ = PerfilCliente.objects.get_or_create(usuario=request.user)
+    if perfil.rol != 'ARTISTA':
+        messages.warning(request, "El Portal de Artistas es exclusivo para cuentas de creadores.")
+        return redirect('perfil')
 
     if request.method == 'POST':
+        action = request.POST.get('action', 'subir_obra')
+        if action == 'guardar_perfil_artista':
+            request.user.first_name = request.POST.get('first_name', '').strip()
+            request.user.last_name = request.POST.get('last_name', '').strip()
+            nuevo_email = request.POST.get('email', '').strip()
+            if nuevo_email:
+                request.user.email = nuevo_email
+            request.user.save()
+
+            perfil.telefono = request.POST.get('telefono', '').strip()
+            perfil.biografia = request.POST.get('biografia', '').strip()
+            perfil.clabe_spei = request.POST.get('clabe_spei', '646180123456789012').strip()
+            perfil.rfc_fiscal = request.POST.get('rfc_fiscal', 'XAXX010101000').strip().upper()
+            perfil.moneda_preferida = request.POST.get('moneda_preferida', 'MXN')
+            perfil.categoria_favorita = request.POST.get('categoria_favorita', 'Pintura al Óleo')
+            perfil.notificaciones_activas = request.POST.get('notificaciones_activas') == 'on'
+            perfil.coleccion_privada = request.POST.get('coleccion_privada') == 'on'
+            perfil.save()
+
+            messages.success(request, "✅ Configuración de perfil de artista y preferencias bancarias SPEI actualizadas.")
+            return redirect('panel_artista')
+
         form = SubirObraArteForm(request.POST)
         if form.is_valid():
             nueva_obra = ObraArte.objects.create(

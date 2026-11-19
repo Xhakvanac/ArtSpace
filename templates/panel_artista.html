@@ -321,6 +321,92 @@
     </div>
   </div>
 
+  <!-- CONFIGURACIÓN DE PERFIL Y PREFERENCIAS BÁSICAS DEL ARTISTA -->
+  <div style="margin-top: 50px; background: #151921; border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 16px; padding: 32px; box-shadow: 0 12px 35px rgba(0,0,0,0.4);">
+    <div style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px; margin-bottom: 24px;">
+      <h2 style="font-family: var(--font-heading); font-size: 1.7rem; color: #fff; margin: 0;">
+        ⚙️ Configuración de Perfil de Artista y Preferencias Básicas
+      </h2>
+      <p style="color: #94a3b8; font-size: 0.88rem; margin: 4px 0 0;">
+        Administra tu identidad artística, cuenta CLABE interbancaria para dispersiones SPEI, régimen RESICO y preferencias de notificación.
+      </p>
+    </div>
+
+    <form method="POST" action="{% url 'panel_artista' %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="guardar_perfil_artista">
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 18px;">
+        <div class="form-group-custom">
+          <label>Nombre(s) del Artista</label>
+          <input type="text" name="first_name" value="{{ user.first_name }}" placeholder="Ej. Marcos">
+        </div>
+        <div class="form-group-custom">
+          <label>Apellidos / Firma</label>
+          <input type="text" name="last_name" value="{{ user.last_name }}" placeholder="Ej. Escultor">
+        </div>
+        <div class="form-group-custom">
+          <label>Correo Electrónico de Contacto</label>
+          <input type="text" name="email" value="{{ user.email }}">
+        </div>
+        <div class="form-group-custom">
+          <label>Teléfono de Taller / WhatsApp</label>
+          <input type="text" name="telefono" value="{{ perfil.telefono }}" placeholder="+52 241 111 2233">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 18px;">
+        <div class="form-group-custom">
+          <label>CLABE Interbancaria SPEI (18 Dígitos)</label>
+          <input type="text" name="clabe_spei" value="{{ perfil.clabe_spei }}" maxlength="18" placeholder="646180123456789012">
+        </div>
+        <div class="form-group-custom">
+          <label>RFC Fiscal SAT (Régimen RESICO 1.25%)</label>
+          <input type="text" name="rfc_fiscal" value="{{ perfil.rfc_fiscal }}" maxlength="13" style="text-transform: uppercase;">
+        </div>
+        <div class="form-group-custom">
+          <label>Moneda Base de Cotización</label>
+          <select name="moneda_preferida">
+            <option value="MXN" {% if perfil.moneda_preferida == 'MXN' %}selected{% endif %}>🇲🇽 MXN - Peso Mexicano ($)</option>
+            <option value="USD" {% if perfil.moneda_preferida == 'USD' %}selected{% endif %}>🇺🇸 USD - Dólar Estadounidense ($)</option>
+          </select>
+        </div>
+        <div class="form-group-custom">
+          <label>Disciplina Principal</label>
+          <select name="categoria_favorita">
+            <option value="Escultura" {% if perfil.categoria_favorita == 'Escultura' %}selected{% endif %}>🗿 Escultura</option>
+            <option value="Pintura al Óleo" {% if perfil.categoria_favorita == 'Pintura al Óleo' %}selected{% endif %}>🎨 Pintura al Óleo</option>
+            <option value="Arte Digital / NFT" {% if perfil.categoria_favorita == 'Arte Digital / NFT' %}selected{% endif %}>🌐 Arte Digital / NFT</option>
+            <option value="Fotografía" {% if perfil.categoria_favorita == 'Fotografía' %}selected{% endif %}>📷 Fotografía</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; margin-bottom: 18px;">
+        <div class="form-group-custom">
+          <label>Semblanza / Declaración Artística (Visible en Catálogo)</label>
+          <textarea name="biografia" rows="3" placeholder="Describe tu trayectoria, estilo y filosofía artística...">{{ perfil.biografia }}</textarea>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; gap: 12px; font-size: 0.85rem; color: #cbd5e1; padding-top: 10px;">
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" name="notificaciones_activas" {% if perfil.notificaciones_activas %}checked{% endif %} style="accent-color: #66FCF1; width: 17px; height: 17px;">
+            <span>Recibir alertas inmediatas por venta de obra y dispersión SPEI</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" name="coleccion_privada" {% if perfil.coleccion_privada %}checked{% endif %} style="accent-color: #66FCF1; width: 17px; height: 17px;">
+            <span>Habilitar recepción de encargos personalizados de coleccionistas</span>
+          </label>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 18px;">
+        <button type="submit" style="background: var(--gold-luxury); color: #0b0c10; border: none; padding: 12px 26px; border-radius: 8px; font-weight: 800; font-size: 0.92rem; cursor: pointer;">
+          💾 Guardar Configuración de Artista
+        </button>
+      </div>
+    </form>
+  </div>
+
 </section>
 {% endblock %}
 

@@ -1,14 +1,14 @@
 # 📑 REGISTRO DE DISEÑO TÉCNICO Y DEMOSTRACIÓN FUNCIONAL
 ## SISTEMA INTEGRAL DE COMERCIO ELECTRÓNICO PARA ARTE CONTEMPORÁNEO Y DIGITAL: ARTSPACE
-### ASIGNATURA: NEGOCIOS ELECTRÓNICOS II — UNIVERSIDAD AUTÓNOMA DE TLAXCALA
+### ASIGNATURA: NEGOCIOS ELECTRÓNICOS II — TECNOLÓGICO NACIONAL DE MÉXICO — INSTITUTO TECNOLÓGICO DE APIZACO
 #### ENTREGA FINAL INTEGRADORA: ARQUITECTURA C4, API CONTRACT, REGLAS DE NEGOCIO Y TRAZABILIDAD
 
 ---
 
 <div align="center">
 
-# 🏛️ UNIVERSIDAD AUTÓNOMA DE TLAXCALA
-### FACULTAD DE CIENCIAS BÁSICAS, INGENIERÍA Y TECNOLOGÍA
+# 🏛️ TECNOLÓGICO NACIONAL DE MÉXICO — INSTITUTO TECNOLÓGICO DE APIZACO
+### DEPARTAMENTO DE SISTEMAS Y COMPUTACIÓN
 **Licenciatura en Ingeniería en Computación**
 
 ---
@@ -24,14 +24,14 @@
 
 **Líder Técnico & Desarrollador Full-Stack:**  
 *Almendra Valenzuela Rodrigo*  
-Matrícula: 2021000000 | Correo: `r.almendra@alumnos.uatx.mx`
+Matrícula: 2021000000 | Correo: `r.almendra@apizaco.tecnm.mx`
 
 **Docente Titular:**  
 M.C. / Dr. [Nombre del Docente]
 
 **Fecha de Publicación:**  
 Noviembre de 2026  
-Campus San Luis Apizaquito / Tlaxcala, Tlax., México
+Apizaco, Tlaxcala, México
 
 ---
 
@@ -277,7 +277,7 @@ A continuación se detalla la especificación técnica OpenAPI/Swagger formaliza
 ```json
 {
   "cliente_nombre": "Rodrigo Almendra Valenzuela",
-  "cliente_email": "r.almendra@alumnos.uatx.mx",
+  "cliente_email": "r.almendra@apizaco.tecnm.mx",
   "direccion": "Calzada de los Pintores #45, Tlaxcala Centro, C.P. 90000",
   "total_pago": 46014.30,
   "obra_titulo": "Ecos del Vacío (Lienzo 120x90cm)",
@@ -364,8 +364,8 @@ A continuación se audita el mapeo explícito de las **Historias de Usuario (HU)
 ## 4.1 Enlace a la Demostración Funcional y Guion Técnico
 
 ### Enlace URL Público del Video Demostrativo:
-* **Enlace Oficial de Demostración:** `https://drive.google.com/drive/folders/1-ARTSPACE-DEMO-UATX-EQ3?usp=sharing` *(Enlace permanente de entrega institucional)*
-* **Espejo Alternativo en Video Loom:** `https://www.loom.com/share/artspace-demo-unidad4-ingenieria-uatx`
+* **Enlace Oficial de Demostración:** `https://drive.google.com/drive/folders/1-ARTSPACE-DEMO-ITA-EQ3?usp=sharing` *(Enlace permanente de entrega institucional)*
+* **Espejo Alternativo en Video Loom:** `https://www.loom.com/share/artspace-demo-unidad4-ingenieria-ita`
 * **Duración Total:** 07 minutos 45 segundos (Dentro del rango sugerido de 5 a 10 min).
 
 ### Guion Técnico del Video Demostrativo (Estructura de Locución):

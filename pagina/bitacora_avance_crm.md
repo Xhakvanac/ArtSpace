@@ -6,8 +6,8 @@
 
 ## 🏛️ DATOS DE IDENTIFICACIÓN INSTITUCIONAL
 
-*   **Institución:** Universidad Autónoma de Tlaxcala (UATx)
-*   **Facultad:** Facultad de Ciencias Básicas, Ingeniería y Tecnología
+*   **Institución:** Instituto Tecnológico de Apizaco (TecNM Campus Apizaco)
+*   **Facultad:** Departamento de Sistemas y Computación
 *   **Licenciatura / Ingeniería:** Ingeniería en Computación
 *   **Asignatura:** Negocios Electrónicos II
 *   **Práctica / Entregable:** Práctica 3 — Integración de Estrategia CRM y Diseño Técnico del Módulo (Entregable 1ra Parte)

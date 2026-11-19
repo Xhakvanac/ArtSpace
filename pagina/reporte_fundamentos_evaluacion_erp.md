@@ -6,8 +6,8 @@
 
 ## 🏛️ DATOS DE IDENTIFICACIÓN INSTITUCIONAL
 
-* **Institución:** Universidad Autónoma de Tlaxcala (UATx)
-* **Facultad:** Facultad de Ciencias Básicas, Ingeniería y Tecnología
+* **Institución:** Instituto Tecnológico de Apizaco (TecNM Campus Apizaco)
+* **Facultad:** Departamento de Sistemas y Computación
 * **Licenciatura / Ingeniería:** Ingeniería en Computación
 * **Asignatura:** Negocios Electrónicos II
 * **Práctica:** Práctica: Fundamentos, Beneficios y Procedimiento de Evaluación de Sistemas ERP
