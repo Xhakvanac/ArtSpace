@@ -148,15 +148,15 @@ HUBSPOT_PORTAL_ID = os.getenv('HUBSPOT_PORTAL_ID', '51952679')
 # Obtén tu Org ID en: Zoho Inventory -> Configuración (⚙️) -> Perfil de Organización
 # Obtén tu Token en: api-console.zoho.com -> Self Client -> Scopes: ZohoInventory.fullaccess.all
 ZOHO_INVENTORY_ORG_ID = os.getenv('ZOHO_INVENTORY_ORG_ID', '940601046')  # Tu Organization ID numérico
-ZOHO_INVENTORY_API_KEY = os.getenv('ZOHO_INVENTORY_API_KEY', '1000.35bdf6c1c08a5bda7c04d35d6abb903e.7b49b683a75074bf66e93bc30635feaa')         # Tu Token OAuth / Bearer Token
+ZOHO_INVENTORY_API_KEY = os.getenv('ZOHO_INVENTORY_API_KEY', '1000.3e40701fe24e8dc564dcd6aa11b7118f.61edc5b5c3bf05459f08f87f95f443f0')         # Tu Token OAuth / Bearer Token
 
 # 3. ERP - Enterprise Resource Planning (Odoo XML-RPC API)
 # Obtén tu API Key en: Odoo -> Mi Perfil / Preferencias -> Seguridad de la cuenta -> Claves de API
 # Requiere permisos de: Facturación / Contabilidad (Invoicing) y Ventas (Sales)
-ODOO_URL = os.getenv('ODOO_URL', 'https://mi-galeria.odoo.com')          # URL de tu instancia (ej. https://empresa.odoo.com)
-ODOO_DB = os.getenv('ODOO_DB', 'odoo_artspace_db')                      # Nombre exacto de la base de datos Odoo
-ODOO_USERNAME = os.getenv('ODOO_USERNAME', 'admin@artspace.mx')          # Correo del usuario administrador en Odoo
-ODOO_API_KEY = os.getenv('ODOO_API_KEY', '')                            # Clave de API alfanumérica generada en Odoo
+ODOO_URL = os.getenv('ODOO_URL', 'https://space-art1.odoo.com')          # URL de tu instancia (sin /mcp)
+ODOO_DB = os.getenv('ODOO_DB', 'space-art1')                      # Nombre exacto de la base de datos Odoo (sin punto)
+ODOO_USERNAME = os.getenv('ODOO_USERNAME', 'leopzfz@gmail.com')          # Correo del usuario administrador en Odoo
+ODOO_API_KEY = os.getenv('ODOO_API_KEY', 'c15127eb6fd9a4caa4a7aaf2349fd1fb1a2a937b_oak')                            # Clave de API alfanumérica generada en Odoo
 
 # 4. SAT CFDI 4.0 & Logística Courier DHL
 DHL_EXPRESS_API_KEY = os.getenv('DHL_EXPRESS_API_KEY', 'DHL_SANDBOX_KEY_2026')

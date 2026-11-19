@@ -150,18 +150,61 @@ class ERPAccountingService:
 
         if odoo_key and odoo_url and odoo_db and odoo_user:
             try:
+                import logging
+                logger = logging.getLogger(__name__)
                 common = xmlrpc.client.ServerProxy(f'{odoo_url}/xmlrpc/2/common', allow_none=True)
                 uid = common.authenticate(odoo_db, odoo_user, odoo_key, {})
                 if uid:
                     models = xmlrpc.client.ServerProxy(f'{odoo_url}/xmlrpc/2/object', allow_none=True)
+                    
+                    # 1. Buscar o registrar al cliente en res.partner
+                    partner_ids = models.execute_kw(odoo_db, uid, odoo_key, 'res.partner', 'search', [
+                        [['email', '=', orden.cliente_email]]
+                    ])
+                    if partner_ids:
+                        partner_id = partner_ids[0]
+                    else:
+                        partner_id = models.execute_kw(odoo_db, uid, odoo_key, 'res.partner', 'create', [{
+                            'name': orden.cliente_nombre or 'Coleccionista ARTSPACE',
+                            'email': orden.cliente_email,
+                            'customer_rank': 1
+                        }])
+
+                    # 2. Generar líneas de factura con los ítems de la orden
+                    items = list(orden.items.all())
+                    if items:
+                        invoice_lines = [
+                            (0, 0, {
+                                'name': f"Obra de Arte: {it.titulo_obra} ({it.artista_nombre}) - Cert: {it.folio_certificado}",
+                                'quantity': it.cantidad,
+                                'price_unit': float(it.precio_unitario),
+                            })
+                            for it in items
+                        ]
+                    else:
+                        invoice_lines = [
+                            (0, 0, {
+                                'name': f"Adquisición de Obra de Arte - Pedido #{orden.codigo_pedido}",
+                                'quantity': 1,
+                                'price_unit': float(orden.monto_total_venta),
+                            })
+                        ]
+
+                    # 3. Crear la factura de cliente ('out_invoice') en Contabilidad
                     invoice_id = models.execute_kw(odoo_db, uid, odoo_key, 'account.move', 'create', [{
                         'move_type': 'out_invoice',
+                        'partner_id': partner_id,
                         'ref': orden.codigo_pedido,
-                        'narration': f'Factura ARTSPACE CFDI 4.0 UUID: {factura.uuid_fiscal if factura else "N/A"}',
+                        'narration': f'Factura ARTSPACE CFDI 4.0 UUID: {factura.uuid_fiscal if factura else "N/A"} | DHL AWB: {orden.numero_guia_awb}',
+                        'invoice_line_ids': invoice_lines
                     }])
+                    logger.info(f"ODOO SUCCESS: Factura #{invoice_id} creada exitosamente en Odoo Contabilidad.")
                     return {'status': 'SINCRONIZADO_ODOO', 'odoo_id': invoice_id}
+                else:
+                    logger.warning(f"ODOO AUTH: Falló autenticación con db='{odoo_db}', user='{odoo_user}'. Verifique clave de API.")
             except Exception as e:
-                pass
+                import logging
+                logging.getLogger(__name__).error(f"ODOO ERROR: {e}")
 
         return {'status': 'SIMULADO_ODOO', 'odoo_id': f"ODOO-ACC-{orden.codigo_pedido}"}
 

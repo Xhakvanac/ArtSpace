@@ -60,33 +60,83 @@ class SCMIntegrationService:
                     "Content-Type": "application/json"
                 }
                 url = f"https://www.zohoapis.com/inventory/v1/salesorders?organization_id={zoho_org.strip()}"
-                zoho_payload = {
-                    "customer_name": orden_envio.cliente_nombre,
-                    "reference_number": orden_envio.codigo_pedido,
-                    "date": timezone.now().strftime('%Y-%m-%d'),
-                    "line_items": [
-                        {
+
+                # 1. Obtener o registrar cliente en Zoho
+                url_contacts = f"https://www.zohoapis.com/inventory/v1/contacts?organization_id={zoho_org.strip()}&email={orden_envio.cliente_email}"
+                resp_c = requests.get(url_contacts, headers=headers, timeout=6)
+                customer_id = None
+                if resp_c.status_code == 200 and resp_c.json().get('contacts'):
+                    customer_id = resp_c.json()['contacts'][0]['contact_id']
+                else:
+                    url_create_c = f"https://www.zohoapis.com/inventory/v1/contacts?organization_id={zoho_org.strip()}"
+                    r_new_c = requests.post(url_create_c, json={
+                        "contact_name": orden_envio.cliente_nombre or "Coleccionista ARTSPACE",
+                        "email": orden_envio.cliente_email
+                    }, headers=headers, timeout=6)
+                    if r_new_c.status_code in [200, 201]:
+                        customer_id = r_new_c.json().get('contact', {}).get('contact_id')
+                    else:
+                        all_c = requests.get(f"https://www.zohoapis.com/inventory/v1/contacts?organization_id={zoho_org.strip()}", headers=headers, timeout=6)
+                        if all_c.status_code == 200 and all_c.json().get('contacts'):
+                            customer_id = all_c.json()['contacts'][0]['contact_id']
+
+                # 2. Obtener o registrar items de la orden en Zoho
+                line_items = []
+                for item in orden_envio.items.all():
+                    r_it = requests.get(f"https://www.zohoapis.com/inventory/v1/items?organization_id={zoho_org.strip()}&search_text={item.titulo_obra[:25]}", headers=headers, timeout=6)
+                    item_id = None
+                    if r_it.status_code == 200 and r_it.json().get('items'):
+                        item_id = r_it.json()['items'][0]['item_id']
+                    else:
+                        r_create_it = requests.post(f"https://www.zohoapis.com/inventory/v1/items?organization_id={zoho_org.strip()}", json={
                             "name": item.titulo_obra,
                             "rate": float(item.precio_unitario),
+                            "description": f"Obra de Arte única por {item.artista_nombre}"
+                        }, headers=headers, timeout=6)
+                        if r_create_it.status_code in [200, 201]:
+                            item_id = r_create_it.json().get('item', {}).get('item_id')
+                    if item_id:
+                        line_items.append({
+                            "item_id": item_id,
+                            "rate": float(item.precio_unitario),
                             "quantity": item.cantidad
-                        } for item in orden_envio.items.all()
-                    ]
-                }
-                resp = requests.post(url, json=zoho_payload, headers=headers, timeout=6)
-                if resp.status_code in [200, 201]:
-                    data = resp.json()
-                    sales_order_num = data.get('salesorder', {}).get('salesorder_number', f"ZOHO-SO-{uuid.uuid4().hex[:8].upper()}")
-                    orden_envio.id_externo_zoho = sales_order_num
-                    orden_envio.save(update_fields=['id_externo_zoho'])
-                    logger.info(f"SCM SUCCESS: Orden {orden_envio.codigo_pedido} sincronizada en Zoho Inventory ({sales_order_num}).")
-                    return {
-                        "status": "SUCCESS",
-                        "platform": "ZOHO_INVENTORY_LIVE",
-                        "external_sales_order_id": sales_order_num,
-                        "live_sync": True
+                        })
+
+                # Si no se resolvieron items específicos, tomar el primer item existente como fallback
+                if not line_items:
+                    r_all_it = requests.get(f"https://www.zohoapis.com/inventory/v1/items?organization_id={zoho_org.strip()}", headers=headers, timeout=6)
+                    if r_all_it.status_code == 200 and r_all_it.json().get('items'):
+                        fb_item = r_all_it.json()['items'][0]
+                        line_items.append({
+                            "item_id": fb_item['item_id'],
+                            "rate": float(orden_envio.monto_total_venta),
+                            "quantity": 1
+                        })
+
+                # 3. Crear Sales Order en Zoho
+                if customer_id and line_items:
+                    zoho_payload = {
+                        "customer_id": customer_id,
+                        "reference_number": orden_envio.codigo_pedido,
+                        "date": timezone.now().strftime('%Y-%m-%d'),
+                        "line_items": line_items,
+                        "notes": f"Guía Courier DHL Express: {orden_envio.numero_guia_awb}"
                     }
-                else:
-                    logger.warning(f"SCM ZOHO API ({resp.status_code}): {resp.text}")
+                    resp = requests.post(url, json=zoho_payload, headers=headers, timeout=6)
+                    if resp.status_code in [200, 201]:
+                        data = resp.json()
+                        sales_order_num = data.get('salesorder', {}).get('salesorder_number', f"ZOHO-SO-{uuid.uuid4().hex[:8].upper()}")
+                        orden_envio.id_externo_zoho = sales_order_num
+                        orden_envio.save(update_fields=['id_externo_zoho'])
+                        logger.info(f"SCM SUCCESS: Orden {orden_envio.codigo_pedido} sincronizada en Zoho Inventory ({sales_order_num}).")
+                        return {
+                            "status": "SUCCESS",
+                            "platform": "ZOHO_INVENTORY_LIVE",
+                            "external_sales_order_id": sales_order_num,
+                            "live_sync": True
+                        }
+                    else:
+                        logger.warning(f"SCM ZOHO API ({resp.status_code}): {resp.text}")
             except Exception as e:
                 logger.error(f"SCM ZOHO CONNECTION ERROR: {e}")
 
