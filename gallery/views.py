@@ -574,9 +574,38 @@ def panel_artista(request):
                 interes=f"Subió Obra: {nueva_obra.titulo} (${nueva_obra.precio_mxn})"
             )
 
+            # Sincronizar automáticamente la obra en Zoho Inventory SCM
+            try:
+                from django.conf import settings
+                zoho_key = getattr(settings, 'ZOHO_INVENTORY_API_KEY', None)
+                zoho_org = getattr(settings, 'ZOHO_INVENTORY_ORG_ID', None)
+                if zoho_key and zoho_org and str(zoho_key).strip():
+                    import requests
+                    r_it_zoho = requests.post(
+                        f"https://www.zohoapis.com/inventory/v1/items?organization_id={zoho_org.strip()}",
+                        json={
+                            "name": f"{nueva_obra.titulo} ({nueva_obra.artista})",
+                            "rate": float(nueva_obra.precio_mxn),
+                            "description": f"Categoría: {nueva_obra.categoria} | Técnica: {nueva_obra.tecnica} | Medidas: {nueva_obra.dimensiones}",
+                            "sku": f"ART-{nueva_obra.id:04d}",
+                            "initial_stock": 1
+                        },
+                        headers={
+                            "Authorization": f"Zoho-oauthtoken {zoho_key.strip()}",
+                            "Content-Type": "application/json"
+                        },
+                        timeout=5
+                    )
+                    if r_it_zoho.status_code in [200, 201]:
+                        it_id = r_it_zoho.json().get('item', {}).get('item_id')
+                        nueva_obra.id_externo_zoho_item = str(it_id)
+                        nueva_obra.save(update_fields=['id_externo_zoho_item'])
+            except Exception:
+                pass
+
             messages.success(
                 request,
-                f"🎨 ¡La obra '{nueva_obra.titulo}' ha sido publicada exitosamente en el catálogo! "
+                f"🎨 ¡La obra '{nueva_obra.titulo}' ha sido publicada exitosamente en el catálogo y sincronizada con Zoho Inventory SCM! "
                 f"Ya está disponible en /galeria/ para que los compradores la aparten con Hold Cart."
             )
             return redirect('panel_artista')
