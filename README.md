@@ -250,7 +250,7 @@ Para consultar los documentos formales de diseño de software y auditoría de in
 - **Departamento:** Sistemas y Computación
 - **Asignatura:** Negocios Electrónicos II
 - **Proyecto:** ArtSpace E-Commerce Ecosystem v2.4
-- **Contacto / Soporte:** `r.almendra@apizaco.tecnm.mx`
+
 
 ---
 
