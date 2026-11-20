@@ -32,6 +32,11 @@ ENV/
 env.bak/
 venv.bak/
 
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
 # Django local DB & cache
 *.log
 local_settings.py
